@@ -13,7 +13,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { ContentAccount, TextAccount } from './Style';
 import { useState } from 'react';
 
-import {api} from '../../services/Service'
+import { api } from '../../services/Service'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -26,16 +26,19 @@ export const Login = ({ navigation }) => {
 	async function Login() {
 
 		//chamar a api de login
-		const response = await api.post('/Login', {
-			email: email,
-			senha: senha
-		});
+		try {
+			const response = await api.post('/Login', {
+				email: email,
+				senha: senha
+			});
+			await AsyncStorage.setItem('token', JSON.stringify(response.data))
+			console.log(response.data);
 
-		await AsyncStorage.setItem('token', JSON.stringify(response.data))
+			navigation.navigate('Main');
 
-		//console.log(response.data);
-
-		navigation.navigate('Main');
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	return (
@@ -48,7 +51,7 @@ export const Login = ({ navigation }) => {
 				placeholder={'Username or email...'}
 				value={email}
 				onChangeText={(txt) => setEmail(txt)}
-				//onChange={event => event.nativeEvent.text}
+			//onChange={event => event.nativeEvent.text}
 			/>
 
 			<Input

@@ -7,14 +7,14 @@ import { useEffect } from 'react';
 
 export const Header = ({ navigation }) => {
 
-	async function profileLoad(){
+	/*async function profileLoad(){
 		const token = await UserDecodeToken()
 
 		console.log(token);
 	}
 	useEffect(() =>{
 		profileLoad()
-	},[])
+	},[])*/
 	return (
 		<ContainerHeader>
 			<BoxUser onPress={() => navigation.navigate('Profile')}>
