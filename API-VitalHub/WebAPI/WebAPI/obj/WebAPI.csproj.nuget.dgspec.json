@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\55358961879\\Desktop\\VitalHub-Grop-Project\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {}
+    "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\55358961879\\Desktop\\VitalHub-Grop-Project\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {
+    "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\55358961879\\Desktop\\VitalHub-Grop-Project\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\55358961879\\Desktop\\VitalHub-Grop-Project\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectPath": "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
         "packagesPath": "C:\\Users\\55358961879\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\55358961879\\Desktop\\VitalHub-Grop-Project\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
+        "outputPath": "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\55358961879\\AppData\\Roaming\\NuGet\\NuGet.Config",

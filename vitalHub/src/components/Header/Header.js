@@ -4,9 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { UserDecodeToken } from '../../services/Utils/Auth';
 import { useEffect } from 'react';
 
-
 export const Header = ({ navigation }) => {
 
+	// chamada da funcao para carregar o perfil do usuario e carregar as informacoes
 	async function profileLoad(){
 		const token = await UserDecodeToken()
 
@@ -21,7 +21,7 @@ export const Header = ({ navigation }) => {
 				<ImageUser source={{ uri: 'https://github.com/marqzzs.png' }} />
 				<DataUser>
 					<TextDefault>Welcome!</TextDefault>
-					<NameUser>Dr. Claudio</NameUser>
+					<NameUser>{}</NameUser>
 				</DataUser>
 			</BoxUser>
 			<Ionicons name="notifications" size={24} color="white" />
