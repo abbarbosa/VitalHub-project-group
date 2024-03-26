@@ -33,8 +33,6 @@ export const Login = ({ navigation }) => {
 
 		await AsyncStorage.setItem('token', JSON.stringify(response.data))
 
-		//console.log(response.data);
-
 		navigation.navigate('Main');
 	}
 

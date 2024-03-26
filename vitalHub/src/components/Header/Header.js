@@ -14,7 +14,10 @@ export const Header = ({ navigation }) => {
 
 		const {name} = token;
 
-		setUserName(name)
+		// Limitamos o tamanho do nome a, por exemplo, 20 caracteres
+		const limitedName = name.length > 16 ? name.substring(0, 16) + '...' : name;
+
+		setUserName(limitedName);
 
 		console.log(token);
 	}

@@ -1,4 +1,5 @@
-import { Button, ButtonTitle } from "../../components/Button/Style";
+import { useEffect, useState } from "react";
+import { Button, ButtonExitApp, ButtonTitle } from "../../components/Button/Style";
 import { Container, ScrollContainer } from "../../components/Container/Style";
 import {
   AddresRow,
@@ -15,20 +16,55 @@ import {
   TextProfileName,
 } from "./Style";
 
-export const Profile = () => {
+import { UserDecodeToken } from '../../services/Utils/Auth';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+export const Profile = ({navigation}) => {
 
   const [nameUser, setUserName] = useState('')
-  const [emailUser, setEm] = useState('')
+  const [userEmail, setUserEmail] = useState('')
 
-	// chamada da funcao para carregar o perfil do usuario e carregar as informacoes
-	async function profileLoad(){
-		const token = await UserDecodeToken()
+  //carregamento dos dados do usuario
+  async function profileLoad(){
+  try {
+    
+      const token = await UserDecodeToken()
+  
+      const {name} = token;
+      const {email} = token;
+  
+      if(token){
+        const {name, email} = token
+      }
+      // Limitamos o tamanho do nome a, por exemplo, 20 caracteres
+      const limitedName = name.length > 16 ? name.substring(0, 16) + '...' : name;
 
-		const {name} = token;
+      setUserName(limitedName);
+      setUserEmail(email);
+  
+    } catch (error) {
+      console.log(error); 
+    }
+  }
+  
+  async function Logout(){
+    try {
 
-		setUserName(name)
+      //obetendo o token
+      const token = await AsyncStorage.getItem('token')
 
-	}
+      //removendo o token
+      await AsyncStorage.removeItem('token')
+
+      navigation.navigate('Login');
+
+      console.log('Token removido', token);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 	useEffect(() =>{
 		profileLoad()
 	},[])
@@ -37,8 +73,8 @@ export const Profile = () => {
       <Container>
         <ProfilePicture source={{ uri: "https://github.com/marqzzs.png" }} />
         <ContentName>
-          <TextProfileName>Richard Kosta</TextProfileName>
-          <TextProfileEmail>richard.kosta@gmail.com</TextProfileEmail>
+          <TextProfileName> {nameUser} </TextProfileName>
+          <TextProfileEmail>{userEmail}</TextProfileEmail>
         </ContentName>
         {/*  */}
         <ContentProfile>
@@ -76,9 +112,9 @@ export const Profile = () => {
           <ButtonTitle>Edit</ButtonTitle>
         </Button>
 
-        <Button disabled={true}>
+        <ButtonExitApp onPress={() => Logout()}>
           <ButtonTitle>Exit the app</ButtonTitle>
-        </Button>
+        </ButtonExitApp>
       </Container>
     </ScrollContainer>
   );

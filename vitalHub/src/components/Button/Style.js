@@ -49,3 +49,8 @@ export const ButtonModal = styled(Button)`
 width: 80%;
 margin-top: 42px;
 `
+
+export const ButtonExitApp = styled(Button)`
+width: 60%;
+background-color: #ACABB7;
+`
