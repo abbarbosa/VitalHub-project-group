@@ -16,6 +16,22 @@ import {
 } from "./Style";
 
 export const Profile = () => {
+
+  const [nameUser, setUserName] = useState('')
+  const [emailUser, setEm] = useState('')
+
+	// chamada da funcao para carregar o perfil do usuario e carregar as informacoes
+	async function profileLoad(){
+		const token = await UserDecodeToken()
+
+		const {name} = token;
+
+		setUserName(name)
+
+	}
+	useEffect(() =>{
+		profileLoad()
+	},[])
   return (
     <ScrollContainer>
       <Container>
