@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import {
 	Button,
@@ -9,6 +9,8 @@ import { Container } from '../../components/Container/Style';
 import { DoctorsCard } from '../../components/DoctorsCard/DoctorsCard';
 import { ListComponent } from '../../components/List/List';
 import { TitleSelection } from '../SelectClinic/Style';
+
+import { api } from '../../services/Service';
 
 const Doctors = [
 	{
@@ -31,7 +33,7 @@ const Doctors = [
 	},
 ];
 
-export const SelectDoctor = ({ navigation }) => {
+export const SelectDoctor = ({ navigation}) => {
 	const [selectedDoctor, setSelectedDoctor] = useState(null);
 
 	const handleDoctorSelection = (doctorId) => {
@@ -42,22 +44,29 @@ export const SelectDoctor = ({ navigation }) => {
 		);
 	};
 
+	const [medicoLista, setMedicoLista] = useState([])
+	async function ListarMedico(){
+		//instanciaar a chamada da api
+		await api.get('/Medicos').then(response => {
+			setMedicoLista(response.data)
+		}).catch(error => {
+			console.log(error);
+		})
+	}
+
+	useEffect(() => {
+		ListarMedico()
+	},[])
+
 	return (
 		<Container>
 			<TitleSelection>Select Doctor</TitleSelection>
 
 			<ListComponent
-				data={Doctors}
+				data={medicoLista}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => (
-					<DoctorsCard
-						id={item.id}
-						nome={item.nome}
-						especialidade={item.especialidade}
-						image={item.image}
-						selected={item.id === selectedDoctor}
-						onPress={handleDoctorSelection}
-					/>
+					<DoctorsCard medico={item}/>
 				)}
 			/>
 

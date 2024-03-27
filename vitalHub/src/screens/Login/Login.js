@@ -22,19 +22,29 @@ export const Login = ({ navigation }) => {
 	const [email, setEmail] = useState()
 	const [senha, setSenha] = useState()
 
-	// Chamar a funcao de login
 	async function Login() {
-
-		//chamar a api de login
-		const response = await api.post('/Login', {
-			email: email,
-			senha: senha
-		});
-
-		await AsyncStorage.setItem('token', JSON.stringify(response.data))
-
-		navigation.navigate('Main');
+		try {
+			// Verificar se os campos de email e senha estão preenchidos
+			if (!email || !senha) {
+				alert('Por favor, preencha todos os campos.');
+				return;
+			}
+	
+			//chamar a api de login
+			const response = await api.post('/Login', {
+				email: email,
+				senha: senha
+			});
+	
+			await AsyncStorage.setItem('token', JSON.stringify(response.data));
+			navigation.navigate('Main');
+		} catch (error) {
+			// Se ocorrer um erro ao fazer login
+			console.log('Erro ao fazer login:', error);
+			alert('Erro ao fazer login. Verifique suas credenciais e tente novamente.');
+		}
 	}
+	
 
 	return (
 		<Container>
