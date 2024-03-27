@@ -38,7 +38,7 @@ export const SelectDoctor = ({ navigation}) => {
 
 	const handleDoctorSelection = (doctorId) => {
 		setSelectedDoctor(
-			doctorId.toString() === selectedDoctor?.toString()
+			doctorId === selectedDoctor?.toString()
 				? null
 				: doctorId,
 		);
@@ -64,9 +64,13 @@ export const SelectDoctor = ({ navigation}) => {
 
 			<ListComponent
 				data={medicoLista}
-				keyExtractor={(item) => item.id.toString()}
+				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
-					<DoctorsCard medico={item}/>
+					<DoctorsCard 
+						medico={item}
+						selected={item.id === selectedDoctor}
+						onPress={handleDoctorSelection}
+					/>
 				)}
 			/>
 

@@ -14,13 +14,13 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export const ClinicCard = ({ name, address, selected, onPress }) => {
+export const ClinicCard = ({ name, address, selected, onPress, clinica }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <ContainerCardList style={{ borderColor: selected ? "#496BBA" : "transparent", borderWidth: 2 }}>
         <ContentNameClinicCard>
-          <TitleCard>{name}</TitleCard>
-          <TextBold>{address}</TextBold>
+          <TitleCard>{clinica.nomeFantasia}</TitleCard>
+          <TextBold>{clinica.endereco.logradouro}</TextBold>
         </ContentNameClinicCard>
         <ContentInformationCard>
           <ContentStar>

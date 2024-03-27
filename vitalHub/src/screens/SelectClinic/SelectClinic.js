@@ -1,5 +1,5 @@
 // SelectClinic.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from '../../components/Container/Style';
 import { ListComponent } from '../../components/List/List';
 import { TitleSelection } from './Style';
@@ -10,17 +10,23 @@ import {
 } from '../../components/Button/Style';
 import { TouchableOpacity } from 'react-native';
 import { ClinicCard } from '../../components/ClinicCard/ClinicCard';
+import { api } from '../../services/Service';
 
-const Clinicas = [
-	{ id: 1, name: 'Clinic Nature', address: 'Jerumenha - PI' },
-	{ id: 2, name: 'Clinic of Woman', address: 'Januaria - MG' },
-	{ id: 3, name: 'Hospital São Lucas', address: 'Lagoinha - MT' },
-	{ id: 4, name: 'Centro Médico Vitalidade', address: 'Rio Branco - AC' },
-	{ id: 5, name: 'Clínica Saúde e Vida', address: 'Seabra - BA' },
-	{ id: 6, name: 'Clínica Integrada Harmonia', address: 'Se - SP' },
-];
 
 export const SelectClinic = ({ navigation }) => {
+	const [listaClinica, setListaClinica] = useState([])
+	async function ListarClinica(){
+		//instanciaar a chamada da api
+		await api.get('/Clinica/ListarTodas').then(response => {
+			setListaClinica(response.data)
+		}).catch(error => {
+			console.log(error);
+		})
+	}
+
+	useEffect(() => {
+		ListarClinica()
+	},[])
 	const [selectedClinic, setSelectedClinic] = useState('');
 
 	const handleClinicSelection = (name) => {
@@ -32,15 +38,14 @@ export const SelectClinic = ({ navigation }) => {
 			<TitleSelection>Select Clinic</TitleSelection>
 
 			<ListComponent
-				data={Clinicas}
-				keyExtractor={(item) => item.id.toString()}
+				data={listaClinica}
+				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
 					<TouchableOpacity
 						onPress={() => handleClinicSelection(item.id)}
 					>
 						<ClinicCard
-							name={item.name}
-							address={item.address}
+							clinica={item}
 							selected={item.id === selectedClinic}
 							onPress={() => handleClinicSelection(item.id)}
 						/>
