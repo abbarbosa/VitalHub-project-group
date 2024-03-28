@@ -34,33 +34,31 @@ export const Home = ({ userType = 'patient', navigation }) => {
 	const [showModalLocationAppointment, setShowModalLocationAppointment] = useState(false);
 
 	const [listaConsulta, setListaConsulta] = useState([])
-
 	async function ListarConsulta(){
-
 		try {
-			//recuperacao do token de acesso
-			const token = await AsyncStorage.getItem('token')
-	
-			//verificacao se o token foi corretamente pego
-			if(token){
-				//fazendo a chamada da api para consultas
-				await api.get('/Consultas',{
+			// Recuperação do token de acesso
+			const token = await AsyncStorage.getItem('token');
+		
+			// Verificação se o token foi corretamente obtido
+			if (token) {
+				// Fazendo a chamada da API para consultas
+				await api.get('/Consultas', {
 					headers: {
-						//adicionando o token ao cabecalho de autorizacao
+						// Adicionando o token ao cabeçalho de autorização
 						Authorization: `Bearer ${token}`
-					},
+					}
 				}).then(response => {
-					setListaConsulta(response.data)
+					setListaConsulta(response.data);
 					console.log(response.data);
 				}).catch(error => {
-					console.log(error);
-				})
+					console.log(`Deu erro: ${error}`);
+				});
 			} else {
-				console.log('Token de autorizacao nao encontrado');
+				console.log('Token de autorização não encontrado');
 			}
 		} catch (error) {
 			console.log(error);
-		}
+		}		
 	}
 
 	useEffect(() => {
@@ -150,14 +148,14 @@ export const Home = ({ userType = 'patient', navigation }) => {
 						/>
 					</FilterAppointment>
 					<ListComponent
-						data={listaConsulta}
+						data={Consultas}
 						key={(item) => item.id}
 						renderItem={({ item }) =>
 							statusLista === item.situacao && (
 								<TouchableOpacity
 									onPress={() =>
 										setShowModalAppointment(true)
-									} // Corrigido para setShowModalAppointment
+									}
 								>
 									<AppointmentCard
 										navigation={navigation}
@@ -168,7 +166,7 @@ export const Home = ({ userType = 'patient', navigation }) => {
 										onPressCancel={() =>
 											setShowModalCancel(true)
 										}
-										consulta={item}
+									
 									/>
 								</TouchableOpacity>
 							)
