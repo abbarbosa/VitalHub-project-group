@@ -17,3 +17,4 @@ const apiUrlLocal = `http://${ip}:${portaApi}/api`
 export const api = axios.create({
     baseURL: apiUrlLocal
 });
+
