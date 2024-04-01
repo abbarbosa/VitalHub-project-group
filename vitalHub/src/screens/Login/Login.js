@@ -17,34 +17,43 @@ import { api } from '../../services/Service'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+//import para a função de carregamento 
+import { ActivityIndicator } from 'react-native';
+
 export const Login = ({ navigation }) => {
 
 	const [email, setEmail] = useState()
 	const [senha, setSenha] = useState()
+	const [loading, setLoading] = useState()
 
 	async function Login() {
+		setLoading(true);
 		try {
 			// Verificar se os campos de email e senha estão preenchidos
 			if (!email || !senha) {
 				alert('Por favor, preencha todos os campos.');
 				return;
 			}
-	
+
 			//chamar a api de login
 			const response = await api.post('/Login', {
 				email: email,
 				senha: senha
 			});
-	
+
 			await AsyncStorage.setItem('token', JSON.stringify(response.data));
 			navigation.navigate('Main');
 		} catch (error) {
 			// Se ocorrer um erro ao fazer login
 			console.log('Erro ao fazer login:', error);
 			alert('Erro ao fazer login. Verifique suas credenciais e tente novamente.');
+		} finally {
+			setTimeout(() => {
+				setLoading(false); // Desativa o indicador de atividade após 2 segundos
+			}, 2000);
 		}
 	}
-	
+
 
 	return (
 		<Container>
@@ -70,8 +79,12 @@ export const Login = ({ navigation }) => {
 				Forgot you password?
 			</LinkMedium>
 
-			<Button onPress={() => Login()}>
-				<ButtonTitle>Log in</ButtonTitle>
+			<Button onPress={Login}>
+				{loading ? (
+					<ActivityIndicator size="small" color="#ffffff" />
+				) : (
+					<ButtonTitle>Log in</ButtonTitle>
+				)}
 			</Button>
 
 			<ButtonGoogle>
