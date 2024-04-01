@@ -47,36 +47,23 @@ export const Profile = ({navigation}) => {
       console.log(error); 
     }
   }
-
+  
   async function Logout(){
     try {
-      // Limpa os estados nameUser e userEmail
-      setUserName();
-      setUserEmail();
-  
+
       //obetendo o token
       const token = await AsyncStorage.getItem('token')
-  
+
       //removendo o token
       await AsyncStorage.removeItem('token')
-  
+
       navigation.navigate('Login');
-  
+
       console.log('Token removido', token);
     } catch (error) {
       console.log(error);
     }
   }
-
-  
-  useEffect(() => {
-    return () => {
-      // Limpa os estados nameUser e userEmail quando o componente é desmontado
-      setUserName(null);
-      setUserEmail(null);
-    };
-  }, []);
-  
 
 	useEffect(() =>{
 		profileLoad()
