@@ -22,8 +22,8 @@ import { ActivityIndicator } from 'react-native';
 
 export const Login = ({ navigation }) => {
 
-	const [email, setEmail] = useState()
-	const [senha, setSenha] = useState()
+	const [email, setEmail] = useState('')
+	const [senha, setSenha] = useState('')
 	const [loading, setLoading] = useState()
 
 	async function Login() {
