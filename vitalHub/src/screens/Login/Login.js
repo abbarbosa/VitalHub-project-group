@@ -13,7 +13,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { ContentAccount, TextAccount } from './Style';
 import { useState } from 'react';
 
-import {api} from '../../services/Service'
+import { api } from '../../services/Service'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -56,7 +56,7 @@ export const Login = ({ navigation }) => {
 				placeholder={'Username or email...'}
 				value={email}
 				onChangeText={(txt) => setEmail(txt)}
-				//onChange={event => event.nativeEvent.text}
+			//onChange={event => event.nativeEvent.text}
 			/>
 
 			<Input

@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 CREATE DATABASE [VitalHub]
 GO
 
 USE [VitalHub]
+=======
+CREATE DATABASE [VitalHubAlteradoManha]
+GO
+
+USE [VitalHubAlteradoManha]
+>>>>>>> anna
 GO
 
 /****** Object:  Table [dbo].[Clinicas]    Script Date: 26/03/2024 09:53:50 ******/
@@ -291,5 +298,9 @@ ALTER TABLE [dbo].[Usuarios] CHECK CONSTRAINT [FK_Usuarios_TiposUsuario]
 GO
 USE [master]
 GO
+<<<<<<< HEAD
 ALTER DATABASE [VitalHub] SET  READ_WRITE 
+=======
+ALTER DATABASE [VitalHubAlteradoManha] SET  READ_WRITE 
+>>>>>>> anna
 GO
