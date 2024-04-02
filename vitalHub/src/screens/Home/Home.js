@@ -108,7 +108,6 @@ export const Home = ({navigation}) => {
 			/>
 
 
-			{/* Renderização condicional com base no userType */}
 			{userType === 'doctor' && (
 				<>
 					
