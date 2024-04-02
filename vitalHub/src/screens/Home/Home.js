@@ -26,7 +26,7 @@ const Consultas = [
 	{ id: 6, nome: 'Carlos', situacao: 'cancelada' },
 ];
 
-export const Home = ({ userType = 'patient', navigation }) => {
+export const Home = ({ userType = 'doctor', navigation }) => {
 	const [statusLista, setStatusLista] = useState('pendente');
 	const [showModalCancel, setShowModalCancel] = useState(false);
 	const [showModalAppointment, setShowModalAppointment] = useState(false);
