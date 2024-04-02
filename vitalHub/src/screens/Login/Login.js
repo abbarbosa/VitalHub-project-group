@@ -98,7 +98,7 @@ export const Login = ({ navigation }) => {
 					<LinkBold
 						onPress={() => navigation.navigate('CreateAccount')}
 					>
-						Create an account now
+						Create an account now!
 					</LinkBold>
 				</TextAccount>
 			</ContentAccount>
