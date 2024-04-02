@@ -37,7 +37,9 @@ export const Home = ({ userType = 'doctor', navigation }) => {
 	async function ListarConsulta(){
 		try {
 			// Recuperação do token de acesso
-			const token = await AsyncStorage.getItem('token');
+			const token = JSON.parse(
+				await AsyncStorage.getItem('token'),
+			).token;
 		
 			// Verificação se o token foi corretamente obtido
 			if (token) {
@@ -148,7 +150,7 @@ export const Home = ({ userType = 'doctor', navigation }) => {
 						/>
 					</FilterAppointment>
 					<ListComponent
-						data={Consultas}
+						data={listaConsulta}
 						key={(item) => item.id}
 						renderItem={({ item }) =>
 							statusLista === item.situacao && (
@@ -166,6 +168,7 @@ export const Home = ({ userType = 'doctor', navigation }) => {
 										onPressCancel={() =>
 											setShowModalCancel(true)
 										}
+										consulta={item}
 									
 									/>
 								</TouchableOpacity>

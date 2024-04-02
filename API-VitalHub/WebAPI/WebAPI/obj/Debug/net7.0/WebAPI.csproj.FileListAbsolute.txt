@@ -246,6 +246,7 @@ C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\D
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
+=======
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.json
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\WebAPI.exe
@@ -329,7 +330,6 @@ C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\o
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
-=======
 C:\Users\52161105850\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\52161105850\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.json
 C:\Users\52161105850\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\WebAPI.exe
@@ -497,3 +497,5 @@ C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\o
 C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.csproj.CopyComplete
 C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
+>>>>>>> 38020fc63c2525360391da46e1bcb9cb45f78e85
+>>>>>>> d9da322bb8b87c9b428ac791f375a04ebfe046dc
