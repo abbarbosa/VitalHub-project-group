@@ -16,68 +16,46 @@ import { LocationModal } from '../../components/LocationModal/LocationModal';
 import { api } from '../../services/Service';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-
-const Consultas = [
-	{ id: 1, nome: 'Carlos', situacao: 'pendente' },
-	{ id: 2, nome: 'Carlos', situacao: 'realizada' },
-	{ id: 3, nome: 'Carlos', situacao: 'pendente' },
-	{ id: 4, nome: 'Carlos', situacao: 'realizada' },
-	{ id: 5, nome: 'Carlos', situacao: 'cancelada' },
-	{ id: 6, nome: 'Carlos', situacao: 'cancelada' },
-];
-
-export const Home = ({ userType = 'patient', navigation }) => {
+export const Home = ({navigation}) => {
 	const [statusLista, setStatusLista] = useState('pendente');
 	const [showModalCancel, setShowModalCancel] = useState(false);
 	const [showModalAppointment, setShowModalAppointment] = useState(false);
 	const [showModalSchedule, setShowModalSchedule] = useState(false);
 	const [showModalLocationAppointment, setShowModalLocationAppointment] = useState(false);
 
+	const [dateSelected, setDateSelected] = useState('')
+
 	const [listaConsulta, setListaConsulta] = useState([])
-	async function ListarConsulta(){
-		try {
-			// Recuperação do token de acesso
-			const token = JSON.parse(
-				await AsyncStorage.getItem('token'),
-			).token;
-		
-			// Verificação se o token foi corretamente obtido
-			if (token) {
-				// Fazendo a chamada da API para consultas
-				await api.get('/Consultas', {
-					headers: {
-						// Adicionando o token ao cabeçalho de autorização
-						Authorization: `Bearer ${token}`
-					}
-				}).then(response => {
-					setListaConsulta(response.data);
-					console.log(response.data);
-				}).catch(error => {
-					console.log(`Deu erro: ${error}`);
-				});
-			} else {
-				console.log('Token de autorização não encontrado');
-			}
-		} catch (error) {
-			console.log(error);
-		}		
+
+	const [profile, setProfile] = useState('Paciente')
+
+	async function ProfileLoad(){
+		const token = await UserDecodeToken()
 	}
 
+	// async function ListarConsulta(){
+	// 	const url = (profile.role = 'Medico' ? 'Medicos' : 'Pacientes')
+
+	// 	///${url}/BuscarPorData?data=${dateSelected}&id=${}
+	// 	await api.get(`  `)
+	// }
+
 	useEffect(() => {
-		ListarConsulta()
+		ProfileLoad()
 	},[])
 
 	return (
 		<Container>
 			{/* Header */}
 			<Header navigation={navigation} />
-			{/* Renderização condicional com base no userType */}
-			{userType === 'doctor' && (
-				<>
-					{/* Calendario */}
-					<CalendarHome />
-					{/* Buttons(Filtros) */}
-					<FilterAppointment>
+
+			{/* Calendario */}
+			<CalendarHome
+			setDateSelected={setDateSelected}
+			/>
+
+			{/* Buttons(Filtros) */}
+			<FilterAppointment>
 						<AbsListAppontment
 							textButton={'Scheduled'}
 							clickButton={statusLista === 'pendente'}
@@ -93,7 +71,47 @@ export const Home = ({ userType = 'patient', navigation }) => {
 							clickButton={statusLista === 'cancelada'}
 							onPress={() => setStatusLista('cancelada')}
 						/>
-					</FilterAppointment>
+			</FilterAppointment>
+
+			//LIstagem dos cards
+			<ListComponent
+				data={listaConsulta}
+				key={(item) => item.id}
+				renderItem={({ item }) =>
+					statusLista === item.situacao && (
+						<TouchableOpacity
+							onPress={() =>
+								setShowModalAppointment(true)
+							}
+						>
+							<AppointmentCard
+								navigation={navigation}
+								situacao={item.situacao}
+								onPressAppointment={() =>
+									setShowModalAppointment(true)
+								}
+								onPressCancel={() =>
+									setShowModalCancel(true)
+								}
+								consulta={item}
+								//
+								roleUsuario={profile.role}
+								dataConsulta={item.dataConsulta}
+								prioridade={item.prioridade.prioridade}
+								usuarioConsulta={profile.role == 'Medico' ? item.paciente : item.medicoClinica.medico}
+								//
+									
+								/>
+						</TouchableOpacity>
+					)
+				}
+			/>
+
+
+			{/* Renderização condicional com base no userType */}
+			{userType === 'doctor' && (
+				<>
+					
 					{/* Cards */}
 					<ListComponent
 						data={listaConsulta}
@@ -130,25 +148,7 @@ export const Home = ({ userType = 'patient', navigation }) => {
 				</>
 			)}
 			{userType === 'patient' && (
-				<>
-					<CalendarHome />
-					<FilterAppointment>
-						<AbsListAppontment
-							textButton={'Scheduled'}
-							clickButton={statusLista === 'pendente'}
-							onPress={() => setStatusLista('pendente')}
-						/>
-						<AbsListAppontment
-							textButton={'Realized'}
-							clickButton={statusLista === 'realizada'}
-							onPress={() => setStatusLista('realizada')}
-						/>
-						<AbsListAppontment
-							textButton={'Canceled'}
-							clickButton={statusLista === 'cancelada'}
-							onPress={() => setStatusLista('cancelada')}
-						/>
-					</FilterAppointment>
+				<>		
 					<ListComponent
 						data={listaConsulta}
 						key={(item) => item.id}
@@ -169,6 +169,12 @@ export const Home = ({ userType = 'patient', navigation }) => {
 											setShowModalCancel(true)
 										}
 										consulta={item}
+										//
+										roleUsuario={profile.role}
+										dataConsulta={item.dataConsulta}
+										prioridade={item.prioridade.prioridade}
+										usuarioConsulta={profile.role == 'Medico' ? item.paciente : item.medicoClinica.medico}
+										//
 									
 									/>
 								</TouchableOpacity>

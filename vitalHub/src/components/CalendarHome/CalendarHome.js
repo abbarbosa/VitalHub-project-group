@@ -3,7 +3,7 @@ import moment from 'moment';
 import { StyleSheet } from 'react-native';
 import { StyledCalendarStrip } from '../../screens/Home/Style';
 
-const CalendarHome = () => {
+const CalendarHome = ({setDateSelected}) => {
   // Atualização das configurações de localização do momento
   moment.updateLocale('pt-br', {
     months: 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split('_'),
@@ -30,6 +30,7 @@ const CalendarHome = () => {
       // Seta esquerda e direita para avançar e voltar (aqui como display none)
       iconLeftStyle={styles.iconsStyle}
       iconRightStyle={styles.iconsStyle}
+      onDateSelected={date => setDateSelected(moment(date).format('YYYY-MM-DD'))}
       // Deixa uma marcação default - data atual
       selectedDate={currentDate}
       // Dia que começamos a visualizar a barra

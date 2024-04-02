@@ -18,7 +18,11 @@ export const AppointmentCard = ({
 	situacao = 'pendente',
 	onPressCancel,
 	onPressAppointment,
-	consulta
+	consulta,
+	roleUsuario,
+	dataConsulta,
+	prioridade,
+	usuarioConsulta,
 }) => {
 	return (
 		<>
@@ -31,7 +35,7 @@ export const AppointmentCard = ({
 				{/* conteudo ao lado da imagem de perfil */}
 				<ContentCard>
 					<DataProfileCard>
-						<ProfileName>{consulta.medicoClinica.medico.idNavigation.nome}</ProfileName>
+						<ProfileName>{usuarioConsulta.idNavigation.nome}</ProfileName>
 						{/* <ProfileData>
 							<TextAge>45 years</TextAge>
 							<TextBold>Rotina</TextBold>
