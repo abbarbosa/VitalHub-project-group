@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
 	ButtonSecundary,
 	ButtonSecundaryTitle,
@@ -20,7 +21,11 @@ import {
 } from '../Profile/Style';
 import { ImageLocation } from './Style';
 
-export const LocationAppointment = ({ navigation }) => {
+export const LocationAppointment = ({ navigation, route }) => {
+	useEffect(() => {
+		console.log(route);
+	}, [route.params]);
+
 	return (
 		<Container>
 			<ImageLocation>

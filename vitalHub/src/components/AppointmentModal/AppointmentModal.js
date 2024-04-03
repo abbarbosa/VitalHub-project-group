@@ -15,6 +15,8 @@ export const AppointmentModal = ({
 	situacao,
 	navigation,
 	setShowModalAppointment, // Função para controlar a exibição do modal
+	roleUsuario,
+	consulta,
 	...rest
 }) => {
 	// Função para fechar o modal
@@ -24,7 +26,14 @@ export const AppointmentModal = ({
 
 	async function handleClose(screen) {
 		await setShowModalAppointment(false);
-		navigation.replace(screen);
+
+		if (screen == 'Local consulta') {
+			navigation.replace(screen, {
+				clinicaid: consulta.medicoClinica.clinicaId,
+			});
+		} else {
+			navigation.replace(screen);
+		}
 	}
 
 	return (

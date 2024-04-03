@@ -8,17 +8,15 @@ import { ListComponent } from '../../components/List/List';
 import { AppointmentCard } from '../../components/AppointmentCard/AppointmentCard';
 import CancellationModal from '../../components/CancellationModal/CancellationModal';
 import { AppointmentModal } from '../../components/AppointmentModal/AppointmentModal';
-import { FontAwesome } from '@expo/vector-icons';
 import { ScheduleButton } from '../../components/ScheduleButton/ScheduleButton';
 import { ScheduleModal } from '../../components/ScheduleModal/ScheduleModal';
 import { TouchableOpacity } from 'react-native';
 import { LocationModal } from '../../components/LocationModal/LocationModal';
 import { api } from '../../services/Service';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserDecodeToken } from '../../services/Utils/Auth';
 
 export const Home = ({ navigation }) => {
-	const [statusLista, setStatusLista] = useState('pendente');
+	const [statusLista, setStatusLista] = useState('Pendentes');
 	const [showModalCancel, setShowModalCancel] = useState(false);
 	const [showModalAppointment, setShowModalAppointment] = useState(false);
 	const [showModalSchedule, setShowModalSchedule] = useState(false);
@@ -33,6 +31,8 @@ export const Home = ({ navigation }) => {
 
 	const [userLogin, setUserLogin] = useState('');
 
+	const [consultaSelecionada, setConsultaSelecionada] = useState();
+
 	async function ProfileLoad() {
 		const token = await UserDecodeToken();
 
@@ -41,7 +41,7 @@ export const Home = ({ navigation }) => {
 	}
 
 	async function ListarConsulta() {
-		const url = (profile.role = 'Medico' ? 'Medicos' : 'Paciente');
+		const url = (profile.role = 'Medico' ? 'Medicos' : 'Pacientes');
 
 		console.log(
 			`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`,
@@ -64,6 +64,14 @@ export const Home = ({ navigation }) => {
 			});
 	}
 
+	function MostrarModal(modal, consulta) {
+		if (modal == 'cancelar') {
+			setShowModalCancel(true);
+
+			setConsultaSelecionada(consulta);
+		}
+	}
+
 	useEffect(() => {
 		ProfileLoad();
 		// ListarConsulta();
@@ -84,19 +92,19 @@ export const Home = ({ navigation }) => {
 			{/* Buttons(Filtros) */}
 			<FilterAppointment>
 				<AbsListAppontment
-					textButton={'Scheduled'}
-					clickButton={statusLista === 'pendente'}
-					onPress={() => setStatusLista('pendente')}
+					textButton={'Agendadas'}
+					clickButton={statusLista === 'Pendentes'}
+					onPress={() => setStatusLista('Pendentes')}
 				/>
 				<AbsListAppontment
-					textButton={'Realized'}
-					clickButton={statusLista === 'realizada'}
-					onPress={() => setStatusLista('realizada')}
+					textButton={'Realizadas'}
+					clickButton={statusLista === 'Realizados'}
+					onPress={() => setStatusLista('Realizados')}
 				/>
 				<AbsListAppontment
-					textButton={'Canceled'}
-					clickButton={statusLista === 'cancelada'}
-					onPress={() => setStatusLista('cancelada')}
+					textButton={'Cancelada'}
+					clickButton={statusLista === 'Cancelados'}
+					onPress={() => setStatusLista('Cancelados')}
 				/>
 			</FilterAppointment>
 
@@ -112,20 +120,20 @@ export const Home = ({ navigation }) => {
 								navigation={navigation}
 								situacao={item.situacao}
 								onPressAppointment={() =>
-									setShowModalAppointment(true)
+									setShowModalAppointment('prontuario', item)
 								}
-								onPressCancel={() => setShowModalCancel(true)}
-								consulta={item}
-								//
+								onPressCancel={() =>
+									setShowModalCancel('cancelar', item)
+								}
+								consulta={item} // Passando os dados da consulta como prop
 								roleUsuario={profile.role}
 								dataConsulta={item.dataConsulta}
 								prioridade={item.prioridade.prioridade}
 								usuarioConsulta={
-									profile.role == 'Medico'
+									profile.role == 'Paciente'
 										? item.paciente
 										: item.medicoClinica.medico
 								}
-								//
 							/>
 						</TouchableOpacity>
 					)
@@ -135,6 +143,11 @@ export const Home = ({ navigation }) => {
 				<>
 					<ScheduleButton
 						onPress={() => setShowModalSchedule(true)}
+					/>
+					<ScheduleModal
+						navigation={navigation}
+						visible={showModalSchedule}
+						setShowModalSchedule={setShowModalSchedule}
 					/>
 				</>
 			)}
@@ -148,17 +161,14 @@ export const Home = ({ navigation }) => {
 				navigation={navigation}
 				visible={showModalAppointment}
 				setShowModalAppointment={setShowModalAppointment}
+				console={consultaSelecionada}
+				roleUsuario={profile.role}
 			/>
 			<LocationModal
 				visible={showModalLocationAppointment}
 				setShowModalLocationAppointment={
 					setShowModalLocationAppointment
 				} // Correção do nome da função
-			/>
-			<ScheduleModal
-				navigation={navigation}
-				visible={showModalSchedule}
-				setShowModalSchedule={setShowModalSchedule}
 			/>
 		</Container>
 	);
