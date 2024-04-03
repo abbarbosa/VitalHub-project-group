@@ -30,7 +30,7 @@ export const Header = ({ navigation }) => {
 				<ImageUser source={{ uri: 'https://github.com/marqzzs.png' }} />
 				<DataUser>
 					<TextDefault>Welcome!</TextDefault>
-					<NameUser>Dr.(a) {nameUser}</NameUser>
+					<NameUser>{nameUser}</NameUser>
 				</DataUser>
 			</BoxUser>
 			<Ionicons name="notifications" size={24} color="white" />
