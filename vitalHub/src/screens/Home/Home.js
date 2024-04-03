@@ -14,75 +14,99 @@ import { ScheduleModal } from '../../components/ScheduleModal/ScheduleModal';
 import { TouchableOpacity } from 'react-native';
 import { LocationModal } from '../../components/LocationModal/LocationModal';
 import { api } from '../../services/Service';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserDecodeToken } from '../../services/Utils/Auth';
 
-export const Home = ({navigation}) => {
+export const Home = ({ navigation }) => {
 	const [statusLista, setStatusLista] = useState('pendente');
 	const [showModalCancel, setShowModalCancel] = useState(false);
 	const [showModalAppointment, setShowModalAppointment] = useState(false);
 	const [showModalSchedule, setShowModalSchedule] = useState(false);
-	const [showModalLocationAppointment, setShowModalLocationAppointment] = useState(false);
+	const [showModalLocationAppointment, setShowModalLocationAppointment] =
+		useState(false);
 
-	const [dateSelected, setDateSelected] = useState('')
+	const [dateSelected, setDateSelected] = useState('');
 
-	const [listaConsulta, setListaConsulta] = useState([])
+	const [listaConsulta, setListaConsulta] = useState([]);
 
-	const [profile, setProfile] = useState('Paciente')
+	const [profile, setProfile] = useState('Paciente');
 
-	async function ProfileLoad(){
-		const token = await UserDecodeToken()
+	const [userLogin, setUserLogin] = useState('');
+
+	async function ProfileLoad() {
+		const token = await UserDecodeToken();
+
+		setProfile(token);
+		setUserLogin(token.role);
 	}
 
-	// async function ListarConsulta(){
-	// 	const url = (profile.role = 'Medico' ? 'Medicos' : 'Pacientes')
+	async function ListarConsulta() {
+		const url = (profile.role = 'Medico' ? 'Medicos' : 'Paciente');
 
-	// 	///${url}/BuscarPorData?data=${dateSelected}&id=${}
-	// 	await api.get(`  `)
-	// }
+		console.log(
+			`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`,
+		);
+		await api
+			.get(
+				`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`,
+				{
+					headers: {
+						Authorization: `Bearer ${profile.token}`,
+					},
+				},
+			)
+			.then((response) => {
+				setListaConsulta(response.data);
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
 
 	useEffect(() => {
-		ProfileLoad()
-	},[])
+		ProfileLoad();
+		// ListarConsulta();
+	}, []);
+
+	useEffect(() => {
+		if (dateSelected != '') {
+			ListarConsulta();
+		}
+	}, [dateSelected]);
 
 	return (
 		<Container>
 			{/* Header */}
 			<Header navigation={navigation} />
-
 			{/* Calendario */}
-			<CalendarHome
-			setDateSelected={setDateSelected}
-			/>
-
+			<CalendarHome setDateSelected={setDateSelected} />
 			{/* Buttons(Filtros) */}
 			<FilterAppointment>
-						<AbsListAppontment
-							textButton={'Scheduled'}
-							clickButton={statusLista === 'pendente'}
-							onPress={() => setStatusLista('pendente')}
-						/>
-						<AbsListAppontment
-							textButton={'Realized'}
-							clickButton={statusLista === 'realizada'}
-							onPress={() => setStatusLista('realizada')}
-						/>
-						<AbsListAppontment
-							textButton={'Canceled'}
-							clickButton={statusLista === 'cancelada'}
-							onPress={() => setStatusLista('cancelada')}
-						/>
+				<AbsListAppontment
+					textButton={'Scheduled'}
+					clickButton={statusLista === 'pendente'}
+					onPress={() => setStatusLista('pendente')}
+				/>
+				<AbsListAppontment
+					textButton={'Realized'}
+					clickButton={statusLista === 'realizada'}
+					onPress={() => setStatusLista('realizada')}
+				/>
+				<AbsListAppontment
+					textButton={'Canceled'}
+					clickButton={statusLista === 'cancelada'}
+					onPress={() => setStatusLista('cancelada')}
+				/>
 			</FilterAppointment>
 
-			//LIstagem dos cards
 			<ListComponent
 				data={listaConsulta}
 				key={(item) => item.id}
 				renderItem={({ item }) =>
 					statusLista === item.situacao && (
 						<TouchableOpacity
-							onPress={() =>
-								setShowModalAppointment(true)
-							}
+							onPress={() => setShowModalAppointment(true)}
 						>
 							<AppointmentCard
 								navigation={navigation}
@@ -90,124 +114,52 @@ export const Home = ({navigation}) => {
 								onPressAppointment={() =>
 									setShowModalAppointment(true)
 								}
-								onPressCancel={() =>
-									setShowModalCancel(true)
-								}
+								onPressCancel={() => setShowModalCancel(true)}
 								consulta={item}
 								//
 								roleUsuario={profile.role}
 								dataConsulta={item.dataConsulta}
 								prioridade={item.prioridade.prioridade}
-								usuarioConsulta={profile.role == 'Medico' ? item.paciente : item.medicoClinica.medico}
+								usuarioConsulta={
+									profile.role == 'Medico'
+										? item.paciente
+										: item.medicoClinica.medico
+								}
 								//
-									
-								/>
+							/>
 						</TouchableOpacity>
 					)
 				}
 			/>
-
-
-			{userType === 'doctor' && (
+			{profile === 'Pacientes' && (
 				<>
-					
-					{/* Cards */}
-					<ListComponent
-						data={listaConsulta}
-						key={(item) => item.id}
-						renderItem={({ item }) =>
-							statusLista === item.situacao && (
-								// console.log(item)
-								<TouchableOpacity>
-									<AppointmentCard
-										navigation={navigation}
-										situacao={item.situacao}
-										onPressAppointment={() =>
-											setShowModalAppointment(true)
-										}
-										onPressCancel={() =>
-											setShowModalCancel(true)
-										}
-									/>
-								</TouchableOpacity>
-							)
-						}
-					/>
-					<CancellationModal
-						navigation={navigation}
-						visible={showModalCancel}
-						setShowModalCancel={setShowModalCancel}
-					/>
-					<AppointmentModal
-						situacao={statusLista}
-						navigation={navigation}
-						visible={showModalAppointment}
-						setShowModalAppointment={setShowModalAppointment}
-					/>
-				</>
-			)}
-			{userType === 'patient' && (
-				<>		
-					<ListComponent
-						data={listaConsulta}
-						key={(item) => item.id}
-						renderItem={({ item }) =>
-							statusLista === item.situacao && (
-								<TouchableOpacity
-									onPress={() =>
-										setShowModalAppointment(true)
-									}
-								>
-									<AppointmentCard
-										navigation={navigation}
-										situacao={item.situacao}
-										onPressAppointment={() =>
-											setShowModalAppointment(true)
-										}
-										onPressCancel={() =>
-											setShowModalCancel(true)
-										}
-										consulta={item}
-										//
-										roleUsuario={profile.role}
-										dataConsulta={item.dataConsulta}
-										prioridade={item.prioridade.prioridade}
-										usuarioConsulta={profile.role == 'Medico' ? item.paciente : item.medicoClinica.medico}
-										//
-									
-									/>
-								</TouchableOpacity>
-							)
-						}
-					/>
-					<CancellationModal
-						navigation={navigation}
-						visible={showModalCancel}
-						setShowModalCancel={setShowModalCancel}
-					/>
-					<AppointmentModal
-						situacao={statusLista}
-						navigation={navigation}
-						visible={showModalAppointment}
-						setShowModalAppointment={setShowModalAppointment}
-					/>
-
-					<ScheduleModal
-						navigation={navigation}
-						visible={showModalSchedule}
-						setShowModalSchedule={setShowModalSchedule}
-					/>
-					<LocationModal
-						visible={showModalLocationAppointment}
-						setShowModalLocationAppointment={
-							setShowModalLocationAppointment
-						} // Correção do nome da função
-					/>
 					<ScheduleButton
 						onPress={() => setShowModalSchedule(true)}
 					/>
 				</>
 			)}
+			<CancellationModal
+				navigation={navigation}
+				visible={showModalCancel}
+				setShowModalCancel={setShowModalCancel}
+			/>
+			<AppointmentModal
+				situacao={statusLista}
+				navigation={navigation}
+				visible={showModalAppointment}
+				setShowModalAppointment={setShowModalAppointment}
+			/>
+			<LocationModal
+				visible={showModalLocationAppointment}
+				setShowModalLocationAppointment={
+					setShowModalLocationAppointment
+				} // Correção do nome da função
+			/>
+			<ScheduleModal
+				navigation={navigation}
+				visible={showModalSchedule}
+				setShowModalSchedule={setShowModalSchedule}
+			/>
 		</Container>
 	);
 };

@@ -35,11 +35,13 @@ export const AppointmentCard = ({
 				{/* conteudo ao lado da imagem de perfil */}
 				<ContentCard>
 					<DataProfileCard>
-						<ProfileName>{usuarioConsulta.idNavigation.nome}</ProfileName>
-						{/* <ProfileData>
+						<ProfileName>
+							{usuarioConsulta.idNavigation.nome}
+						</ProfileName>
+						<ProfileData>
 							<TextAge>45 years</TextAge>
 							<TextBold>Rotina</TextBold>
-						</ProfileData> */}
+						</ProfileData>
 					</DataProfileCard>
 
 					<ViewRow>
@@ -53,7 +55,14 @@ export const AppointmentCard = ({
 										: '#8C8A97'
 								}
 							/>
-							<TextBold situacao={consulta.situacao.situacao} color={consulta.situacao.situacao === 'Pendentes' ? '#49B3BA' : '#8C8A97'}>
+							<TextBold
+								situacao={consulta.situacao.situacao}
+								color={
+									consulta.situacao.situacao === 'Pendentes'
+										? '#49B3BA'
+										: '#8C8A97'
+								}
+							>
 								14:00
 							</TextBold>
 						</ClockCard>
