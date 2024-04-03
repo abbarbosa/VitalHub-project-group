@@ -498,4 +498,7 @@ C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\o
 C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
 >>>>>>> 38020fc63c2525360391da46e1bcb9cb45f78e85
+<<<<<<< HEAD
 >>>>>>> d9da322bb8b87c9b428ac791f375a04ebfe046dc
+=======
+>>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c

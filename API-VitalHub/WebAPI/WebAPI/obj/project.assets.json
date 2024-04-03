@@ -3352,11 +3352,25 @@
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      "projectUniqueName": "C:\\Users\\55358961879\\Desktop\\2023-3S-3DS-Alunos\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+      "projectName": "WebAPI",
+      "projectPath": "C:\\Users\\55358961879\\Desktop\\2023-3S-3DS-Alunos\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+      "packagesPath": "C:\\Users\\55358961879\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\55358961879\\Desktop\\2023-3S-3DS-Alunos\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
+=======
+>>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c
       "projectUniqueName": "C:\\Users\\52161105850\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
       "projectName": "WebAPI",
       "projectPath": "C:\\Users\\52161105850\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
       "packagesPath": "C:\\Users\\52161105850\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\52161105850\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
+<<<<<<< HEAD
+=======
+>>>>>>> 38020fc63c2525360391da46e1bcb9cb45f78e85
+>>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\52161105850\\AppData\\Roaming\\NuGet\\NuGet.Config",
