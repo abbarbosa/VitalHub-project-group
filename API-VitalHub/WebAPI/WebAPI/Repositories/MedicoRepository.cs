@@ -116,6 +116,7 @@ namespace WebAPI.Repositories
                 .Include(x => x.Prioridade)
                 .Include(x => x.Paciente!.IdNavigation)
                 .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
+                .Include(x => x.MedicoClinica!.Medico!.Especialidade)
 
                 .Where(x => x.MedicoClinica!.MedicoId == idMedico && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) ==0)
                 .ToList();

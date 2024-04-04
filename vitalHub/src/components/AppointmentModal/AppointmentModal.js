@@ -9,6 +9,7 @@ import {
 	ButtonTitle,
 } from '../Button/Style';
 import { ProfileData, TextAge, TextBold } from '../AppointmentCard/Style';
+import { useEffect } from 'react';
 
 export const AppointmentModal = ({
 	visible,
@@ -27,14 +28,21 @@ export const AppointmentModal = ({
 	async function handleClose(screen) {
 		await setShowModalAppointment(false);
 
-		if (screen == 'Local consulta') {
+		console.log(' consulta ');
+		console.log(consulta);
+
+		if (screen == 'LocationAppointment') {
 			navigation.replace(screen, {
-				clinicaid: consulta.medicoClinica.clinicaId,
+				clinica: consulta.medicoClinica.clinicaId,
 			});
 		} else {
 			navigation.replace(screen);
 		}
 	}
+
+	useEffect(() => {
+		console.log(consulta);
+	}, [visible]);
 
 	return (
 		<Modal
@@ -56,7 +64,7 @@ export const AppointmentModal = ({
 						<TextBold>joao@gmail.com</TextBold>
 					</ProfileData>
 
-					{situacao !== 'pendente' ? (
+					{situacao !== 'Pendentes' ? (
 						<ButtonModal
 							onPress={() => handleClose('VisualizePrescription')}
 						>

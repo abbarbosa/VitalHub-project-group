@@ -27,7 +27,7 @@ export const Home = ({ navigation }) => {
 
 	const [listaConsulta, setListaConsulta] = useState([]);
 
-	const [profile, setProfile] = useState('Paciente');
+	const [profile, setProfile] = useState({});
 
 	const [userLogin, setUserLogin] = useState('');
 
@@ -43,21 +43,10 @@ export const Home = ({ navigation }) => {
 	async function ListarConsulta() {
 		const url = (profile.role = 'Medico' ? 'Medicos' : 'Pacientes');
 
-		console.log(
-			`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`,
-		);
 		await api
-			.get(
-				`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`,
-				{
-					headers: {
-						Authorization: `Bearer ${profile.token}`,
-					},
-				},
-			)
+			.get(`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`)
 			.then((response) => {
 				setListaConsulta(response.data);
-				console.log(response.data);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -65,16 +54,17 @@ export const Home = ({ navigation }) => {
 	}
 
 	function MostrarModal(modal, consulta) {
-		if (modal == 'cancelar') {
-			setShowModalCancel(true);
+		setConsultaSelecionada(consulta);
 
-			setConsultaSelecionada(consulta);
+		if (modal === 'cancelar') {
+			setShowModalCancel(true);
+		} else if (modal === 'prontuario') {
+			setShowModalAppointment(true);
 		}
 	}
 
 	useEffect(() => {
 		ProfileLoad();
-		// ListarConsulta();
 	}, []);
 
 	useEffect(() => {
@@ -112,25 +102,25 @@ export const Home = ({ navigation }) => {
 				data={listaConsulta}
 				key={(item) => item.id}
 				renderItem={({ item }) =>
-					statusLista === item.situacao && (
+					statusLista === item.situacao.situacao && (
 						<TouchableOpacity
-							onPress={() => setShowModalAppointment(true)}
+							onPress={() => MostrarModal('prontuario', item)}
 						>
 							<AppointmentCard
 								navigation={navigation}
-								situacao={item.situacao}
+								situacao={item.situacao.situacao}
 								onPressAppointment={() =>
-									setShowModalAppointment('prontuario', item)
+									MostrarModal('prontuario', item)
 								}
 								onPressCancel={() =>
-									setShowModalCancel('cancelar', item)
+									MostrarModal('cancelar', item)
 								}
 								consulta={item} // Passando os dados da consulta como prop
 								roleUsuario={profile.role}
 								dataConsulta={item.dataConsulta}
 								prioridade={item.prioridade.prioridade}
 								usuarioConsulta={
-									profile.role == 'Paciente'
+									profile.role === 'Medico'
 										? item.paciente
 										: item.medicoClinica.medico
 								}
@@ -144,11 +134,6 @@ export const Home = ({ navigation }) => {
 					<ScheduleButton
 						onPress={() => setShowModalSchedule(true)}
 					/>
-					<ScheduleModal
-						navigation={navigation}
-						visible={showModalSchedule}
-						setShowModalSchedule={setShowModalSchedule}
-					/>
 				</>
 			)}
 			<CancellationModal
@@ -161,7 +146,7 @@ export const Home = ({ navigation }) => {
 				navigation={navigation}
 				visible={showModalAppointment}
 				setShowModalAppointment={setShowModalAppointment}
-				console={consultaSelecionada}
+				consulta={consultaSelecionada}
 				roleUsuario={profile.role}
 			/>
 			<LocationModal
@@ -169,6 +154,12 @@ export const Home = ({ navigation }) => {
 				setShowModalLocationAppointment={
 					setShowModalLocationAppointment
 				} // Correção do nome da função
+				consulta={consultaSelecionada}
+			/>
+			<ScheduleModal
+				navigation={navigation}
+				visible={showModalSchedule}
+				setShowModalSchedule={setShowModalSchedule}
 			/>
 		</Container>
 	);
