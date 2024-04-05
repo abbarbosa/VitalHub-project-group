@@ -47,8 +47,11 @@ export const AppointmentCard = ({
 			<ContentCard>
 				<DataProfileCard>
 					<ProfileName>
-						{usuarioConsulta.idNavigation.nome}
+						{usuarioConsulta &&
+							usuarioConsulta.idNavigation &&
+							usuarioConsulta.idNavigation.nome}
 					</ProfileName>
+
 					<ProfileData>
 						<TextAge>45 years</TextAge>
 						<TextBold>Rotina</TextBold>
