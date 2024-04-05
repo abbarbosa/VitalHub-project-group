@@ -1,3 +1,4 @@
+// Importando os módulos necessários do React e do React Native
 import { useEffect, useState } from "react";
 import { Button, ButtonExitApp, ButtonTitle } from "../../components/Button/Style";
 import { Container, ScrollContainer } from "../../components/Container/Style";
@@ -12,85 +13,77 @@ import {
   TextProfileEmail,
   TextProfileInput,
   TextProfileName,
-} from "./Style";
+} from "./Style"; // Importando os estilos específicos para este componente
 
+// Importando funções e componentes adicionais necessários
 import { UserDecodeToken } from '../../services/Utils/Auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../../services/Service";
 
+// Definição do componente Profile
+export const Profile = ({ navigation }) => {
 
-export const Profile = ({navigation}) => {
-
-  const [nameUser, setUserName] = useState('')
+  // Definição dos estados do componente
+  const [nameUser, setNameUser] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [userData, setUserData] = useState('')
+  const [informations, setInformations] = useState('')
+  const [profile, setProfile] = useState('')
+  const [userLogin, setUserLogin] = useState('')
 
-  //carregamento dos dados do usuario
-  async function profileLoad(){
-  try {
-    
-      const token = await UserDecodeToken()
-  
-      const {name} = token;
-      const {email} = token;
-      const {dateBirth} = token;
-  
-      if(token){
-        const {name, email} = token
-      }
-      // Limitamos o tamanho do nome a, por exemplo, 20 caracteres
-      const limitedName = name.length > 16 ? name.substring(0, 16) + '...' : name;
 
-      setUserName(limitedName);
-      setUserEmail(email);
-  
-    } catch (error) {
-      console.log(error); 
-    }
+
+  // Função assíncrona para carregar os dados do usuário
+  async function profileLoad() {
+    const token = await UserDecodeToken();
+    setProfile(token);
+    setUserLogin(token.role);
   }
 
-  async function loggedUser(){
+  // Função assíncrona para carregar os dados do usuário logado
+  async function loggedUser() {
     try {
-      // Recuperação do token de acesso
-			const token = JSON.parse(
-				await AsyncStorage.getItem('token'),
-			).token;
+      // Recuperação do token de acesso armazenado localmente
+      const token = JSON.parse(
+        await AsyncStorage.getItem('token'),
+      ).token;
 
-      if(token){
+      // Verifica se o token existe
+      if (token) {
+        // Requisição à API para obter dados do usuário logado
         await api.get('/Pacientes/PerfilLogado', {
           headers: {
-						// Adicionando o token ao cabeçalho de autorização
-						Authorization: `Bearer ${token}`
-					}
-          
+            // Adicionando o token ao cabeçalho de autorização
+            Authorization: `Bearer ${token}`
+          }
         }).then(response => {
-          // Formata a data de nascimento antes de definir no estado
+          // Formata a data de nascimento e o CPF antes de definir no estado
           const formattedBirthDate = formatBirthDate(response.data.dataNascimento);
-           // Formata o CPF antes de definir no estado
           const formattedCPF = formatCPF(response.data.cpf);
-          // Define a data de nascimento formatada no estado
-          setUserData({ ...response.data, dataNascimento: formattedBirthDate, cpf: formattedCPF});
+
+          // Define os dados do usuário formatados no estado
+          setUserData({ ...response.data, dataNascimento: formattedBirthDate, cpf: formattedCPF });
         }).catch(error => {
           console.log(error);
         })
-      }else{
+      } else {
         console.log(`deu erro no if`);
       }
     } catch (error) {
-      console.log(`Deu erro nl catch: ${error}`);
+      console.log(`Deu erro no catch: ${error}`);
     }
-    
   }
-  
-  async function Logout(){
-    try {
 
-      //obetendo o token
+  // Função assíncrona para realizar o logout do usuário
+  async function Logout() {
+    try {
+      // Obtém o token de acesso armazenado localmente
       const token = await AsyncStorage.getItem('token')
 
-      //removendo o token
+      // Remove o token armazenado localmente
       await AsyncStorage.removeItem('token')
 
+      // Navega para a tela de login
       navigation.navigate('Login');
 
       console.log('Token removido', token);
@@ -99,38 +92,58 @@ export const Profile = ({navigation}) => {
     }
   }
 
-// Função para formatar a data de nascimento
-function formatBirthDate(dateString) {
-  // Cria um objeto de data a partir da string da data de nascimento
-  const birthDate = new Date(dateString);
+  // Função para formatar a data de nascimento
+  function formatBirthDate(dateString) {
+    // Cria um objeto de data a partir da string da data de nascimento
+    const birthDate = new Date(dateString);
 
-  // Obtém o dia, mês e ano da data de nascimento
-  const day = String(birthDate.getDate()).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
-  const month = String(birthDate.getMonth() + 1).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
-  const year = birthDate.getFullYear();
+    // Obtém o dia, mês e ano da data de nascimento
+    const day = String(birthDate.getDate()).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
+    const month = String(birthDate.getMonth() + 1).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
+    const year = birthDate.getFullYear();
 
-  // Formata a data no formato dd/mm/aaaa
-  const formattedDate = `${day}/${month}/${year}`;
+    // Formata a data no formato dd/mm/aaaa
+    const formattedDate = `${day}/${month}/${year}`;
 
-  return formattedDate;
-}
+    return formattedDate;
+  }
 
-// Função para formatar o CPF
-function formatCPF(cpfString) {
-  // Extrai os três primeiros dígitos do CPF
-  const firstDigits = cpfString.substring(0, 3);
-  // Oculta todos os demais dígitos com "*"
-  const hiddenDigits = cpfString.substring(3).replace(/\d/g, '*');
-  // Concatena os três primeiros dígitos com os demais ocultos
-  const formattedCPF = `${firstDigits}${hiddenDigits}`;
-  return formattedCPF;
-}
+  // Função para formatar o CPF
+  function formatCPF(cpfString) {
+    // Extrai os três primeiros dígitos do CPF
+    const firstDigits = cpfString.substring(0, 3);
+    // Oculta todos os demais dígitos com "*"
+    const hiddenDigits = cpfString.substring(3).replace(/\d/g, '*');
+    // Concatena os três primeiros dígitos com os demais ocultos
+    const formattedCPF = `${firstDigits}${hiddenDigits}`;
+    return formattedCPF;
+  }
 
+  async function ShowInformations() {
+    const url = (informations.role === 'Medico' ? 'Medicos' : 'Pacientes');
+    await api
+      .get(`${url}/BuscarPorId?id=${profile.user}`)
+      .then((response) => {
+        console.log(response)
 
-	useEffect(() =>{
-		profileLoad(),
-    loggedUser()
-	},[])
+      })
+    //   // await api
+    //   //   .get(`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`)
+    //   //   .then((response) => {
+    //   //     setListaConsulta(response.data);
+    //   //   })
+    //   //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  }
+
+  // Efeito utilizado para carregar os dados do usuário ao montar o componente
+  useEffect(() => {
+    profileLoad(),
+      loggedUser()
+  }, [])
+
+  // Retorno do componente
   return (
     <ScrollContainer>
       <Container>
@@ -139,10 +152,9 @@ function formatCPF(cpfString) {
           <TextProfileName> {nameUser} </TextProfileName>
           <TextProfileEmail>{userEmail}</TextProfileEmail>
         </ContentName>
-        {/*  */}
         <ContentProfile>
           <TextProfileInput>Date of birth:</TextProfileInput>
-          <InputProfile placeholder={"04/05/1999"}>
+          <InputProfile>
             {userData.dataNascimento}
           </InputProfile>
         </ContentProfile>
@@ -191,4 +203,4 @@ function formatCPF(cpfString) {
       </Container>
     </ScrollContainer>
   );
-};
+}; 

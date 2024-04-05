@@ -9,14 +9,15 @@ import {
 	ButtonTitle,
 } from '../Button/Style';
 import { ProfileData, TextAge, TextBold } from '../AppointmentCard/Style';
+import { useEffect } from 'react';
 
 export const AppointmentModal = ({
-	roleUser,
-	consulta,
 	visible,
 	situacao,
 	navigation,
 	setShowModalAppointment, // Função para controlar a exibição do modal
+	roleUsuario,
+	consulta,
 	...rest
 }) => {
 	// Função para fechar o modal
@@ -27,13 +28,21 @@ export const AppointmentModal = ({
 	async function handleClose(screen) {
 		await setShowModalAppointment(false);
 
-		if(screen == "Local consulta"){
-			navigation.replace(screen, {clinicaId : consulta.medicoClinica.clinicaId});
-		}else{
-			navigation.replace(screen)
+		console.log(' consulta ');
+		console.log(consulta);
+
+		if (screen == 'LocationAppointment') {
+			navigation.replace(screen, {
+				clinicaid: consulta.medicoClinica.clinicaId,
+			});
+		} else {
+			navigation.replace(screen);
 		}
-		
 	}
+
+	useEffect(() => {
+		console.log(consulta);
+	}, [visible]);
 
 	return (
 		<Modal
@@ -55,7 +64,7 @@ export const AppointmentModal = ({
 						<TextBold>joao@gmail.com</TextBold>
 					</ProfileData>
 
-					{situacao !== 'pendente' ? (
+					{situacao !== 'Pendentes' ? (
 						<ButtonModal
 							onPress={() => handleClose('VisualizePrescription')}
 						>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	ButtonSecundary,
 	ButtonSecundaryTitle,
@@ -20,43 +20,69 @@ import {
 	TextProfileInput,
 } from '../Profile/Style';
 import { ImageLocation } from './Style';
-
-
-
+import { api } from '../../services/Service';
+import { ActivityIndicator } from 'react-native';
 
 export const LocationAppointment = ({ navigation, route }) => {
+	const [clinica, setClinica] = useState(null);
+
 	useEffect(() => {
-		console.log(route);
-	}, [route.params])
+		if (clinica == null) {
+			console.log(clinica);
+			BuscarClinica();
+		}
+	}, [clinica]);
+
+	async function BuscarClinica() {
+		(await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaid}`))
+			.then((response) => {
+				setClinica(response.data);
+
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
 	return (
 		<Container>
-			<ImageLocation>
-				<Map />
-			</ImageLocation>
+			{clinica !== null ? (
+				<>
+					<ImageLocation>
+						<Map />
+					</ImageLocation>
 
-			<SpaceView>
-				<Title>Clinic Nature</Title>
-				<SmallTextModal>Jerumenha-PI</SmallTextModal>
-			</SpaceView>
+					<SpaceView>
+						<Title>{clinica.nomeFantasia}</Title>
+						<SmallTextModal>Jerumenha-PI</SmallTextModal>
+					</SpaceView>
 
-			<ContentProfile>
-				<TextProfileInput>Address</TextProfileInput>
-				<InputProfile placeholder={'Rua Vincenso, 97'} />
-			</ContentProfile>
-			<ContentRow>
-				<RowContentProfile>
-					<TextProfileInput>Number</TextProfileInput>
-					<InputRow placeholder={'97'} />
-				</RowContentProfile>
-				{/*  */}
-				<RowContentProfile>
-					<TextProfileInput>neighborhood</TextProfileInput>
-					<InputRow placeholder={'Jerumenha-PI'} />
-				</RowContentProfile>
-			</ContentRow>
-			<ButtonSecundary onPress={() => navigation.replace('Main')}>
-				<ButtonSecundaryTitle>Back</ButtonSecundaryTitle>
-			</ButtonSecundary>
+					<ContentProfile>
+						<TextProfileInput>Address</TextProfileInput>
+						<InputProfile
+							placeholder={'Rua Vincenso, 97'}
+							editable={false}
+						/>
+					</ContentProfile>
+					<ContentRow>
+						<RowContentProfile>
+							<TextProfileInput>Number</TextProfileInput>
+							<InputRow placeholder={'97'} />
+						</RowContentProfile>
+						{/*  */}
+						<RowContentProfile>
+							<TextProfileInput>neighborhood</TextProfileInput>
+							<InputRow placeholder={'Jerumenha-PI'} />
+						</RowContentProfile>
+					</ContentRow>
+					<ButtonSecundary onPress={() => navigation.replace('Main')}>
+						<ButtonSecundaryTitle>Back</ButtonSecundaryTitle>
+					</ButtonSecundary>
+				</>
+			) : (
+				<ActivityIndicator />
+			)}
 		</Container>
 	);
 };

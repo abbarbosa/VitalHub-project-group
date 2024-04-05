@@ -3347,41 +3347,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\55358961879\\.nuget\\packages\\": {}
+    "C:\\Users\\52161105850\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\55358961879\\Desktop\\2023-3S-3DS-Alunos\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
-=======
-      "projectUniqueName": "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
->>>>>>> 2d21a304faf5c16cd94f09b7249b14525594246a
-      "projectName": "WebAPI",
-      "projectPath": "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
-      "packagesPath": "C:\\Users\\55358961879\\.nuget\\packages\\",
-<<<<<<< HEAD
-      "outputPath": "C:\\Users\\55358961879\\Desktop\\2023-3S-3DS-Alunos\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
-=======
->>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c
       "projectUniqueName": "C:\\Users\\52161105850\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
       "projectName": "WebAPI",
       "projectPath": "C:\\Users\\52161105850\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
       "packagesPath": "C:\\Users\\52161105850\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\52161105850\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
-<<<<<<< HEAD
-=======
->>>>>>> 38020fc63c2525360391da46e1bcb9cb45f78e85
->>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c
-=======
-      "outputPath": "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\obj\\",
->>>>>>> 2d21a304faf5c16cd94f09b7249b14525594246a
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\55358961879\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\52161105850\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3401,11 +3379,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3458,24 +3431,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[7.0.17, 7.0.17]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[7.0.17, 7.0.17]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[7.0.17, 7.0.17]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[7.0.17, 7.0.17]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -3484,7 +3439,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   },
