@@ -36,17 +36,30 @@ export const Home = ({ navigation }) => {
 	async function ProfileLoad() {
 		const token = await UserDecodeToken();
 
+		console.log(token);
+
 		setProfile(token);
+
+		console.log(profile);
+
 		setUserLogin(token.role);
+
+		console.log(userLogin);
 	}
 
 	async function ListarConsulta() {
-		const url = (profile.role = 'Medico' ? 'Medicos' : 'Pacientes');
+		const url = profile.role === 'Medico' ? 'Medicos' : 'Pacientes';
+
+		console.log(url);
 
 		await api
 			.get(`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`)
 			.then((response) => {
+				console.log(response.data);
+
 				setListaConsulta(response.data);
+
+				console.log(listaConsulta);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -129,13 +142,19 @@ export const Home = ({ navigation }) => {
 					)
 				}
 			/>
-			{profile === 'Pacientes' && (
+			{profile === 'Paciente' && (
 				<>
 					<ScheduleButton
 						onPress={() => setShowModalSchedule(true)}
 					/>
+					<ScheduleModal
+						navigation={navigation}
+						visible={showModalSchedule}
+						setShowModalSchedule={setShowModalSchedule}
+					/>
 				</>
 			)}
+
 			<CancellationModal
 				navigation={navigation}
 				visible={showModalCancel}
@@ -155,11 +174,6 @@ export const Home = ({ navigation }) => {
 					setShowModalLocationAppointment
 				} // Correção do nome da função
 				consulta={consultaSelecionada}
-			/>
-			<ScheduleModal
-				navigation={navigation}
-				visible={showModalSchedule}
-				setShowModalSchedule={setShowModalSchedule}
 			/>
 		</Container>
 	);

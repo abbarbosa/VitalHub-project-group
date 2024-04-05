@@ -33,7 +33,7 @@ export const AppointmentModal = ({
 
 		if (screen == 'LocationAppointment') {
 			navigation.replace(screen, {
-				clinica: consulta.medicoClinica.clinicaId,
+				clinicaid: consulta.medicoClinica.clinicaId,
 			});
 		} else {
 			navigation.replace(screen);
