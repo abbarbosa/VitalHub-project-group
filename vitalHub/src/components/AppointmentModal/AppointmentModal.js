@@ -11,6 +11,8 @@ import {
 import { ProfileData, TextAge, TextBold } from '../AppointmentCard/Style';
 
 export const AppointmentModal = ({
+	roleUser,
+	consulta,
 	visible,
 	situacao,
 	navigation,
@@ -24,7 +26,13 @@ export const AppointmentModal = ({
 
 	async function handleClose(screen) {
 		await setShowModalAppointment(false);
-		navigation.replace(screen);
+
+		if(screen == "Local consulta"){
+			navigation.replace(screen, {clinicaId : consulta.medicoClinica.clinicaId});
+		}else{
+			navigation.replace(screen)
+		}
+		
 	}
 
 	return (

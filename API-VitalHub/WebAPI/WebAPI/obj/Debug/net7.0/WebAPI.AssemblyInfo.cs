@@ -15,6 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 <<<<<<< HEAD
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fdd1d8a700ebfd4f8c24513a308fc9324e28600")]
 =======
 <<<<<<< HEAD
@@ -27,6 +28,9 @@ using System.Reflection;
 >>>>>>> 38020fc63c2525360391da46e1bcb9cb45f78e85
 >>>>>>> d9da322bb8b87c9b428ac791f375a04ebfe046dc
 >>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e7bd2104b8ae1e58f157f19de46467d7e756be72")]
+>>>>>>> 2d21a304faf5c16cd94f09b7249b14525594246a
 [assembly: System.Reflection.AssemblyProductAttribute("WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

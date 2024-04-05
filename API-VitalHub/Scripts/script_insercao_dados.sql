@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 USE VitalHub;
-=======
-USE VitalHubAlteradoManha;
->>>>>>> anna
 
 -- Selecionando todos os endereços
 SELECT * FROM dbo.Enderecos;
@@ -90,20 +86,12 @@ VALUES
 	(NEWID(), 'Cancelados');
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> anna
 -- Selecionando todas as clínicas
 SELECT * FROM dbo.Clinicas;
 
 INSERT INTO
 	dbo.Clinicas
 VALUES
-<<<<<<< HEAD
 	(NEWID(), 'Clínica Médica Vida & Saúde', '12345678000190', 'Clínica Médica Vida & Saúde', -23.5505, -46.6333, 'clinica.vidasaude@gmail.com'),
 	(NEWID(), 'Centro Médico São Paulo', '23456789000101', 'Centro Médico São Paulo', -23.5674, -46.6482, 'medico.saopaulo@gmail.com');
-=======
-	(NEWID(), 'Clínica Médica Vida & Saúde', '12345678000190', 'Clínica Médica Vida & Saúde', 'clinica.vidasaude@gmail.com', '0FCCC0A1-3B4A-4DBB-B0EA-B34D56030EBB'),
-	(NEWID(), 'Centro Médico São Paulo', '23456789000101', 'Centro Médico São Paulo',  'medico.saopaulo@gmail.com', '0FCCC0A1-3B4A-4DBB-B0EA-B34D56030EBB');
->>>>>>> anna

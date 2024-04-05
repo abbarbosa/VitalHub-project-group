@@ -162,7 +162,6 @@ C:\Users\carlos.roque\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\
 C:\Users\carlos.roque\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
 C:\Users\carlos.roque\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\carlos.roque\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
-<<<<<<< HEAD
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.json
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\WebAPI.exe
@@ -246,7 +245,10 @@ C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\D
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\55358961879\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 2d21a304faf5c16cd94f09b7249b14525594246a
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.json
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\WebAPI.exe
@@ -330,6 +332,7 @@ C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\o
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
+<<<<<<< HEAD
 C:\Users\52161105850\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\52161105850\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\appsettings.json
 C:\Users\52161105850\Desktop\2023-3S-3DS-Alunos\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\WebAPI.exe
@@ -502,3 +505,5 @@ C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\o
 >>>>>>> d9da322bb8b87c9b428ac791f375a04ebfe046dc
 =======
 >>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c
+=======
+>>>>>>> 2d21a304faf5c16cd94f09b7249b14525594246a

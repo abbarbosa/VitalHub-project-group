@@ -1,11 +1,15 @@
 {
   "version": 2,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
   "dgSpecHash": "7iee4LmhLEib2iQrJrjahabfYtTAglIY+f6c/z3DL1ducY7YEA25SexCBi9zwIRO/rBtklIcvNaZHm+q9apsXA==",
+=======
+  "dgSpecHash": "NNDNqGzIFQrbCM5ykTgru/nJqz0n9dgQx3j+h4tM0sWTswOnIsLQ1pXIpZj30xNo368nar1vjGIiZeL6gEqviw==",
+>>>>>>> 2d21a304faf5c16cd94f09b7249b14525594246a
   "success": true,
-  "projectFilePath": "C:\\Users\\55358961879\\Desktop\\2023-3S-3DS-Alunos\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
+  "projectFilePath": "C:\\Users\\55358961879\\Desktop\\VitalHub-project-group\\API-VitalHub\\WebAPI\\WebAPI\\WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\55358961879\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\55358961879\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
@@ -80,6 +84,7 @@
     "C:\\Users\\55358961879\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.17\\microsoft.netcore.app.ref.7.0.17.nupkg.sha512",
     "C:\\Users\\55358961879\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.17\\microsoft.aspnetcore.app.ref.7.0.17.nupkg.sha512",
     "C:\\Users\\55358961879\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.17\\microsoft.netcore.app.host.win-x64.7.0.17.nupkg.sha512"
+<<<<<<< HEAD
 =======
 >>>>>>> f2c93df24ae55554c67044b0fb02a91b4a312b7c
   "dgSpecHash": "7x7f2Q7+Yc9q+jKMvqCugNRtEPc3mmPXD7KH7HZX3yRdjiRUlY27IJYOJrPNK6++WMLBy0G1cresVEimIXDcTQ==",
@@ -155,6 +160,8 @@
     "C:\\Users\\52161105850\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
     "C:\\Users\\52161105850\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\52161105850\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
+=======
+>>>>>>> 2d21a304faf5c16cd94f09b7249b14525594246a
   ],
   "logs": [
     {

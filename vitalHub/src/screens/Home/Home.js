@@ -14,7 +14,9 @@ import { ScheduleModal } from '../../components/ScheduleModal/ScheduleModal';
 import { TouchableOpacity } from 'react-native';
 import { LocationModal } from '../../components/LocationModal/LocationModal';
 import { api } from '../../services/Service';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserDecodeToken } from '../../services/Utils/Auth';
+
 
 
 const Consultas = [
@@ -26,183 +28,163 @@ const Consultas = [
 	{ id: 6, nome: 'Carlos', situacao: 'cancelada' },
 ];
 
-export const Home = ({ userType = 'doctor', navigation }) => {
+export const Home = ({ userType = 'patient', navigation }) => {
 	const [statusLista, setStatusLista] = useState('pendente');
 	const [showModalCancel, setShowModalCancel] = useState(false);
 	const [showModalAppointment, setShowModalAppointment] = useState(false);
 	const [showModalSchedule, setShowModalSchedule] = useState(false);
-	const [showModalLocationAppointment, setShowModalLocationAppointment] = useState(false);
+	const [showModalLocationAppointment, setShowModalLocationAppointment] =
+		useState(false);
 
-	const [listaConsulta, setListaConsulta] = useState([])
-	async function ListarConsulta(){
-		try {
-			// Recuperação do token de acesso
-			const token = JSON.parse(
-				await AsyncStorage.getItem('token'),
-			).token;
-		
-			// Verificação se o token foi corretamente obtido
-			if (token) {
-				// Fazendo a chamada da API para consultas
-				await api.get('/Consultas', {
+	const [dateSelected, setDateSelected] = useState('');
+
+	const [listaConsulta, setListaConsulta] = useState([]);
+
+	const [profile, setProfile] = useState('Paciente');
+
+	const [userLogin, setUserLogin] = useState('');
+
+	const [selectedQuery, setSelectedQuery] = useState('')
+
+	async function ProfileLoad() {
+		const token = await UserDecodeToken();
+
+		setProfile(token);
+		setUserLogin(token.role);
+	}
+
+	async function ListarConsulta() {
+		const url = (profile.role = 'Medico' ? 'Medicos' : 'Paciente');
+
+		console.log(
+			`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`,
+		);
+		await api
+			.get(
+				`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`,
+				{
 					headers: {
-						// Adicionando o token ao cabeçalho de autorização
-						Authorization: `Bearer ${token}`
-					}
-				}).then(response => {
-					setListaConsulta(response.data);
-					console.log(response.data);
-				}).catch(error => {
-					console.log(`Deu erro: ${error}`);
-				});
-			} else {
-				console.log('Token de autorização não encontrado');
-			}
-		} catch (error) {
-			console.log(error);
-		}		
+						Authorization: `Bearer ${profile.token}`,
+					},
+				},
+			)
+			.then((response) => {
+				setListaConsulta(response.data);
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+	function ShowModal(modal, consulta) {
+		if (modal === 'Cancelar') {
+			setShowModalCancel(true),
+
+
+			setSelectedQuery(consulta)
+		}else {
+			setShowModalAppointment(true)
+		}
 	}
 
 	useEffect(() => {
-		ListarConsulta()
-	},[])
+		ProfileLoad();
+		// ListarConsulta();
+	}, []);
+
+	useEffect(() => {
+		if (dateSelected != '') {
+			ListarConsulta();
+		}
+	}, [dateSelected]);
 
 	return (
 		<Container>
 			{/* Header */}
 			<Header navigation={navigation} />
-			{/* Renderização condicional com base no userType */}
-			{userType === 'doctor' && (
-				<>
-					{/* Calendario */}
-					<CalendarHome />
-					{/* Buttons(Filtros) */}
-					<FilterAppointment>
-						<AbsListAppontment
-							textButton={'Scheduled'}
-							clickButton={statusLista === 'pendente'}
-							onPress={() => setStatusLista('pendente')}
-						/>
-						<AbsListAppontment
-							textButton={'Realized'}
-							clickButton={statusLista === 'realizada'}
-							onPress={() => setStatusLista('realizada')}
-						/>
-						<AbsListAppontment
-							textButton={'Canceled'}
-							clickButton={statusLista === 'cancelada'}
-							onPress={() => setStatusLista('cancelada')}
-						/>
-					</FilterAppointment>
-					{/* Cards */}
-					<ListComponent
-						data={listaConsulta}
-						key={(item) => item.id}
-						renderItem={({ item }) =>
-							statusLista === item.situacao && (
-								// console.log(item)
-								<TouchableOpacity>
-									<AppointmentCard
-										navigation={navigation}
-										situacao={item.situacao}
-										onPressAppointment={() =>
-											setShowModalAppointment(true)
-										}
-										onPressCancel={() =>
-											setShowModalCancel(true)
-										}
-									/>
-								</TouchableOpacity>
-							)
-						}
-					/>
-					<CancellationModal
-						navigation={navigation}
-						visible={showModalCancel}
-						setShowModalCancel={setShowModalCancel}
-					/>
-					<AppointmentModal
-						situacao={statusLista}
-						navigation={navigation}
-						visible={showModalAppointment}
-						setShowModalAppointment={setShowModalAppointment}
-					/>
-				</>
-			)}
-			{userType === 'patient' && (
-				<>
-					<CalendarHome />
-					<FilterAppointment>
-						<AbsListAppontment
-							textButton={'Scheduled'}
-							clickButton={statusLista === 'pendente'}
-							onPress={() => setStatusLista('pendente')}
-						/>
-						<AbsListAppontment
-							textButton={'Realized'}
-							clickButton={statusLista === 'realizada'}
-							onPress={() => setStatusLista('realizada')}
-						/>
-						<AbsListAppontment
-							textButton={'Canceled'}
-							clickButton={statusLista === 'cancelada'}
-							onPress={() => setStatusLista('cancelada')}
-						/>
-					</FilterAppointment>
-					<ListComponent
-						data={listaConsulta}
-						key={(item) => item.id}
-						renderItem={({ item }) =>
-							statusLista === item.situacao && (
-								<TouchableOpacity
-									onPress={() =>
-										setShowModalAppointment(true)
-									}
-								>
-									<AppointmentCard
-										navigation={navigation}
-										situacao={item.situacao}
-										onPressAppointment={() =>
-											setShowModalAppointment(true)
-										}
-										onPressCancel={() =>
-											setShowModalCancel(true)
-										}
-										consulta={item}
-									
-									/>
-								</TouchableOpacity>
-							)
-						}
-					/>
-					<CancellationModal
-						navigation={navigation}
-						visible={showModalCancel}
-						setShowModalCancel={setShowModalCancel}
-					/>
-					<AppointmentModal
-						situacao={statusLista}
-						navigation={navigation}
-						visible={showModalAppointment}
-						setShowModalAppointment={setShowModalAppointment}
-					/>
+			{/* Calendario */}
+			<CalendarHome setDateSelected={setDateSelected} />
+			{/* Buttons(Filtros) */}
+			<FilterAppointment>
+				<AbsListAppontment
+					textButton={'Scheduled'}
+					clickButton={statusLista === 'pendente'}
+					onPress={() => setStatusLista('pendente')}
+				/>
+				<AbsListAppontment
+					textButton={'Realized'}
+					clickButton={statusLista === 'realizada'}
+					onPress={() => setStatusLista('realizada')}
+				/>
+				<AbsListAppontment
+					textButton={'Canceled'}
+					clickButton={statusLista === 'cancelada'}
+					onPress={() => setStatusLista('cancelada')}
+				/>
+			</FilterAppointment>
 
-					<ScheduleModal
-						navigation={navigation}
-						visible={showModalSchedule}
-						setShowModalSchedule={setShowModalSchedule}
-					/>
-					<LocationModal
-						visible={showModalLocationAppointment}
-						setShowModalLocationAppointment={
-							setShowModalLocationAppointment
-						} // Correção do nome da função
-					/>
+			<ListComponent
+				data={listaConsulta}
+				key={(item) => item.id}
+				renderItem={({ item }) =>
+					statusLista === item.situacao && (
+						<TouchableOpacity
+							onPress={() => setShowModalAppointment(true)}
+						>
+							<AppointmentCard
+								navigation={navigation}
+								situacao={item.situacao}
+								onPressAppointment={() =>
+									setShowModalAppointment(true)
+								}
+								onPressCancel={() => setShowModalCancel(true)}
+								consulta={item}
+								//
+								roleUsuario={profile.role}
+								dataConsulta={item.dataConsulta}
+								prioridade={item.prioridade.prioridade}
+								usuarioConsulta={
+									profile.role == 'Medico'
+										? item.paciente
+										: item.medicoClinica.medico
+								}
+							//
+							/>
+						</TouchableOpacity>
+					)
+				}
+			/>
+			{profile === 'Pacientes' && (
+				<>
 					<ScheduleButton
 						onPress={() => setShowModalSchedule(true)}
 					/>
 				</>
 			)}
+			<CancellationModal
+				navigation={navigation}
+				visible={showModalCancel}
+				setShowModalCancel={setShowModalCancel}
+			/>
+			<AppointmentModal
+				situacao={statusLista}
+				navigation={navigation}
+				consulta={selectedQuery}
+				roleUser={profile.role}
+				visible={showModalAppointment}
+				setShowModalAppointment={setShowModalAppointment}
+			/>
+			<LocationModal
+				visible={showModalLocationAppointment}
+				setShowModalLocationAppointment={
+					setShowModalLocationAppointment
+				} // Correção do nome da função
+			/>
+			<ScheduleModal
+				navigation={navigation}
+				visible={showModalSchedule}
+				setShowModalSchedule={setShowModalSchedule}
+			/>
 		</Container>
 	);
 };
