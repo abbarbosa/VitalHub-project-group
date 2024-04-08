@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 export const Header = ({ navigation }) => {
 
-	const [nameUser, setUserName] = useState('')
+	const [userName, setUserName] = useState('')
 
 	// chamada da funcao para carregar o perfil do usuario e carregar as informacoes
 	async function profileLoad(){
@@ -30,7 +30,7 @@ export const Header = ({ navigation }) => {
 				<ImageUser source={{ uri: 'https://github.com/marqzzs.png' }} />
 				<DataUser>
 					<TextDefault>Welcome!</TextDefault>
-					<NameUser>{nameUser}</NameUser>
+					<NameUser>{userName}</NameUser>
 				</DataUser>
 			</BoxUser>
 			<Ionicons name="notifications" size={24} color="white" />

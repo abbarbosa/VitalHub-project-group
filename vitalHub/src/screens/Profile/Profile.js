@@ -19,12 +19,13 @@ import {
 import { UserDecodeToken } from '../../services/Utils/Auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../../services/Service";
+import moment from "moment";
 
 // Definição do componente Profile
 export const Profile = ({ navigation }) => {
 
   // Definição dos estados do componente
-  const [nameUser, setNameUser] = useState('')
+  const [userName, setUserName] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [userData, setUserData] = useState('')
   const [informations, setInformations] = useState('')
@@ -33,12 +34,17 @@ export const Profile = ({ navigation }) => {
 
 
 
+
   // Função assíncrona para carregar os dados do usuário
   async function profileLoad() {
     const token = await UserDecodeToken();
     setProfile(token);
     setUserLogin(token.role);
+
+
+    const { name } = token;
   }
+
 
   // Função assíncrona para carregar os dados do usuário logado
   async function loggedUser() {
@@ -51,18 +57,18 @@ export const Profile = ({ navigation }) => {
       // Verifica se o token existe
       if (token) {
         // Requisição à API para obter dados do usuário logado
-        await api.get('/Pacientes/PerfilLogado', {
-          headers: {
-            // Adicionando o token ao cabeçalho de autorização
-            Authorization: `Bearer ${token}`
-          }
-        }).then(response => {
+        const url = (profile.role === 'Medico' ? 'Medicos' : 'Pacientes');
+        await api.get(`${url}/BuscarPorId?id=${profile.user}`
+        ).then(response => {
+          console.log(response.data);
+          setInformations(response.data)
           // Formata a data de nascimento e o CPF antes de definir no estado
-          const formattedBirthDate = formatBirthDate(response.data.dataNascimento);
-          const formattedCPF = formatCPF(response.data.cpf);
+
+          // const formattedBirthDate = formatBirthDate(response.data.dataNascimento);
+          // const formattedCPF = formatCPF(response.data.cpf);
 
           // Define os dados do usuário formatados no estado
-          setUserData({ ...response.data, dataNascimento: formattedBirthDate, cpf: formattedCPF });
+          //setUserData({ ...response.data, dataNascimento: formattedBirthDate, cpf: formattedCPF });
         }).catch(error => {
           console.log(error);
         })
@@ -92,22 +98,6 @@ export const Profile = ({ navigation }) => {
     }
   }
 
-  // Função para formatar a data de nascimento
-  function formatBirthDate(dateString) {
-    // Cria um objeto de data a partir da string da data de nascimento
-    const birthDate = new Date(dateString);
-
-    // Obtém o dia, mês e ano da data de nascimento
-    const day = String(birthDate.getDate()).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
-    const month = String(birthDate.getMonth() + 1).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
-    const year = birthDate.getFullYear();
-
-    // Formata a data no formato dd/mm/aaaa
-    const formattedDate = `${day}/${month}/${year}`;
-
-    return formattedDate;
-  }
-
   // Função para formatar o CPF
   function formatCPF(cpfString) {
     // Extrai os três primeiros dígitos do CPF
@@ -118,25 +108,6 @@ export const Profile = ({ navigation }) => {
     const formattedCPF = `${firstDigits}${hiddenDigits}`;
     return formattedCPF;
   }
-
-  async function ShowInformations() {
-    const url = (informations.role === 'Medico' ? 'Medicos' : 'Pacientes');
-    await api
-      .get(`${url}/BuscarPorId?id=${profile.user}`)
-      .then((response) => {
-        console.log(response)
-
-      })
-    //   // await api
-    //   //   .get(`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`)
-    //   //   .then((response) => {
-    //   //     setListaConsulta(response.data);
-    //   //   })
-    //   //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  }
-
   // Efeito utilizado para carregar os dados do usuário ao montar o componente
   useEffect(() => {
     profileLoad(),
@@ -149,27 +120,30 @@ export const Profile = ({ navigation }) => {
       <Container>
         <ProfilePicture source={{ uri: "https://github.com/marqzzs.png" }} />
         <ContentName>
-          <TextProfileName> {nameUser} </TextProfileName>
+          <TextProfileName> {userName} </TextProfileName>
           <TextProfileEmail>{userEmail}</TextProfileEmail>
         </ContentName>
         <ContentProfile>
+
+
           <TextProfileInput>Date of birth:</TextProfileInput>
           <InputProfile>
-            {userData.dataNascimento}
+            {userLogin === 'Medico' ? `${informations?.especialidade?.especialidade1}` : `${informations.dataNascimento}`}
           </InputProfile>
         </ContentProfile>
         {/*  */}
         <ContentProfile>
-          <TextProfileInput>CPF:</TextProfileInput>
-          <InputProfile placeholder={"859*********"}>
-            {userData.cpf}
+          <TextProfileInput>CPF ou CRM:</TextProfileInput>
+          <InputProfile>
+            {userLogin === 'Medico' && informations?.crm ? informations.crm : ''}
           </InputProfile>
+
         </ContentProfile>
         {/*  */}
         <ContentProfile>
           <TextProfileInput>Address:</TextProfileInput>
-          <InputProfile placeholder={"Rua Vincenso Silva, 987"}>
-            {userData.endereco ? userData.endereco.logradouro : ''}
+          <InputProfile >
+            {userLogin === 'Medico' ``}
           </InputProfile>
         </ContentProfile>
         {/*  */}
