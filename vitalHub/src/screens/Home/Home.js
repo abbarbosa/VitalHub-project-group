@@ -46,7 +46,6 @@ export const Home = ({ navigation }) => {
 
 		console.log(userLogin);
 	}
-
 	async function ListarConsulta() {
 		const url = profile.role === 'Medico' ? 'Medicos' : 'Pacientes';
 

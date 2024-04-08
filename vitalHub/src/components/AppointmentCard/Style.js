@@ -42,7 +42,9 @@ export const TextAge = styled.Text`
 `;
 export const TextBold = styled(TextAge)`
 	font-family: 'Quicksand_600SemiBold';
+	color: ${(props) => (props.color ? props.color : '#8C8A97')};
 `;
+
 export const ViewRow = styled.View`
 	width: 100%;
 	flex-direction: row;
@@ -57,7 +59,7 @@ export const ClockCard = styled.View`
 	border-radius: 5px;
 	align-items: center;
 	background-color: ${(props) =>
-		props.situacao == 'Pendentes' ? '#E8FCFD' : 'F1F0F5'};
+		props.situacao == 'Pendentes' ? '#F1F0F5' : '#E8FCFD'};
 `;
 
 export const ButtonCard = styled.TouchableOpacity``;

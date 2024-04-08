@@ -10,6 +10,7 @@ import {
 } from '../Button/Style';
 import { ProfileData, TextAge, TextBold } from '../AppointmentCard/Style';
 import { useEffect } from 'react';
+import moment from 'moment';
 
 export const AppointmentModal = ({
 	visible,
@@ -39,6 +40,12 @@ export const AppointmentModal = ({
 			navigation.replace(screen);
 		}
 	}
+
+	const calcularIdade = (dataNascimento) => {
+		const hoje = moment();
+		const nascimento = moment(dataNascimento);
+		return hoje.diff(nascimento, 'years');
+	};
 
 	useEffect(() => {
 		console.log(consulta);
@@ -70,13 +77,15 @@ export const AppointmentModal = ({
 					<ProfileData>
 						<TextAge>
 							{roleUsuario === 'Paciente'
-								? `CRM: ${consulta?.medicoClinica?.medico?.crm}`
-								: `CPF: ${consulta?.paciente?.cpf}`}
+								? `${consulta?.medicoClinica?.medico?.crm}`
+								: `${calcularIdade(
+										consulta?.paciente?.dataNascimento,
+								  )} anos`}
 						</TextAge>
 						<TextBold>
 							{roleUsuario === 'Paciente'
-								? `Especialidade: ${consulta?.medicoClinica?.medico?.especialidade?.especialidade1}`
-								: 'Data de Nascimento: '}
+								? `${consulta?.medicoClinica?.medico?.especialidade?.especialidade1}`
+								: `${consulta?.paciente?.idNavigation?.email}`}
 						</TextBold>
 					</ProfileData>
 

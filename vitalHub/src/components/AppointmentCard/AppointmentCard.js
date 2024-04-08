@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 import { UserDecodeToken } from '../../services/Utils/Auth';
 import { Text } from 'react-native';
+import moment from 'moment';
 
 export const AppointmentCard = ({
 	situacao,
@@ -29,6 +30,16 @@ export const AppointmentCard = ({
 	prioridade,
 }) => {
 	const [profile, setProfile] = useState({});
+
+	const calcularIdade = (dataNascimento) => {
+		const hoje = moment();
+		const nascimento = moment(dataNascimento);
+		return hoje.diff(nascimento, 'years');
+	};
+
+	// const formatarDataNascimento = (dataNascimento) => {
+	// 	return moment(dataNascimento).format('DD/MM/YYYY');
+	// };
 
 	useEffect(() => {
 		async function ProfileLoad() {
@@ -47,13 +58,19 @@ export const AppointmentCard = ({
 			<ContentCard>
 				<DataProfileCard>
 					<ProfileName>
-						{usuarioConsulta &&
-							usuarioConsulta.idNavigation &&
-							usuarioConsulta.idNavigation.nome}
+						{roleUsuario === 'Paciente'
+							? `${usuarioConsulta?.idNavigation?.nome}`
+							: `${usuarioConsulta?.idNavigation?.nome}`}
 					</ProfileName>
 
 					<ProfileData>
-						<TextAge>45 years</TextAge>
+						<TextAge>
+							{roleUsuario === 'Paciente'
+								? `${consulta?.medicoClinica?.medico?.crm}`
+								: `${calcularIdade(
+										consulta?.paciente?.dataNascimento,
+								  )} anos`}
+						</TextAge>
 						<TextBold>Rotina</TextBold>
 					</ProfileData>
 				</DataProfileCard>
@@ -72,7 +89,7 @@ export const AppointmentCard = ({
 							situacao={situacao.situacao}
 							color={'#49B3BA'}
 						>
-							{dataConsulta}
+							{moment(dataConsulta).format('HH:mm')}
 						</TextBold>
 					</ClockCard>
 
