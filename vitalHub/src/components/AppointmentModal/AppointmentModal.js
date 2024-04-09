@@ -36,9 +36,14 @@ export const AppointmentModal = ({
 			navigation.replace(screen, {
 				clinicaid: consulta.medicoClinica.clinicaId,
 			});
+
+			if (screen === 'VisualizePrescription') {
+				navigation.replace(screen, { consulta: consulta });
+			}
 		} else {
 			navigation.replace(screen);
 		}
+		//
 	}
 
 	const calcularIdade = (dataNascimento) => {
@@ -90,11 +95,23 @@ export const AppointmentModal = ({
 					</ProfileData>
 
 					{situacao !== 'Pendentes' ? (
-						<ButtonModal
-							onPress={() => handleClose('VisualizePrescription')}
-						>
-							<ButtonTitle>View medical record</ButtonTitle>
-						</ButtonModal>
+						roleUsuario === 'Paciente' ? (
+							<ButtonModal
+								onPress={() =>
+									handleClose('VisualizePrescription', {
+										consulta: consulta,
+									})
+								}
+							>
+								<ButtonTitle>View medical record</ButtonTitle>
+							</ButtonModal>
+						) : (
+							<ButtonModal
+								onPress={() => handleClose('MedicalRecords')}
+							>
+								<ButtonTitle>Insert medical record</ButtonTitle>
+							</ButtonModal> // Se não for 'Paciente', renderiza um fragmento vazio
+						)
 					) : (
 						<ButtonModal
 							onPress={() => handleClose('LocationAppointment')}
@@ -102,6 +119,7 @@ export const AppointmentModal = ({
 							<ButtonTitle>View appointment location</ButtonTitle>
 						</ButtonModal>
 					)}
+
 					<ButtonSecundary onPress={closeModal}>
 						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
 					</ButtonSecundary>

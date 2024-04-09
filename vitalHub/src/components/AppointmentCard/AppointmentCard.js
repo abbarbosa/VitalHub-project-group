@@ -1,5 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import {
+	BottomShadow,
 	ButtonCard,
 	ButtonText,
 	ClockCard,
@@ -101,14 +102,23 @@ export const AppointmentCard = ({
 							</ButtonText>
 						</ButtonCard>
 					) : situacao === 'Realizados' ? (
-						<ButtonCard onPress={onPressAppointment}>
-							<ButtonText situacao={situacao.situacao}>
-								View Medical Records
-							</ButtonText>
-						</ButtonCard>
+						roleUsuario === 'Paciente' ? (
+							<ButtonCard onPress={onPressAppointment}>
+								<ButtonText situacao={situacao.situacao}>
+									View Medical Records
+								</ButtonText>
+							</ButtonCard>
+						) : (
+							<ButtonCard onPress={onPressAppointment}>
+								<ButtonText situacao={situacao.situacao}>
+									Insert medical records
+								</ButtonText>
+							</ButtonCard>
+						)
 					) : null}
 				</ViewRow>
 			</ContentCard>
+			<BottomShadow />
 		</ContainerCardList>
 	);
 };

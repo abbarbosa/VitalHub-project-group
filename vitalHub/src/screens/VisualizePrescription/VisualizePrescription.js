@@ -23,89 +23,124 @@ import {
 import { ButtonSecundaryTitle } from '../../components/Button/Style';
 import { ButtonText } from '../../components/AppointmentCard/Style';
 import { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 
-export const VisualizePrescription = ({ navigation, route }) => {
+export const VisualizePrescription = ({ navigation, route, roleUsuario }) => {
 	// Verificar se route.params está definido
-	const [photoUri, setPhotoUri] = useState(null)
+	const [photoUri, setPhotoUri] = useState(null);
+	const [consulta, setConsulta] = useState(null);
 
 	useEffect(() => {
 		if (route.params && route.params.photoUri) {
-		  setPhotoUri(route.params.photoUri);
+			setPhotoUri(route.params.photoUri);
 		}
-	  }, [route.params]);
+	}, [route.params]);
+
+	useEffect(() => {
+		if (route.params && route.params.consulta && consulta === null) {
+			// setConsulta(route.params.consulta);
+		}
+	}, [consulta, route.params.consulta]);
 
 	return (
 		<ScrollContainer>
 			<Container>
-				<ProfilePicture
-					source={{
-						uri: 'https://i.ibb.co/pzb7dV8/4ac0d625-25c8-40b1-a39c-6389a4066e25.jpg',
-					}}
-				/>
-				<ContentName>
-					<Title>Dr. Hans Chucrute</Title>
-					<BigGroupModal>
-						<SmallTextModal>Plastic Surgeon</SmallTextModal>
-						<SmallTextModal>CRM-15287</SmallTextModal>
-					</BigGroupModal>
-				</ContentName>
-				<ContentProfile>
-					<TextProfileInput>Query description:</TextProfileInput>
-					<InputRecord placeholder={'Description here'} />
-				</ContentProfile>
-				<ContentProfile>
-					<TextProfileInput>Patient diagnosis:</TextProfileInput>
-					<InputMedicalRecords placeholder={'Diagnosis here'} />
-				</ContentProfile>
-				<ContentProfile>
-					<TextProfileInput>Medical prescription:</TextProfileInput>
-					<InputRecord placeholder={'Prescription here'} />
-				</ContentProfile>
-				<ContentProfile>
-					{photoUri == null ? (
-						<>
-							<FileVisualize>
-								<MaterialCommunityIcons
-									name="image-filter-center-focus-strong"
-									size={24}
-									color="black"
-								/>
-
-								<Title>No photo informed</Title>
-							</FileVisualize>
-						</>
-					) : (
-						<>
-							<FileVisualizeImage source={{ uri: photoUri }} />
-						</>
-					)}
-				</ContentProfile>
-				<ContentSend>
-					<ViewPhotoSend
-						onPress={() => navigation.navigate('CameraPhoto', {})}
-					>
-						<MaterialIcons
-							name="add-a-photo"
-							size={24}
-							color="white"
+				{consulta !== null ? (
+					<>
+						<ProfilePicture
+							source={{
+								uri: 'https://i.ibb.co/pzb7dV8/4ac0d625-25c8-40b1-a39c-6389a4066e25.jpg',
+							}}
 						/>
-						<TextSend>Send</TextSend>
-					</ViewPhotoSend>
-					<TouchableOpacity>
-						<ButtonTextVisualize>Cancel</ButtonTextVisualize>
-					</TouchableOpacity>
-				</ContentSend>
-				<ContentProfile>
-					<InputRecord
-						placeholder={'Blood test result: all normal'}
-					/>
-				</ContentProfile>
-				<ButtonSecundaryTitle
-					onPress={() => navigation.navigate('Home')}
-				>
-					Back
-				</ButtonSecundaryTitle>
+						<ContentName>
+							<Title>
+								{consulta?.medicoClinica?.medico?.nome}
+							</Title>
+							<BigGroupModal>
+								<SmallTextModal>
+									{
+										consulta?.medicoClinica?.medico
+											?.especialidade?.especialidade1
+									}
+								</SmallTextModal>
+								<SmallTextModal>
+									{consulta?.medicoClinica?.medico?.crm}
+								</SmallTextModal>
+							</BigGroupModal>
+						</ContentName>
+						<ContentProfile>
+							<TextProfileInput>
+								Query description:
+							</TextProfileInput>
+							<InputRecord placeholder={'Description here'} />
+						</ContentProfile>
+						<ContentProfile>
+							<TextProfileInput>
+								Patient diagnosis:
+							</TextProfileInput>
+							<InputMedicalRecords
+								placeholder={'Diagnosis here'}
+							/>
+						</ContentProfile>
+						<ContentProfile>
+							<TextProfileInput>
+								Medical prescription:
+							</TextProfileInput>
+							<InputRecord placeholder={'Prescription here'} />
+						</ContentProfile>
+						<ContentProfile>
+							{photoUri == null ? (
+								<>
+									<FileVisualize>
+										<MaterialCommunityIcons
+											name="image-filter-center-focus-strong"
+											size={24}
+											color="black"
+										/>
+										<Title>No photo informed</Title>
+									</FileVisualize>
+								</>
+							) : (
+								<>
+									<FileVisualizeImage
+										source={{ uri: photoUri }}
+									/>
+								</>
+							)}
+						</ContentProfile>
+						<ContentSend>
+							<ViewPhotoSend
+								onPress={() =>
+									navigation.navigate('CameraPhoto', {})
+								}
+							>
+								<MaterialIcons
+									name="add-a-photo"
+									size={24}
+									color="white"
+								/>
+								<TextSend>Send</TextSend>
+							</ViewPhotoSend>
+							<TouchableOpacity>
+								<ButtonTextVisualize>
+									Cancel
+								</ButtonTextVisualize>
+							</TouchableOpacity>
+						</ContentSend>
+						<ContentProfile>
+							<InputRecord
+								placeholder={'Blood test result: all normal'}
+							/>
+						</ContentProfile>
+						<ButtonSecundaryTitle
+							onPress={() => navigation.navigate('Home')}
+						>
+							Back
+						</ButtonSecundaryTitle>
+					</>
+				) : (
+					<ActivityIndicator />
+				)}
 			</Container>
 		</ScrollContainer>
 	);

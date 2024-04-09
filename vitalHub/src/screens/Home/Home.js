@@ -54,11 +54,11 @@ export const Home = ({ navigation }) => {
 		await api
 			.get(`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`)
 			.then((response) => {
-				console.log(response.data);
+				// console.log(response.data);
 
 				setListaConsulta(response.data);
 
-				console.log(listaConsulta);
+				// console.log(listaConsulta);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -73,6 +73,21 @@ export const Home = ({ navigation }) => {
 		} else if (modal === 'prontuario') {
 			setShowModalAppointment(true);
 		}
+	}
+
+	async function CancelarConsulta() {
+		try {
+			await api
+				.patch(
+					`/Consultas/Status?id=${consultaSelecionada}$situacaoid=${'1A4C4AAB-3097-45B1-9AD2-EEAE7CFD6BD2'}`,
+				)
+				.then((response) => {
+					setListaConsulta(response.data);
+				})
+				.catch((error) => {
+					console.log(`Deu erro na requisicao: ${error}`);
+				});
+		} catch (error) {}
 	}
 
 	useEffect(() => {
@@ -141,7 +156,7 @@ export const Home = ({ navigation }) => {
 					)
 				}
 			/>
-			{profile === 'Paciente' && (
+			{profile.role === 'Paciente' && (
 				<>
 					<ScheduleButton
 						onPress={() => setShowModalSchedule(true)}

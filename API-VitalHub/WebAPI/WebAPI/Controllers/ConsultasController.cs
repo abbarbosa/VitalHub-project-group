@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
             return StatusCode(201);
         }
 
-        [HttpPut("Status")]
+        [HttpPatch("Status")]
         public IActionResult EditarStatus(Consulta consulta)
         {
             consultaRepository.EditarStatus(consulta);
