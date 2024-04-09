@@ -30,6 +30,9 @@ VALUES
 
 UPDATE dbo.Usuarios SET senha = '$2y$10$kZROpWHidaGEbQdfvq3SpeVPGiNcpLQHAOcENJbblYV0aAqXoHnYO' WHERE id = 'F63A83C9-35C7-4BDE-940D-5B07303D8F02';
 
+UPDATE [dbo].[Enderecos]
+   SET [Cidade] = 'São Caetano do Sul' WHERE [ID] =  '959F4884-4C91-4F77-A55C-2C6F8C816B33'
+GO
 
 -- Selecionando todas as especialidades
 SELECT * FROM dbo.Especialidades;

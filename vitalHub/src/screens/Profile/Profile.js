@@ -20,6 +20,7 @@ import { UserDecodeToken } from '../../services/Utils/Auth';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../../services/Service";
 import moment from "moment";
+import { ActivityIndicator } from "react-native";
 
 // Definição do componente Profile
 export const Profile = ({ navigation }) => {
@@ -28,9 +29,10 @@ export const Profile = ({ navigation }) => {
   const [userName, setUserName] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [userData, setUserData] = useState('')
-  const [informations, setInformations] = useState('')
+  const [informations, setInformations] = useState(null)
   const [profile, setProfile] = useState('')
   const [userLogin, setUserLogin] = useState('')
+  const [inputsBlocked, setInputsBlocked] = useState(true);
 
 
 
@@ -38,43 +40,45 @@ export const Profile = ({ navigation }) => {
   // Função assíncrona para carregar os dados do usuário
   async function profileLoad() {
     const token = await UserDecodeToken();
+
     setProfile(token);
     setUserLogin(token.role);
 
+    await loggedUser(token)
 
     const { name } = token;
+
+    const { email } = token;
+
+    const limitedName = name.length > 16 ? name.substring(0, 16) + '...' : name;
+    setUserName(limitedName);
+
+    setUserEmail(email)
   }
 
 
   // Função assíncrona para carregar os dados do usuário logado
-  async function loggedUser() {
+  async function loggedUser(token) {
     try {
       // Recuperação do token de acesso armazenado localmente
-      const token = JSON.parse(
-        await AsyncStorage.getItem('token'),
-      ).token;
+      // const token = JSON.parse(
+      //   await AsyncStorage.getItem('token'),
+      // ).token;
 
       // Verifica se o token existe
-      if (token) {
-        // Requisição à API para obter dados do usuário logado
-        const url = (profile.role === 'Medico' ? 'Medicos' : 'Pacientes');
-        await api.get(`${url}/BuscarPorId?id=${profile.user}`
-        ).then(response => {
-          console.log(response.data);
-          setInformations(response.data)
-          // Formata a data de nascimento e o CPF antes de definir no estado
+      // Requisição à API para obter dados do usuário logado
+      const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes');
 
-          // const formattedBirthDate = formatBirthDate(response.data.dataNascimento);
-          // const formattedCPF = formatCPF(response.data.cpf);
+      await api.get(`${url}/BuscarPorId?id=${token.user}`
+      ).then(response => {
+        console.log(325454);
+        console.log(response.data);
 
-          // Define os dados do usuário formatados no estado
-          //setUserData({ ...response.data, dataNascimento: formattedBirthDate, cpf: formattedCPF });
-        }).catch(error => {
-          console.log(error);
-        })
-      } else {
-        console.log(`deu erro no if`);
-      }
+        setInformations(response.data)
+
+      }).catch(error => {
+        console.log(error);
+      })
     } catch (error) {
       console.log(`Deu erro no catch: ${error}`);
     }
@@ -108,73 +112,95 @@ export const Profile = ({ navigation }) => {
     const formattedCPF = `${firstDigits}${hiddenDigits}`;
     return formattedCPF;
   }
+
+  const formatarDataNascimento = (dataNascimento) => {
+    return moment(dataNascimento).format('DD/MM/YYYY');
+  };
+
+  const handleEditButtonClick = () => {
+    setInputsBlocked(false); // Desbloquear os inputs ao clicar no botão "Editar"
+  }
+
+  const handleEditButtonClickFalse= () => {
+    setInputsBlocked(true);
+  }
   // Efeito utilizado para carregar os dados do usuário ao montar o componente
   useEffect(() => {
-    profileLoad(),
-      loggedUser()
+    profileLoad()
   }, [])
 
   // Retorno do componente
   return (
     <ScrollContainer>
-      <Container>
-        <ProfilePicture source={{ uri: "https://github.com/marqzzs.png" }} />
-        <ContentName>
-          <TextProfileName> {userName} </TextProfileName>
-          <TextProfileEmail>{userEmail}</TextProfileEmail>
-        </ContentName>
-        <ContentProfile>
+      {
+        informations != null ? (
+          <Container >
+            <ProfilePicture source={{ uri: "https://github.com/marqzzs.png" }} />
+            <ContentName>
+              <TextProfileName> {userName} </TextProfileName>
+              <TextProfileEmail>{userEmail}</TextProfileEmail>
+            </ContentName>
+            <ContentProfile>
+              <TextProfileInput> {userLogin === 'Medico' ? 'Specialized' : 'Birthday date'}</TextProfileInput>
+              <InputProfile  editable={!inputsBlocked}>
+                {userLogin === 'Medico' ? `${informations?.especialidade?.especialidade1}` : `${formatarDataNascimento(informations.dataNascimento)}`}
 
+              </InputProfile>
+            </ContentProfile>
+            {/*  */}
+            <ContentProfile>
+              <TextProfileInput> {userLogin === 'Medico' ? 'CRM' : 'CPF'}</TextProfileInput>
+              <InputProfile  editable={!inputsBlocked}>
+                {userLogin === 'Medico' ? `${informations.crm}` : `${informations?.cpf}`}
+                {/* {userLogin === 'Medico' && informations?.crm ? informations.crm : ''} */}
+              </InputProfile>
+            </ContentProfile>
+            {/*  */}
+            <ContentProfile>
+              <TextProfileInput>Address:</TextProfileInput>
+              <InputProfile  editable={!inputsBlocked}>
+                {/* {userLogin ==='Medico' ? `${informations.endereco.logradouro}`: `${informations.endereco.logradouro}`} */}
+                {`${informations.endereco.logradouro}`}
+              </InputProfile>
+            </ContentProfile>
+            {/*  */}
+            <ContentRow>
+              <RowContentProfile> 
+                <TextProfileInput>CEP:</TextProfileInput>
+                <InputRow  editable={!inputsBlocked} //placeholder={"05545-333"}
+                >
+                  {`${informations.endereco.cep}`}
+                </InputRow>
+              </RowContentProfile>
+              {/*  */}
+              <RowContentProfile>
+                <TextProfileInput>City:</TextProfileInput>
+                <InputRow  editable={!inputsBlocked}
+                //placeholder={"Capao Redondo - SP"}
+                >
+                  {`${informations.endereco.cidade}`}
+                  {/* {userLogin === 'Medico' ? `${informations.endereco.cidade}`: `${informations.endereco.cidade}`} */}
+                </InputRow>
+              </RowContentProfile>
+            </ContentRow>
 
-          <TextProfileInput>Date of birth:</TextProfileInput>
-          <InputProfile>
-            {userLogin === 'Medico' ? `${informations?.especialidade?.especialidade1}` : `${informations.dataNascimento}`}
-          </InputProfile>
-        </ContentProfile>
-        {/*  */}
-        <ContentProfile>
-          <TextProfileInput>CPF ou CRM:</TextProfileInput>
-          <InputProfile>
-            {userLogin === 'Medico' && informations?.crm ? informations.crm : ''}
-          </InputProfile>
+            <Button onPress={handleEditButtonClickFalse}>
+              <ButtonTitle>Save</ButtonTitle>
+            </Button>
 
-        </ContentProfile>
-        {/*  */}
-        <ContentProfile>
-          <TextProfileInput>Address:</TextProfileInput>
-          <InputProfile >
-            {userLogin === 'Medico' ``}
-          </InputProfile>
-        </ContentProfile>
-        {/*  */}
-        <ContentRow>
-          <RowContentProfile>
-            <TextProfileInput>CEP:</TextProfileInput>
-            <InputRow placeholder={"05545-333"}>
-              {userData.endereco ? userData.endereco.cep : ""}
-            </InputRow>
-          </RowContentProfile>
-          {/*  */}
-          <RowContentProfile>
-            <TextProfileInput>City:</TextProfileInput>
-            <InputRow placeholder={"Capao Redondo - SP"}>
-              {userData.endereco ? userData.endereco.cidade : ""}
-            </InputRow>
-          </RowContentProfile>
-        </ContentRow>
+            <Button  onPress={handleEditButtonClick}>
+              <ButtonTitle>Edit</ButtonTitle>
+            </Button>
 
-        <Button>
-          <ButtonTitle>Save</ButtonTitle>
-        </Button>
+            <ButtonExitApp onPress={() => Logout()}>
+              <ButtonTitle>Exit the app</ButtonTitle>
+            </ButtonExitApp>
+          </Container>
+        ) : (
+          <ActivityIndicator />
+        )
+      }
 
-        <Button>
-          <ButtonTitle>Edit</ButtonTitle>
-        </Button>
-
-        <ButtonExitApp onPress={() => Logout()}>
-          <ButtonTitle>Exit the app</ButtonTitle>
-        </ButtonExitApp>
-      </Container>
     </ScrollContainer>
   );
 }; 
