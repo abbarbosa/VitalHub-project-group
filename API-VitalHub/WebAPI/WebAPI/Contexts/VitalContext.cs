@@ -44,7 +44,7 @@ public partial class VitalContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=NOTE05-SALA19; initial catalog= VitalHub_G17V3; user Id = sa; pwd=Senai@134; TrustServerCertificate=true");
+        => optionsBuilder.UseSqlServer("Data Source=NOTE05-SALA19; initial catalog=VitalHub_G17V3; user Id = sa; pwd = Senai@134; TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -145,9 +145,6 @@ public partial class VitalContext : DbContext
                 .HasColumnName("ID");
             entity.Property(e => e.ConsultaId).HasColumnName("ConsultaID");
             entity.Property(e => e.Descricao).HasColumnType("text");
-            entity.Property(e => e.Titulo)
-                .HasMaxLength(100)
-                .IsUnicode(false);
 
             entity.HasOne(d => d.Consulta).WithMany(p => p.Exames)
                 .HasForeignKey(d => d.ConsultaId)
@@ -244,7 +241,6 @@ public partial class VitalContext : DbContext
             entity.Property(e => e.Medicamento)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Observacoes).HasColumnType("text");
         });
 
         modelBuilder.Entity<SituacaoConsulta>(entity =>

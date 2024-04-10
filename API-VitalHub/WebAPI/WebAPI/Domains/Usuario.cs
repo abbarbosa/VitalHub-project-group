@@ -5,7 +5,7 @@ namespace WebAPI.Domains;
 
 public partial class Usuario
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }= Guid.NewGuid();
 
     public Guid? TipoUsuarioId { get; set; }
 
@@ -16,6 +16,8 @@ public partial class Usuario
     public string? Senha { get; set; }
 
     public string? Foto { get; set; }
+
+    public int? CodRecupSenha { get; set; }
 
     public virtual Medico? Medico { get; set; }
 
