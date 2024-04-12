@@ -1,4 +1,6 @@
-﻿using WebAPI.Domains;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using WebAPI.Domains;
 
 namespace WebAPI.ViewModels
 {
@@ -27,8 +29,9 @@ namespace WebAPI.ViewModels
         public Guid IdTipoUsuario { get; set; }
 
         public string? Foto { get; set; }
-
-
+        [NotMapped]
+        [JsonIgnore]
+        public IFormFile? Arquivo{ get; set; }
 
     }
 }
