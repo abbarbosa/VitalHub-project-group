@@ -60,10 +60,11 @@ namespace WebAPI.Controllers
                 user.Email = pacienteModel.Email;
                 user.TipoUsuarioId = pacienteModel.IdTipoUsuario;
 
-                               
+
+                
                 var containerName = "blobvitalcontainerv2";
 
-                user.Foto = await AzureBlobStorageHelper.UploadImageBlobAsync(pacienteModel.Arquivo, connectionString, containerName);
+                user.Foto = await AzureBlobStorageHelper.UploadImageBlobAsync(pacienteModel.Arquivo!, connectionString, containerName);
 
                 user.Senha = pacienteModel.Senha;
 
@@ -91,7 +92,7 @@ namespace WebAPI.Controllers
 
                 return BadRequest(ex.Message);
             }
-           
+
         }
 
         [HttpGet("BuscarPorData")]
@@ -112,6 +113,7 @@ namespace WebAPI.Controllers
         {
             try
             {
+                return Ok(pacienteRepository.AtualizarPerfil(idUsuario, paciente));
                 return Ok(pacienteRepository.AtualizarPerfil(idUsuario, paciente));
             }
             catch (Exception ex)
