@@ -24,23 +24,37 @@ import { ButtonSecundaryTitle } from '../../components/Button/Style';
 import { ButtonText } from '../../components/AppointmentCard/Style';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
+import { api } from '../../services/Service';
 
-export const VisualizePrescription = ({ navigation, route, roleUsuario }) => {
-	// Verificar se route.params está definido
+export const VisualizePrescription = ({ navigation, route }) => {
 	const [photoUri, setPhotoUri] = useState(null);
 	const [consulta, setConsulta] = useState(null);
+
+	useEffect(() => {
+		if (consulta == null && route.params.consultaid) {
+			console.log(consulta);
+
+			BuscarConsulta();
+		}
+	}, [consulta, route.params.consultaid]);
+
+	async function BuscarConsulta() {
+		await api
+			.get(`/Consultas/BuscarPorId?id=${route.params.consultaid}`)
+			.then((response) => {
+				setConsulta(response.data);
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
 
 	useEffect(() => {
 		if (route.params && route.params.photoUri) {
 			setPhotoUri(route.params.photoUri);
 		}
 	}, [route.params]);
-
-	useEffect(() => {
-		if (route.params && route.params.consulta && consulta === null) {
-			// setConsulta(route.params.consulta);
-		}
-	}, [consulta, route.params.consulta]);
 
 	return (
 		<ScrollContainer>
@@ -54,7 +68,10 @@ export const VisualizePrescription = ({ navigation, route, roleUsuario }) => {
 						/>
 						<ContentName>
 							<Title>
-								{consulta?.medicoClinica?.medico?.nome}
+								{
+									consulta?.medicoClinica?.medico
+										?.idNavigation?.nome
+								}
 							</Title>
 							<BigGroupModal>
 								<SmallTextModal>
@@ -64,7 +81,7 @@ export const VisualizePrescription = ({ navigation, route, roleUsuario }) => {
 									}
 								</SmallTextModal>
 								<SmallTextModal>
-									{consulta?.medicoClinica?.medico?.crm}
+									CRM: {consulta?.medicoClinica?.medico?.crm}
 								</SmallTextModal>
 							</BigGroupModal>
 						</ContentName>
@@ -72,21 +89,28 @@ export const VisualizePrescription = ({ navigation, route, roleUsuario }) => {
 							<TextProfileInput>
 								Query description:
 							</TextProfileInput>
-							<InputRecord placeholder={'Description here'} />
+							<InputRecord
+								placeholder={'Description here'}
+								multiline={true}
+							>
+								{consulta.exames[0]?.descricao}
+							</InputRecord>
 						</ContentProfile>
 						<ContentProfile>
 							<TextProfileInput>
 								Patient diagnosis:
 							</TextProfileInput>
-							<InputMedicalRecords
-								placeholder={'Diagnosis here'}
-							/>
+							<InputMedicalRecords placeholder={'Diagnosis here'}>
+								{consulta.diagnostico}
+							</InputMedicalRecords>
 						</ContentProfile>
 						<ContentProfile>
 							<TextProfileInput>
 								Medical prescription:
 							</TextProfileInput>
-							<InputRecord placeholder={'Prescription here'} />
+							<InputRecord placeholder={'Prescription here'}>
+								{consulta.receita?.medicamento}
+							</InputRecord>
 						</ContentProfile>
 						<ContentProfile>
 							{photoUri == null ? (

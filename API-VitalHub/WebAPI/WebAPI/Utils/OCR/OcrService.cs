@@ -8,11 +8,13 @@ namespace WebAPI.Utils.OCR
     {
         
 
+
         //metodo para reconhecer o caracteres(texto) a partir de uma imagem
         public async Task<string > RecognizeTextAsync(Stream imageStream)
         {
             try
             {
+
                 // cria a chamada para a api
                 var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(_subscriptionKey))
                 {

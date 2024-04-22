@@ -29,21 +29,25 @@ export const AppointmentModal = ({
 	async function handleClose(screen) {
 		await setShowModalAppointment(false);
 
-		console.log(' consulta ');
 		console.log(consulta);
 
-		if (screen == 'LocationAppointment') {
-			navigation.replace(screen, {
-				clinicaid: consulta.medicoClinica.clinicaId,
-			});
-
-			if (screen === 'VisualizePrescription') {
-				navigation.replace(screen, { consulta: consulta });
+		if (consulta) {
+			if (screen === 'LocationAppointment') {
+				navigation.replace(screen, {
+					clinicaid: consulta.medicoClinica.clinicaId,
+				});
+			} else if (screen === 'VisualizePrescription') {
+				navigation.replace(screen, {
+					consultaid: consulta?.id,
+				});
+			} else if (screen === 'MedicalRecords') {
+				navigation.replace(screen, {
+					consultaid: consulta?.id,
+				});
 			}
 		} else {
 			navigation.replace(screen);
 		}
-		//
 	}
 
 	const calcularIdade = (dataNascimento) => {
@@ -98,9 +102,7 @@ export const AppointmentModal = ({
 						roleUsuario === 'Paciente' ? (
 							<ButtonModal
 								onPress={() =>
-									handleClose('VisualizePrescription', {
-										consulta: consulta,
-									})
+									handleClose('VisualizePrescription')
 								}
 							>
 								<ButtonTitle>View medical record</ButtonTitle>
