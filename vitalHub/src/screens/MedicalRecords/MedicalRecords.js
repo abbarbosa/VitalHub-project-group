@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native';
+import { StatusBar, Text } from 'react-native';
 import { Title } from '../../components/Title/Style';
 import { Container, ScrollContainer } from '../../components/Container/Style';
 import { ImageUser } from '../../components/Header/Style';
@@ -26,6 +26,10 @@ import { api } from '../../services/Service';
 
 export const MedicalRecords = ({ navigation, route }) => {
 	const [consulta, setConsulta] = useState(null);
+	const [descricao, setDescricao] = useState('');
+	const [diagnostico, setDiagnostico] = useState('');
+	const [prescricao, setPrescricao] = useState('');
+	const [edicaoHabilitada, setEdicaoHabilitada] = useState(false);
 
 	useEffect(() => {
 		if (consulta == null && route.params.consultaid) {
@@ -46,6 +50,27 @@ export const MedicalRecords = ({ navigation, route }) => {
 				console.log(error);
 			});
 	}
+
+	async function EditarProntuario() {
+		try {
+			await api
+				.put(`/Consultas/Prontuario`, {
+					consultaid: route.params.consultaid,
+					medicamento: prescricao,
+					descricao: descricao,
+					diagnostico: diagnostico,
+				})
+				.then((response) => {
+					setEdicaoHabilitada(false);
+					console.log(`Sucesso na edicao: ${response}`);
+				})
+				.catch((error) => {
+					console.log(`Deu erro no metodo: ${error}`);
+				});
+		} catch (error) {
+			console.log(`Deu erro na chamada da api: ${error}`);
+		}
+	}
 	return (
 		<ScrollContainer>
 			<Container>
@@ -55,37 +80,66 @@ export const MedicalRecords = ({ navigation, route }) => {
 					}}
 				/>
 				<ContentName>
-					{/* <TextProfileName>
-						{consulta.paciente.idNavigation.nome}
+					<TextProfileName>
+						{consulta && consulta.paciente?.idNavigation?.nome}
 					</TextProfileName>
 					<TextProfileEmail>
-						{consulta.paciente.idNavigation.email}
-					</TextProfileEmail> */}
+						{consulta && consulta.paciente?.idNavigation?.email}
+					</TextProfileEmail>
 				</ContentName>
 				<ContentProfile>
 					<TextProfileInput>Query description:</TextProfileInput>
-					<InputRecord placeholder={'Description'} multiline={true}>
-						{consulta.exames[0]?.descricao}
+					<InputRecord
+						placeholder={'Description'}
+						multiline={true}
+						onChangeText={(text) => setDescricao(text)}
+						editable={edicaoHabilitada}
+					>
+						{consulta && consulta.descricao}
 					</InputRecord>
 				</ContentProfile>
 				<ContentProfile>
 					<TextProfileInput>Patient diagnosis:</TextProfileInput>
-					<InputMedicalRecords placeholder={'Diagnosis'}>
-						{consulta.diagnostico}
+					<InputMedicalRecords
+						placeholder={'Diagnosis'}
+						onChangeText={(text) => setDiagnostico(text)}
+						editable={edicaoHabilitada}
+					>
+						{consulta && consulta.diagnostico}
 					</InputMedicalRecords>
 				</ContentProfile>
 				<ContentProfile>
 					<TextProfileInput>Medical prescription:</TextProfileInput>
-					<InputRecord placeholder={'Prescription'}>
-						{consulta.receita?.medicamento}
+					<InputRecord
+						placeholder={'Prescription'}
+						onChangeText={(text) => setPrescricao(text)}
+						editable={edicaoHabilitada}
+					>
+						{consulta && consulta.receita?.medicamento}
 					</InputRecord>
 				</ContentProfile>
-				<Button>
-					<ButtonTitle>Save</ButtonTitle>
-				</Button>
-				<Button disabled={true}>
+				{edicaoHabilitada ? (
+					<Button
+						onPress={() => EditarProntuario()}
+						disabled={!consulta}
+					>
+						<ButtonTitle>Save</ButtonTitle>
+					</Button>
+				) : (
+					<Button
+						disabled={!consulta}
+						style={{ backgroundColor: '#CCCCCC' }}
+					>
+						<ButtonTitle>Save</ButtonTitle>
+					</Button>
+				)}
+				<Button
+					onPress={() => setEdicaoHabilitada(true)}
+					disabled={edicaoHabilitada}
+				>
 					<ButtonTitle>Edit</ButtonTitle>
 				</Button>
+
 				<ButtonSecundaryTitle
 					onPress={() => navigation.navigate('Home')}
 				>

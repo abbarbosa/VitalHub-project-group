@@ -92,15 +92,19 @@ export const VisualizePrescription = ({ navigation, route }) => {
 							<InputRecord
 								placeholder={'Description here'}
 								multiline={true}
+								editable={false}
 							>
-								{consulta.exames[0]?.descricao}
+								{consulta.descricao}
 							</InputRecord>
 						</ContentProfile>
 						<ContentProfile>
 							<TextProfileInput>
 								Patient diagnosis:
 							</TextProfileInput>
-							<InputMedicalRecords placeholder={'Diagnosis here'}>
+							<InputMedicalRecords
+								placeholder={'Diagnosis here'}
+								editable={false}
+							>
 								{consulta.diagnostico}
 							</InputMedicalRecords>
 						</ContentProfile>
@@ -108,7 +112,10 @@ export const VisualizePrescription = ({ navigation, route }) => {
 							<TextProfileInput>
 								Medical prescription:
 							</TextProfileInput>
-							<InputRecord placeholder={'Prescription here'}>
+							<InputRecord
+								placeholder={'Prescription here'}
+								editable={false}
+							>
 								{consulta.receita?.medicamento}
 							</InputRecord>
 						</ContentProfile>
@@ -154,6 +161,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						<ContentProfile>
 							<InputRecord
 								placeholder={'Blood test result: all normal'}
+								editable={false}
 							/>
 						</ContentProfile>
 						<ButtonSecundaryTitle
