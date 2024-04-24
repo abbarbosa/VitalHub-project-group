@@ -83,7 +83,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 				</ContentProfile>
 				<ContentSend>
 					<ViewPhotoSend
-						onPress={() => navigation.navigate('CameraPhoto', {})}
+						onPress={() => navigation.navigate('CameraPhoto', )}
 					>
 						<MaterialIcons
 							name="add-a-photo"

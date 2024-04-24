@@ -4,6 +4,7 @@ import { Input } from "../../components/Input/Style";
 export const ProfilePicture = styled.Image`
   width: 100%;
   height: 280px;
+  position: relative;
 `;
 
 export const ContentName = styled.View`

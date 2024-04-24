@@ -6,10 +6,12 @@ import { ContentIcon, TextIcon } from './Style';
 
 const BottomTab = createBottomTabNavigator();
 
-export const Main = () => {
+export const Main = ({navigation, route}) => {
+
+	const routeParams = route.params;
 	return (
 		<BottomTab.Navigator
-			initialRouteName="Home"
+			initialRouteName={route.params != undefined ? routeParams.screen:"Home"}
 			screenOptions={({ route }) => ({
 				tabBarStyle: {
 					backgroundColor: '#fff',
@@ -61,7 +63,9 @@ export const Main = () => {
 			})}
 		>
 			<BottomTab.Screen name="Home" component={Home} />
-			<BottomTab.Screen name="Profile" component={Profile} />
+			<BottomTab.Screen name="Profile">
+				{(props) => <Profile navigation={navigation} route={route}/>}
+			</BottomTab.Screen>
 		</BottomTab.Navigator>
 	);
 };

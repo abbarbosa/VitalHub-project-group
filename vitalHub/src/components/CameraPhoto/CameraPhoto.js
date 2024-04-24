@@ -1,5 +1,5 @@
 // Importações necessárias
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
 	StyleSheet,
 	Text,
@@ -9,12 +9,14 @@ import {
 	Image,
 	Alert,
 } from 'react-native';
-import { Camera } from 'expo-camera';
 import { FontAwesome, MaterialIcons, FontAwesome6 } from '@expo/vector-icons';
+import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
+import { ButtonGallery, ImageGallery } from './Style';
 
 // Componente CameraPhoto
-export const CameraPhoto = ({ navigation, route }) => {
+export const CameraPhoto = ({ navigation }) => {
 	// Referência para a câmera
 	const cameraRef = useRef(null);
 
@@ -32,6 +34,8 @@ export const CameraPhoto = ({ navigation, route }) => {
 
 	// Estado para controlar o foco automático (ligado ou desligado)
 	const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.off);
+
+	const [lastedPhoto, setLastedPhoto] = useState(null)
 
 	// Função para capturar a foto
 	async function CapturePhoto() {
@@ -51,7 +55,7 @@ export const CameraPhoto = ({ navigation, route }) => {
 
 	async function SendPhoto() {
 		if (photo) {
-			navigation.navigate('VisualizePrescription', { photoUri: photo });
+			navigation.navigate('Main', { photoUri: photo , screen: 'Profile'});
 		}
 	}
 
@@ -83,15 +87,37 @@ export const CameraPhoto = ({ navigation, route }) => {
 		}
 	}
 
+	async function getLastPhoto() {
+		const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
+		console.log(assets);
+
+		if (assets.length > 0) {
+			setLastedPhoto(assets[0].uri)
+		}
+
+	}
+
+	async function SelectImageGallery() {
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			quality: 1
+			// mediaTypes: ImagePicker.mediaTypeOptions.Images,
+			// quality: 1
+		});
+		console.log("foto galeria");
+		console.log(result.assets[0].uri);
+		if (!result.canceled) {
+			setPhoto(result.assets[0].uri);
+			setOpenModal(true);
+		}
+	}
+
 	// Solicitar permissões da câmera e da galeria ao montar o componente
 	useEffect(() => {
-		(async () => {
-			const { status: cameraStatus } =
-				await Camera.requestCameraPermissionsAsync();
-			const { status: mediaStatus } =
-				await MediaLibrary.requestPermissionsAsync();
-		})();
+		getLastPhoto()
+		
 	}, []);
+
 
 	// Renderização do componente
 	return (
@@ -148,6 +174,14 @@ export const CameraPhoto = ({ navigation, route }) => {
 							}
 						/>
 					</TouchableOpacity>
+					<ButtonGallery onPress={() => SelectImageGallery()}>
+						{
+							lastedPhoto != null ? (
+								< ImageGallery source={{ uri: lastedPhoto }} />
+							) : null
+						}
+
+					</ButtonGallery>
 				</View>
 			</Camera>
 
@@ -233,7 +267,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	flashOn: {
-		backgroundColor: '#1212', // Cor de fundo quando o flash está ativado
+		backgroundColor: '#121212', // Cor de fundo quando o flash está ativado
 	},
 	flashOff: {
 		backgroundColor: '#121212', // Cor de fundo quando o flash está desativado

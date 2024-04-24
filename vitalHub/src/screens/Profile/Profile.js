@@ -21,9 +21,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { api } from "../../services/Service";
 import moment from "moment";
 import { ActivityIndicator } from "react-native";
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { ButtonCamera, ContainerImage } from "../Login/Style";
 
 // Definição do componente Profile
-export const Profile = ({ navigation }) => {
+export const Profile = ({ navigation, route }) => {
 
   // Definição dos estados do componente
   const [userName, setUserName] = useState('')
@@ -33,9 +35,7 @@ export const Profile = ({ navigation }) => {
   const [profile, setProfile] = useState('')
   const [userLogin, setUserLogin] = useState('')
   const [inputsBlocked, setInputsBlocked] = useState(true);
-
-
-
+  const [photoUriRoute, setPhotoUriRoute] = useState(null)
 
   // Função assíncrona para carregar os dados do usuário
   async function profileLoad() {
@@ -71,8 +71,7 @@ export const Profile = ({ navigation }) => {
 
       await api.get(`${url}/BuscarPorId?id=${token.user}`
       ).then(response => {
-        console.log(325454);
-        console.log(response.data);
+
 
         setInformations(response.data)
 
@@ -95,8 +94,6 @@ export const Profile = ({ navigation }) => {
 
       // Navega para a tela de login
       navigation.navigate('Login');
-
-      console.log('Token removido', token);
     } catch (error) {
       console.log(error);
     }
@@ -121,7 +118,7 @@ export const Profile = ({ navigation }) => {
     setInputsBlocked(false); // Desbloquear os inputs ao clicar no botão "Editar"
   }
 
-  const handleEditButtonClickFalse= () => {
+  const handleEditButtonClickFalse = () => {
     setInputsBlocked(true);
   }
   // Efeito utilizado para carregar os dados do usuário ao montar o componente
@@ -129,78 +126,112 @@ export const Profile = ({ navigation }) => {
     profileLoad()
   }, [])
 
-  // Retorno do componente
-  return (
-    <ScrollContainer>
-      {
-        informations != null ? (
-          <Container >
-            <ProfilePicture source={{ uri: "https://github.com/marqzzs.png" }} />
-            <ContentName>
-              <TextProfileName> {userName} </TextProfileName>
-              <TextProfileEmail>{userEmail}</TextProfileEmail>
-            </ContentName>
-            <ContentProfile>
-              <TextProfileInput> {userLogin === 'Medico' ? 'Specialized' : 'Birthday date'}</TextProfileInput>
-              <InputProfile  editable={!inputsBlocked}>
-                {userLogin === 'Medico' ? `${informations?.especialidade?.especialidade1}` : `${formatarDataNascimento(informations.dataNascimento)}`}
+  async function AlternateProfilePicture() {
+    const formData = new FormData();
+    formData.append("Arquivo", {
+      uri: route.params.photoUri,
+      name: `image.${route.params.photoUri.split(".")[1]}`,
+      type: `image.${route.params.photoUri.split(".")[1]}`
+    })
 
-              </InputProfile>
-            </ContentProfile>
-            {/*  */}
-            <ContentProfile>
-              <TextProfileInput> {userLogin === 'Medico' ? 'CRM' : 'CPF'}</TextProfileInput>
-              <InputProfile  editable={!inputsBlocked}>
-                {userLogin === 'Medico' ? `${informations.crm}` : `${informations?.cpf}`}
-                {/* {userLogin === 'Medico' && informations?.crm ? informations.crm : ''} */}
-              </InputProfile>
-            </ContentProfile>
-            {/*  */}
-            <ContentProfile>
-              <TextProfileInput>Address:</TextProfileInput>
-              <InputProfile  editable={!inputsBlocked}>
-                {/* {userLogin ==='Medico' ? `${informations.endereco.logradouro}`: `${informations.endereco.logradouro}`} */}
-                {`${informations.endereco.logradouro}`}
-              </InputProfile>
-            </ContentProfile>
-            {/*  */}
-            <ContentRow>
-              <RowContentProfile> 
-                <TextProfileInput>CEP:</TextProfileInput>
-                <InputRow  editable={!inputsBlocked} //placeholder={"05545-333"}
-                >
-                  {`${informations.endereco.cep}`}
-                </InputRow>
-              </RowContentProfile>
-              {/*  */}
-              <RowContentProfile>
-                <TextProfileInput>City:</TextProfileInput>
-                <InputRow  editable={!inputsBlocked}
-                //placeholder={"Capao Redondo - SP"}
-                >
-                  {`${informations.endereco.cidade}`}
-                  {/* {userLogin === 'Medico' ? `${informations.endereco.cidade}`: `${informations.endereco.cidade}`} */}
-                </InputRow>
-              </RowContentProfile>
-            </ContentRow>
-
-            <Button onPress={handleEditButtonClickFalse}>
-              <ButtonTitle>Save</ButtonTitle>
-            </Button>
-
-            <Button  onPress={handleEditButtonClick}>
-              <ButtonTitle>Edit</ButtonTitle>
-            </Button>
-
-            <ButtonExitApp onPress={() => Logout()}>
-              <ButtonTitle>Exit the app</ButtonTitle>
-            </ButtonExitApp>
-          </Container>
-        ) : (
-          <ActivityIndicator />
-        )
+    console.log(`/Usuario/AlterarFotoPerfil?id=${profile.user}`)
+    await api.put(`/Usuario/AlterarFotoPerfil?id=${profile.user}`, formData, {
+      headers:{
+        "Content-Type" : "multipart/form-data"
       }
+    }).then(response =>{
+      console.log(response);
+    }).catch(error =>{
+      console.log(error);
+    })
+}
 
-    </ScrollContainer>
-  );
+useEffect(() => {
+  if (route.params.photoUri) {
+    AlternateProfilePicture()
+  }
+}, [route.params]);
+
+
+
+// Retorno do componente
+return (
+  <ScrollContainer>
+    {
+      informations != null ? (
+        <Container>
+          <ContainerImage>
+            <ProfilePicture source={{ uri: "https://github.com/marqzzs.png" }} />
+            <ButtonCamera onPress={() => navigation.navigate('CameraPhoto', {})}>
+              <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
+            </ButtonCamera>
+          </ContainerImage>
+          <ContentName>
+            <TextProfileName> {userName} </TextProfileName>
+            <TextProfileEmail>{userEmail}</TextProfileEmail>
+          </ContentName>
+          <ContentProfile>
+
+            <TextProfileInput> {userLogin === 'Medico' ? 'Specialized' : 'Birthday date'}</TextProfileInput>
+            <InputProfile editable={!inputsBlocked}>
+              {userLogin === 'Medico' ? `${informations?.especialidade?.especialidade1}` : `${formatarDataNascimento(informations.dataNascimento)}`}
+
+            </InputProfile>
+          </ContentProfile>
+          {/*  */}
+          <ContentProfile>
+            <TextProfileInput> {userLogin === 'Medico' ? 'CRM' : 'CPF'}</TextProfileInput>
+            <InputProfile editable={!inputsBlocked}>
+              {userLogin === 'Medico' ? `${informations.crm}` : `${informations?.cpf}`}
+              {/* {userLogin === 'Medico' && informations?.crm ? informations.crm : ''} */}
+            </InputProfile>
+          </ContentProfile>
+          {/*  */}
+          <ContentProfile>
+            <TextProfileInput>Address:</TextProfileInput>
+            <InputProfile editable={!inputsBlocked}>
+              {/* {userLogin ==='Medico' ? `${informations.endereco.logradouro}`: `${informations.endereco.logradouro}`} */}
+              {`${informations.endereco.logradouro}`}
+            </InputProfile>
+          </ContentProfile>
+          {/*  */}
+          <ContentRow>
+            <RowContentProfile>
+              <TextProfileInput>CEP:</TextProfileInput>
+              <InputRow editable={!inputsBlocked} //placeholder={"05545-333"}
+              >
+                {`${informations.endereco.cep}`}
+              </InputRow>
+            </RowContentProfile>
+            {/*  */}
+            <RowContentProfile>
+              <TextProfileInput>City:</TextProfileInput>
+              <InputRow editable={!inputsBlocked}
+              //placeholder={"Capao Redondo - SP"}
+              >
+                {`${informations.endereco.cidade}`}
+                {/* {userLogin === 'Medico' ? `${informations.endereco.cidade}`: `${informations.endereco.cidade}`} */}
+              </InputRow>
+            </RowContentProfile>
+          </ContentRow>
+
+          <Button onPress={handleEditButtonClickFalse}>
+            <ButtonTitle>Save</ButtonTitle>
+          </Button>
+
+          <Button onPress={handleEditButtonClick}>
+            <ButtonTitle>Edit</ButtonTitle>
+          </Button>
+
+          <ButtonExitApp onPress={() => Logout()}>
+            <ButtonTitle>Exit the app</ButtonTitle>
+          </ButtonExitApp>
+        </Container>
+      ) : (
+        <ActivityIndicator />
+      )
+    }
+
+  </ScrollContainer>
+);
 }; 

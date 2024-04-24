@@ -6,7 +6,8 @@ const portaApi = '4466'
 
 //declarar o ip da maquina
 
-const ip = '192.168.21.63'
+const ip = '192.168.19.136'
+
 
 //definir a base da url de acesso da api
 
