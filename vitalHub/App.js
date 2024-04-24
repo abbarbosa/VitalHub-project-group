@@ -40,6 +40,7 @@ import { SelectDate } from './src/screens/SelectDate/SelectDate';
 import { LocationAppointment } from './src/screens/LocationAppointment/LocationAppointment';
 import { VisualizePrescription } from './src/screens/VisualizePrescription/VisualizePrescription';
 import { Main } from './src/screens/Main/Main';
+
 import { Camera, CameraPhoto } from './src/components/CameraPhoto/CameraPhoto';
 
 export default function App() {
