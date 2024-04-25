@@ -128,10 +128,10 @@ export const Profile = ({ navigation, route }) => {
 
   async function AlternateProfilePicture() {
     const formData = new FormData();
-    formData.append("Arquivo", {
-      uri: route.params.photoUri,
+    formData.append("Arquivo", { 
+      uri: route.params.photoUriRoute,
       name: `image.${route.params.photoUri.split(".")[1]}`,
-      type: `image.${route.params.photoUri.split(".")[1]}`
+      type: `image/${route.params.photoUri.split(".")[1]}`
     })
 
     console.log(`/Usuario/AlterarFotoPerfil?id=${profile.user}`)
