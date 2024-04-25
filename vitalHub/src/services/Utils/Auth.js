@@ -27,5 +27,6 @@ export const UserDecodeToken = async () => {
 		email: decoded.email,
 		user: decoded.jti,
 		token: token,
+		foto: decoded.foto,
 	};
 };

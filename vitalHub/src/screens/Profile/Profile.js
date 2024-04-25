@@ -21,11 +21,16 @@ import {
 import { UserDecodeToken } from '../../services/Utils/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../../services/Service';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ButtonCamera, ContainerImage } from './Style';
 
-export const Profile = ({ navigation }) => {
+export const Profile = ({ navigation, route }) => {
 	const [nameUser, setUserName] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 	const [userData, setUserData] = useState('');
+	const [photoUri, setPhotoUri] = useState(null);
+	const [profile, setProfile] = useState();
+	const [dados, setDados] = useState();
 
 	//carregamento dos dados do usuario
 	async function profileLoad() {
@@ -88,6 +93,24 @@ export const Profile = ({ navigation }) => {
 		}
 	}
 
+	async function BuscarPorId() {
+		try {
+			const token = await UserDecodeToken();
+
+			await api
+				.get(`/Usuario/BuscarPorId?id=${token.user}`)
+				.then((response) => {
+					setDados(response.data);
+					console.log(response.data);
+				})
+				.catch((error) => {
+					console.log(`Deu erro aqui: ${error}`);
+				});
+		} catch (error) {
+			console.log('Erro ao buscar usuário por ID:', error);
+		}
+	}
+
 	async function Logout() {
 		try {
 			//obetendo o token
@@ -131,15 +154,79 @@ export const Profile = ({ navigation }) => {
 		return formattedCPF;
 	}
 
+	async function AlternateProfilePicture() {
+		// Obter o token
+		const token = await UserDecodeToken();
+
+		console.log(token);
+
+		if (!token) {
+			console.log('Token não encontrado');
+			return;
+		}
+
+		const formData = new FormData();
+
+		formData.append('Arquivo', {
+			uri: route.params.photoUri,
+			name: `image.${route.params.photoUri.split('.').pop()}`,
+			type: `image/${route.params.photoUri.split('.').pop()}`,
+		});
+
+		await api
+			.put(`/Usuario/AlterarFotoPerfil?id=${token.user}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
 	useEffect(() => {
-		profileLoad(), loggedUser();
+		profileLoad();
+		loggedUser();
 	}, []);
+
+	useEffect(() => {
+		BuscarPorId();
+		dados;
+	}, []);
+	useEffect(() => {
+		if (route.params != undefined) {
+			AlternateProfilePicture();
+		}
+
+		console.log(route.params);
+	}, [route.params]);
+
 	return (
 		<ScrollContainer>
 			<Container>
-				<ProfilePicture
-					source={{ uri: 'https://github.com/marqzzs.png' }}
-				/>
+				<ContainerImage>
+					{dados && dados.foto && (
+						<ProfilePicture
+							source={{
+								uri: dados && dados.foto,
+							}}
+						/>
+					)}
+
+					<ButtonCamera
+						onPress={() => navigation.navigate('CameraPhoto', {})}
+					>
+						<MaterialCommunityIcons
+							name="camera-plus"
+							size={20}
+							color={'#fbfbfb'}
+						/>
+					</ButtonCamera>
+				</ContainerImage>
+
 				<ContentName>
 					<TextProfileName> {nameUser} </TextProfileName>
 					<TextProfileEmail>{userEmail}</TextProfileEmail>

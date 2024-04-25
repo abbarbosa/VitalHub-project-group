@@ -6,8 +6,8 @@ namespace WebAPI.Utils.OCR
 {
     public class OcrService
     {
-        
 
+        
 
         //metodo para reconhecer o caracteres(texto) a partir de uma imagem
         public async Task<string > RecognizeTextAsync(Stream imageStream)
