@@ -55,7 +55,10 @@ export const CameraPhoto = ({ navigation, route }) => {
 
 	async function SendPhoto() {
 		if (photo) {
-			navigation.navigate('Main', { photoUri: photo, screen: 'Profile' });
+			navigation.navigate('Main', {
+				photoUri: photo,
+				screen: 'VisualizePrescription',
+			});
 		}
 	}
 

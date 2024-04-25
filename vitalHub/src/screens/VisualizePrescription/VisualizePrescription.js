@@ -29,6 +29,7 @@ import { api } from '../../services/Service';
 export const VisualizePrescription = ({ navigation, route }) => {
 	const [photoUri, setPhotoUri] = useState(null);
 	const [consulta, setConsulta] = useState(null);
+	const [descricaoExame, setDescricaoExame] = useState();
 
 	useEffect(() => {
 		if (consulta == null && route.params.consultaid) {
@@ -47,6 +48,28 @@ export const VisualizePrescription = ({ navigation, route }) => {
 			})
 			.catch((error) => {
 				console.log(error);
+			});
+	}
+
+	async function InserirExame() {
+		const formData = new FormData();
+		formData.append('ConsultaId', consulta.id);
+		formData.append('Imagem', {
+			uri: route.params.photoUri,
+			name: `image.${route.params.photoUri.split('.').pop()}`,
+			type: `image/${route.params.photoUri.split('.').pop()}`,
+		});
+
+		await api
+			.post(`/Exame/Cadastrar`, formData, {
+				headers: {
+					'Content-Type': 'mulipart/form-data',
+				},
+			})
+			.then((response) => {
+				setDescricaoExame(
+					descricaoExame + '\n' + response.data.descricao,
+				);
 			});
 	}
 
@@ -162,6 +185,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 							<InputRecord
 								placeholder={'Blood test result: all normal'}
 								editable={false}
+								value={descricaoExame}
 							/>
 						</ContentProfile>
 						<ButtonSecundaryTitle
