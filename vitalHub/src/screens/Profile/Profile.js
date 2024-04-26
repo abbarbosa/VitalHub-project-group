@@ -202,7 +202,7 @@ export const Profile = ({ navigation, route }) => {
 		}
 
 		console.log(route.params);
-	}, [route.params]);
+	}, [dados, route.params]);
 
 	return (
 		<ScrollContainer>
@@ -217,7 +217,11 @@ export const Profile = ({ navigation, route }) => {
 					)}
 
 					<ButtonCamera
-						onPress={() => navigation.navigate('CameraPhoto', {})}
+						onPress={() =>
+							navigation.navigate('CameraPhoto', {
+								isProfile: true,
+							})
+						}
 					>
 						<MaterialCommunityIcons
 							name="camera-plus"

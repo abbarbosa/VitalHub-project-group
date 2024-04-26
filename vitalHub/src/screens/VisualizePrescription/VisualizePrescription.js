@@ -60,22 +60,38 @@ export const VisualizePrescription = ({ navigation, route }) => {
 			type: `image/${route.params.photoUri.split('.').pop()}`,
 		});
 
-		await api
-			.post(`/Exame/Cadastrar`, formData, {
+		console.log('continue');
+		console.log(route.params.consultaid);
+		console.log({
+			uri: route.params.photoUri,
+			name: `image.${route.params.photoUri.split('.').pop()}`,
+			type: `image/${route.params.photoUri.split('.').pop()}`,
+		});
+
+		try {
+			const response = await api.post(`/Exame/Cadastrar`, formData, {
 				headers: {
-					'Content-Type': 'mulipart/form-data',
+					'Content-Type': 'multipart/form-data',
 				},
-			})
-			.then((response) => {
-				setDescricaoExame(
-					descricaoExame + '\n' + response.data.descricao,
-				);
 			});
+
+			console.log('ta chegando');
+			console.log('\n');
+			console.log('vai colocar');
+			setDescricaoExame(descricaoExame + '\n' + response.data.descricao);
+			console.log('\n');
+			console.log('Colocou');
+			console.log(response.data.descricao);
+		} catch (error) {
+			console.error('Deu erro:', error);
+		}
 	}
 
 	useEffect(() => {
 		if (route.params && route.params.photoUri) {
 			setPhotoUri(route.params.photoUri);
+
+			InserirExame();
 		}
 	}, [route.params]);
 
@@ -165,7 +181,9 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						<ContentSend>
 							<ViewPhotoSend
 								onPress={() =>
-									navigation.navigate('CameraPhoto', {})
+									navigation.navigate('CameraPhoto', {
+										isProfile: false,
+									})
 								}
 							>
 								<MaterialIcons
@@ -186,6 +204,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 								placeholder={'Blood test result: all normal'}
 								editable={false}
 								value={descricaoExame}
+								multiline={true}
 							/>
 						</ContentProfile>
 						<ButtonSecundaryTitle
