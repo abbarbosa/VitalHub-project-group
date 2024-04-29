@@ -10,12 +10,13 @@ import {
 } from '../Button/Style';
 import { ProfileData, TextAge, TextBold } from '../AppointmentCard/Style';
 import { useEffect } from 'react';
+import moment from 'moment';
 
 export const AppointmentModal = ({
 	visible,
 	situacao,
 	navigation,
-	setShowModalAppointment, // Função para controlar a exibição do modal
+	setShowModalAppointment,
 	roleUsuario,
 	consulta,
 	...rest
@@ -28,17 +29,39 @@ export const AppointmentModal = ({
 	async function handleClose(screen) {
 		await setShowModalAppointment(false);
 
-		console.log(' consulta ');
 		console.log(consulta);
 
+<<<<<<< HEAD
 		if (screen == 'LocationAppointment') {
 			navigation.replace(screen, {
 				clinicaid: consulta.medicoClinica.clinicaId,
 			});
+=======
+		if (consulta) {
+			if (screen === 'LocationAppointment') {
+				navigation.replace(screen, {
+					clinicaid: consulta.medicoClinica.clinicaId,
+				});
+			} else if (screen === 'VisualizePrescription') {
+				navigation.replace(screen, {
+					consultaid: consulta?.id,
+				});
+			} else if (screen === 'MedicalRecords') {
+				navigation.replace(screen, {
+					consultaid: consulta?.id,
+				});
+			}
+>>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 		} else {
 			navigation.replace(screen);
 		}
 	}
+
+	const calcularIdade = (dataNascimento) => {
+		const hoje = moment();
+		const nascimento = moment(dataNascimento);
+		return hoje.diff(nascimento, 'years');
+	};
 
 	useEffect(() => {
 		console.log(consulta);
@@ -58,18 +81,46 @@ export const AppointmentModal = ({
 							uri: 'https://img.elo7.com.br/product/600x380/3473C40/dobby-harry-potter-hogwarts.jpg',
 						}}
 					/>
-					<Title>Joao</Title>
+
+					{/* Renderização condicional baseada no tipo de usuário */}
+					<Title>
+						{roleUsuario === 'Paciente'
+							? consulta?.medicoClinica?.medico?.idNavigation
+									?.nome
+							: consulta?.paciente?.idNavigation?.nome}
+					</Title>
+
 					<ProfileData>
-						<TextAge>45 years</TextAge>
-						<TextBold>joao@gmail.com</TextBold>
+						<TextAge>
+							{roleUsuario === 'Paciente'
+								? `${consulta?.medicoClinica?.medico?.crm}`
+								: `${calcularIdade(
+										consulta?.paciente?.dataNascimento,
+								  )} anos`}
+						</TextAge>
+						<TextBold>
+							{roleUsuario === 'Paciente'
+								? `${consulta?.medicoClinica?.medico?.especialidade?.especialidade1}`
+								: `${consulta?.paciente?.idNavigation?.email}`}
+						</TextBold>
 					</ProfileData>
 
 					{situacao !== 'Pendentes' ? (
-						<ButtonModal
-							onPress={() => handleClose('VisualizePrescription')}
-						>
-							<ButtonTitle>View medical record</ButtonTitle>
-						</ButtonModal>
+						roleUsuario === 'Paciente' ? (
+							<ButtonModal
+								onPress={() =>
+									handleClose('VisualizePrescription')
+								}
+							>
+								<ButtonTitle>View medical record</ButtonTitle>
+							</ButtonModal>
+						) : (
+							<ButtonModal
+								onPress={() => handleClose('MedicalRecords')}
+							>
+								<ButtonTitle>Insert medical record</ButtonTitle>
+							</ButtonModal> // Se não for 'Paciente', renderiza um fragmento vazio
+						)
 					) : (
 						<ButtonModal
 							onPress={() => handleClose('LocationAppointment')}
@@ -77,6 +128,7 @@ export const AppointmentModal = ({
 							<ButtonTitle>View appointment location</ButtonTitle>
 						</ButtonModal>
 					)}
+
 					<ButtonSecundary onPress={closeModal}>
 						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
 					</ButtonSecundary>

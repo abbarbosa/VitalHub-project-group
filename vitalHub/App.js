@@ -36,6 +36,7 @@ import { LocationAppointment } from './src/screens/LocationAppointment/LocationA
 import { VisualizePrescription } from './src/screens/VisualizePrescription/VisualizePrescription';
 import { Main } from './src/screens/Main/Main';
 
+<<<<<<< HEAD
 import { Camera } from 'expo-camera';
 
 
@@ -43,6 +44,9 @@ import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 import { CameraPhoto } from './src/components/CameraPhoto/CameraPhoto';
 
+=======
+import { Camera, CameraPhoto } from './src/components/CameraPhoto/CameraPhoto';
+>>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 
 export default function App() {
 	const [fontsLoaded, fontsError] = useFonts({

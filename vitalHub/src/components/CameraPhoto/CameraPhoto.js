@@ -37,6 +37,7 @@ export const CameraPhoto = ({ navigation }) => {
 
 	const [lastedPhoto, setLastedPhoto] = useState(null)
 
+
 	// Função para capturar a foto
 	async function CapturePhoto() {
 		// Ativar o foco automático antes de tirar a foto
@@ -56,6 +57,7 @@ export const CameraPhoto = ({ navigation }) => {
 	async function SendPhoto() {
 		if (photo) {
 			navigation.navigate('Main', { photoUri: photo , screen: 'Profile'});
+
 		}
 	}
 
@@ -95,6 +97,8 @@ export const CameraPhoto = ({ navigation }) => {
 			setLastedPhoto(assets[0].uri)
 		}
 
+
+
 	}
 
 	async function SelectImageGallery() {
@@ -106,6 +110,7 @@ export const CameraPhoto = ({ navigation }) => {
 		});
 		console.log("foto galeria");
 		console.log(result.assets[0].uri);
+
 		if (!result.canceled) {
 			setPhoto(result.assets[0].uri);
 			setOpenModal(true);
@@ -114,8 +119,15 @@ export const CameraPhoto = ({ navigation }) => {
 
 	// Solicitar permissões da câmera e da galeria ao montar o componente
 	useEffect(() => {
-		getLastPhoto()
-		
+
+		(async () => {
+			const { status: cameraStatus } =
+				await Camera.requestCameraPermissionsAsync();
+			const { status: mediaStatus } =
+				await MediaLibrary.requestPermissionsAsync();
+		})();
+
+		GetLastPhoto();
 	}, []);
 
 
@@ -175,11 +187,13 @@ export const CameraPhoto = ({ navigation }) => {
 						/>
 					</TouchableOpacity>
 					<ButtonGallery onPress={() => SelectImageGallery()}>
+
 						{
 							lastedPhoto != null ? (
 								< ImageGallery source={{ uri: lastedPhoto }} />
 							) : null
 						}
+
 
 					</ButtonGallery>
 				</View>

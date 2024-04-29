@@ -1,5 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import {
+	BottomShadow,
 	ButtonCard,
 	ButtonText,
 	ClockCard,
@@ -16,6 +17,7 @@ import {
 import { useEffect, useState } from 'react';
 import { UserDecodeToken } from '../../services/Utils/Auth';
 import { Text } from 'react-native';
+import moment from 'moment';
 
 export const AppointmentCard = ({
 	situacao,
@@ -29,6 +31,16 @@ export const AppointmentCard = ({
 	prioridade,
 }) => {
 	const [profile, setProfile] = useState({});
+
+	const calcularIdade = (dataNascimento) => {
+		const hoje = moment();
+		const nascimento = moment(dataNascimento);
+		return hoje.diff(nascimento, 'years');
+	};
+
+	// const formatarDataNascimento = (dataNascimento) => {
+	// 	return moment(dataNascimento).format('DD/MM/YYYY');
+	// };
 
 	useEffect(() => {
 		async function ProfileLoad() {
@@ -48,10 +60,19 @@ export const AppointmentCard = ({
 			<ContentCard>
 				<DataProfileCard>
 					<ProfileName>
-						{usuarioConsulta.idNavigation.nome}
+						{roleUsuario === 'Paciente'
+							? `${usuarioConsulta?.idNavigation?.nome}`
+							: `${usuarioConsulta?.idNavigation?.nome}`}
 					</ProfileName>
+
 					<ProfileData>
-						<TextAge>45 years</TextAge>
+						<TextAge>
+							{roleUsuario === 'Paciente'
+								? `${consulta?.medicoClinica?.medico?.crm}`
+								: `${calcularIdade(
+										consulta?.paciente?.dataNascimento,
+								  )} anos`}
+						</TextAge>
 						<TextBold>Rotina</TextBold>
 					</ProfileData>
 				</DataProfileCard>
@@ -70,7 +91,7 @@ export const AppointmentCard = ({
 							situacao={situacao.situacao}
 							color={'#49B3BA'}
 						>
-							{dataConsulta}
+							{moment(dataConsulta).format('HH:mm')}
 						</TextBold>
 					</ClockCard>
 
@@ -82,14 +103,23 @@ export const AppointmentCard = ({
 							</ButtonText>
 						</ButtonCard>
 					) : situacao === 'Realizados' ? (
-						<ButtonCard onPress={onPressAppointment}>
-							<ButtonText situacao={situacao.situacao}>
-								View Medical Records
-							</ButtonText>
-						</ButtonCard>
+						roleUsuario === 'Paciente' ? (
+							<ButtonCard onPress={onPressAppointment}>
+								<ButtonText situacao={situacao.situacao}>
+									View Medical Records
+								</ButtonText>
+							</ButtonCard>
+						) : (
+							<ButtonCard onPress={onPressAppointment}>
+								<ButtonText situacao={situacao.situacao}>
+									Insert medical records
+								</ButtonText>
+							</ButtonCard>
+						)
 					) : null}
 				</ViewRow>
 			</ContentCard>
+			<BottomShadow />
 		</ContainerCardList>
 	);
 };

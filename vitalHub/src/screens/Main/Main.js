@@ -12,6 +12,9 @@ export const Main = ({navigation, route}) => {
 	return (
 		<BottomTab.Navigator
 			initialRouteName={route.params != undefined ? routeParams.screen:"Home"}
+
+
+
 			screenOptions={({ route }) => ({
 				tabBarStyle: {
 					backgroundColor: '#fff',
@@ -64,8 +67,11 @@ export const Main = ({navigation, route}) => {
 		>
 			<BottomTab.Screen name="Home" component={Home} />
 			<BottomTab.Screen name="Profile">
+
 				{(props) => <Profile navigation={navigation} route={route}/>}
+
+
 			</BottomTab.Screen>
 		</BottomTab.Navigator>
 	);
-};
+}

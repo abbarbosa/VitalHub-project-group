@@ -1,3 +1,4 @@
+
 // Importando os módulos necessários do React e do React Native
 import { useEffect, useState } from "react";
 import { Button, ButtonExitApp, ButtonTitle } from "../../components/Button/Style";
@@ -14,6 +15,7 @@ import {
   TextProfileInput,
   TextProfileName,
 } from "./Style"; // Importando os estilos específicos para este componente
+
 
 // Importando funções e componentes adicionais necessários
 import { UserDecodeToken } from '../../services/Utils/Auth';
@@ -153,6 +155,10 @@ useEffect(() => {
 }, [route.params]);
 
 
+		return formattedDate;
+	}
+
+
 
 // Retorno do componente
 return (
@@ -234,4 +240,5 @@ return (
 
   </ScrollContainer>
 );
-}; 
+
+

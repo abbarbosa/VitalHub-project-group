@@ -35,6 +35,7 @@ export const Home = ({ navigation }) => {
 	// Função assíncrona para carregar o perfil do usuário
 	async function ProfileLoad() {
 		const token = await UserDecodeToken();
+<<<<<<< HEAD
 		setProfile(token);
 		setUserLogin(token.role);
 	}
@@ -42,10 +43,32 @@ export const Home = ({ navigation }) => {
 	// Função assíncrona para listar as consultas com base na data selecionada
 	async function ListarConsulta() {
 		const url = (profile.role === 'Medico' ? 'Medicos' : 'Pacientes');
+=======
+
+		console.log(token);
+
+		setProfile(token);
+
+		console.log(profile);
+
+		setUserLogin(token.role);
+
+		console.log(userLogin);
+	}
+	async function ListarConsulta() {
+		const url = profile.role === 'Medico' ? 'Medicos' : 'Pacientes';
+
+		console.log(url);
+
+>>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 		await api
 			.get(`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`)
 			.then((response) => {
+				// console.log(response.data);
+
 				setListaConsulta(response.data);
+
+				// console.log(listaConsulta);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -62,7 +85,25 @@ export const Home = ({ navigation }) => {
 		}
 	}
 
+<<<<<<< HEAD
 	// Efeito para carregar o perfil do usuário ao montar o componente
+=======
+	async function CancelarConsulta() {
+		try {
+			await api
+				.patch(
+					`/Consultas/Status?id=${consultaSelecionada}$situacaoid=${'1A4C4AAB-3097-45B1-9AD2-EEAE7CFD6BD2'}`,
+				)
+				.then((response) => {
+					setListaConsulta(response.data);
+				})
+				.catch((error) => {
+					console.log(`Deu erro na requisicao: ${error}`);
+				});
+		} catch (error) {}
+	}
+
+>>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 	useEffect(() => {
 		ProfileLoad();
 	}, []);
@@ -132,9 +173,13 @@ export const Home = ({ navigation }) => {
 					)
 				}
 			/>
+<<<<<<< HEAD
 			
 			{/* Botão de agendamento */}
 			{profile === 'Paciente' && (
+=======
+			{profile.role === 'Paciente' && (
+>>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 				<>
 					<ScheduleButton
 						onPress={() => setShowModalSchedule(true)}
@@ -147,7 +192,10 @@ export const Home = ({ navigation }) => {
 				</>
 			)}
 
+<<<<<<< HEAD
 			{/* Modal de cancelamento */}
+=======
+>>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 			<CancellationModal
 				navigation={navigation}
 				visible={showModalCancel}

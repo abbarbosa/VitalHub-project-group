@@ -27,17 +27,21 @@ export const LocationAppointment = ({ navigation, route }) => {
 	const [clinica, setClinica] = useState(null);
 
 	useEffect(() => {
-		if (clinica == null) {
+		if (clinica == null && route.params.clinicaid) {
 			console.log(clinica);
 			BuscarClinica();
 		}
-	}, [clinica]);
+	}, [clinica, route.params.clinicaid]);
 
 	async function BuscarClinica() {
+<<<<<<< HEAD
 		(await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaid}`))
+=======
+		await api
+			.get(`/Clinica/BuscarPorId?id=${route.params.clinicaid}`)
+>>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 			.then((response) => {
 				setClinica(response.data);
-
 				console.log(response.data);
 			})
 			.catch((error) => {
@@ -55,25 +59,30 @@ export const LocationAppointment = ({ navigation, route }) => {
 
 					<SpaceView>
 						<Title>{clinica.nomeFantasia}</Title>
-						<SmallTextModal>Jerumenha-PI</SmallTextModal>
+						<SmallTextModal>
+							{clinica.endereco.cidade}-SP
+						</SmallTextModal>
 					</SpaceView>
 
 					<ContentProfile>
 						<TextProfileInput>Address</TextProfileInput>
-						<InputProfile
-							placeholder={'Rua Vincenso, 97'}
-							editable={false}
-						/>
+						<InputProfile placeholder={'Rua Vincenso, 97'}>
+							{clinica.endereco.logradouro}
+						</InputProfile>
 					</ContentProfile>
 					<ContentRow>
 						<RowContentProfile>
 							<TextProfileInput>Number</TextProfileInput>
-							<InputRow placeholder={'97'} />
+							<InputRow placeholder={'97'}>
+								{clinica.endereco.numero}
+							</InputRow>
 						</RowContentProfile>
 						{/*  */}
 						<RowContentProfile>
 							<TextProfileInput>neighborhood</TextProfileInput>
-							<InputRow placeholder={'Jerumenha-PI'} />
+							<InputRow placeholder={'Jerumenha-PI'}>
+								{clinica.endereco.cidade}-SP
+							</InputRow>
 						</RowContentProfile>
 					</ContentRow>
 					<ButtonSecundary onPress={() => navigation.replace('Main')}>
