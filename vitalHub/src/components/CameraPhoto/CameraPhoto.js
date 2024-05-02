@@ -127,7 +127,7 @@ export const CameraPhoto = ({ navigation }) => {
 				await MediaLibrary.requestPermissionsAsync();
 		})();
 
-		GetLastPhoto();
+		getLastPhoto();
 	}, []);
 
 

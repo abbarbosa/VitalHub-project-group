@@ -59,66 +59,12 @@ export const VisualizePrescription = ({ navigation, route }) => {
 	return (
 		<ScrollContainer>
 			<Container>
-<<<<<<< HEAD
-				<ProfilePicture
-					source={{
-						uri: 'https://i.ibb.co/pzb7dV8/4ac0d625-25c8-40b1-a39c-6389a4066e25.jpg',
-					}}
-				/>
-				<ContentName>
-					<Title>Dr. Hans Chucrute</Title>
-					<BigGroupModal>
-						<SmallTextModal>Plastic Surgeon</SmallTextModal>
-						<SmallTextModal>CRM-15287</SmallTextModal>
-					</BigGroupModal>
-				</ContentName>
-				<ContentProfile>
-					<TextProfileInput>Query description:</TextProfileInput>
-					<InputRecord placeholder={'Description here'} />
-				</ContentProfile>
-				<ContentProfile>
-					<TextProfileInput>Patient diagnosis:</TextProfileInput>
-					<InputMedicalRecords placeholder={'Diagnosis here'} />
-				</ContentProfile>
-				<ContentProfile>
-					<TextProfileInput>Medical prescription:</TextProfileInput>
-					<InputRecord placeholder={'Prescription here'} />
-				</ContentProfile>
-				<ContentProfile>
-					{photoUri == null ? (
-						<>
-							<FileVisualize>
-								<MaterialCommunityIcons
-									name="image-filter-center-focus-strong"
-									size={24}
-									color="black"
-								/>
-
-								<Title>No photo informed</Title>
-							</FileVisualize>
-						</>
-					) : (
-						<>
-							<FileVisualizeImage source={{ uri: photoUri }} />
-						</>
-					)}
-				</ContentProfile>
-				<ContentSend>
-					<ViewPhotoSend
-						onPress={() => navigation.navigate('CameraPhoto', )}
-					>
-						<MaterialIcons
-							name="add-a-photo"
-							size={24}
-							color="white"
-=======
 				{consulta !== null ? (
 					<>
 						<ProfilePicture
 							source={{
 								uri: 'https://i.ibb.co/pzb7dV8/4ac0d625-25c8-40b1-a39c-6389a4066e25.jpg',
 							}}
->>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 						/>
 						<ContentName>
 							<Title>
@@ -196,7 +142,9 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						<ContentSend>
 							<ViewPhotoSend
 								onPress={() =>
-									navigation.navigate('CameraPhoto', {})
+									navigation.navigate('CameraPhoto', {
+										isProfile: false,
+									})
 								}
 							>
 								<MaterialIcons
@@ -216,6 +164,8 @@ export const VisualizePrescription = ({ navigation, route }) => {
 							<InputRecord
 								placeholder={'Blood test result: all normal'}
 								editable={false}
+								value={descricaoExame}
+								multiline={true}
 							/>
 						</ContentProfile>
 						<ButtonSecundaryTitle

@@ -34,12 +34,9 @@ export const LocationAppointment = ({ navigation, route }) => {
 	}, [clinica, route.params.clinicaid]);
 
 	async function BuscarClinica() {
-<<<<<<< HEAD
-		(await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaid}`))
-=======
+
 		await api
 			.get(`/Clinica/BuscarPorId?id=${route.params.clinicaid}`)
->>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 			.then((response) => {
 				setClinica(response.data);
 				console.log(response.data);

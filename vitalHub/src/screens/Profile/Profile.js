@@ -28,217 +28,266 @@ import { ButtonCamera, ContainerImage } from "../Login/Style";
 
 // Definição do componente Profile
 export const Profile = ({ navigation, route }) => {
+	const [nameUser, setUserName] = useState('');
+	const [userEmail, setUserEmail] = useState('');
+	const [userData, setUserData] = useState('');
+	const [photoUri, setPhotoUri] = useState(null);
+	const [profile, setProfile] = useState();
+	const [dados, setDados] = useState();
 
-  // Definição dos estados do componente
-  const [userName, setUserName] = useState('')
-  const [userEmail, setUserEmail] = useState('')
-  const [userData, setUserData] = useState('')
-  const [informations, setInformations] = useState(null)
-  const [profile, setProfile] = useState('')
-  const [userLogin, setUserLogin] = useState('')
-  const [inputsBlocked, setInputsBlocked] = useState(true);
-  const [photoUriRoute, setPhotoUriRoute] = useState(null)
+	//carregamento dos dados do usuario
+	async function profileLoad() {
+		try {
+			const token = await UserDecodeToken();
 
-  // Função assíncrona para carregar os dados do usuário
-  async function profileLoad() {
-    const token = await UserDecodeToken();
+			const { name } = token;
+			const { email } = token;
+			const { dateBirth } = token;
 
-    setProfile(token);
-    setUserLogin(token.role);
+			if (token) {
+				const { name, email } = token;
+			}
+			// Limitamos o tamanho do nome a, por exemplo, 20 caracteres
+			const limitedName =
+				name.length > 16 ? name.substring(0, 16) + '...' : name;
 
-    await loggedUser(token)
+			setUserName(limitedName);
+			setUserEmail(email);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-    const { name } = token;
+	async function loggedUser() {
+		try {
+			// Recuperação do token de acesso
+			const token = JSON.parse(await AsyncStorage.getItem('token')).token;
 
-    const { email } = token;
+			if (token) {
+				await api
+					.get('/Pacientes/PerfilLogado', {
+						headers: {
+							// Adicionando o token ao cabeçalho de autorização
+							Authorization: `Bearer ${token}`,
+						},
+					})
+					.then((response) => {
+						// Formata a data de nascimento antes de definir no estado
+						const formattedBirthDate = formatBirthDate(
+							response.data.dataNascimento,
+						);
+						// Formata o CPF antes de definir no estado
+						const formattedCPF = formatCPF(response.data.cpf);
+						// Define a data de nascimento formatada no estado
+						setUserData({
+							...response.data,
+							dataNascimento: formattedBirthDate,
+							cpf: formattedCPF,
+						});
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			} else {
+				console.log(`deu erro no if`);
+			}
+		} catch (error) {
+			console.log(`Deu erro nl catch: ${error}`);
+		}
+	}
 
-    const limitedName = name.length > 16 ? name.substring(0, 16) + '...' : name;
-    setUserName(limitedName);
+	async function BuscarPorId() {
+		try {
+			const token = await UserDecodeToken();
 
-    setUserEmail(email)
-  }
+			await api
+				.get(`/Usuario/BuscarPorId?id=${token.user}`)
+				.then((response) => {
+					setDados(response.data);
+					console.log(response.data);
+				})
+				.catch((error) => {
+					console.log(`Deu erro aqui: ${error}`);
+				});
+		} catch (error) {
+			console.log('Erro ao buscar usuário por ID:', error);
+		}
+	}
 
+	async function Logout() {
+		try {
+			//obetendo o token
+			const token = await AsyncStorage.getItem('token');
 
-  // Função assíncrona para carregar os dados do usuário logado
-  async function loggedUser(token) {
-    try {
-      // Recuperação do token de acesso armazenado localmente
-      // const token = JSON.parse(
-      //   await AsyncStorage.getItem('token'),
-      // ).token;
+			//removendo o token
+			await AsyncStorage.removeItem('token');
 
-      // Verifica se o token existe
-      // Requisição à API para obter dados do usuário logado
-      const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes');
+			navigation.navigate('Login');
 
-      await api.get(`${url}/BuscarPorId?id=${token.user}`
-      ).then(response => {
+			console.log('Token removido', token);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
+	// Função para formatar a data de nascimento
+	function formatBirthDate(dateString) {
+		// Cria um objeto de data a partir da string da data de nascimento
+		const birthDate = new Date(dateString);
 
-        setInformations(response.data)
+		// Obtém o dia, mês e ano da data de nascimento
+		const day = String(birthDate.getDate()).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
+		const month = String(birthDate.getMonth() + 1).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
+		const year = birthDate.getFullYear();
 
-      }).catch(error => {
-        console.log(error);
-      })
-    } catch (error) {
-      console.log(`Deu erro no catch: ${error}`);
-    }
-  }
-
-  // Função assíncrona para realizar o logout do usuário
-  async function Logout() {
-    try {
-      // Obtém o token de acesso armazenado localmente
-      const token = await AsyncStorage.getItem('token')
-
-      // Remove o token armazenado localmente
-      await AsyncStorage.removeItem('token')
-
-      // Navega para a tela de login
-      navigation.navigate('Login');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // Função para formatar o CPF
-  function formatCPF(cpfString) {
-    // Extrai os três primeiros dígitos do CPF
-    const firstDigits = cpfString.substring(0, 3);
-    // Oculta todos os demais dígitos com "*"
-    const hiddenDigits = cpfString.substring(3).replace(/\d/g, '*');
-    // Concatena os três primeiros dígitos com os demais ocultos
-    const formattedCPF = `${firstDigits}${hiddenDigits}`;
-    return formattedCPF;
-  }
-
-  const formatarDataNascimento = (dataNascimento) => {
-    return moment(dataNascimento).format('DD/MM/YYYY');
-  };
-
-  const handleEditButtonClick = () => {
-    setInputsBlocked(false); // Desbloquear os inputs ao clicar no botão "Editar"
-  }
-
-  const handleEditButtonClickFalse = () => {
-    setInputsBlocked(true);
-  }
-  // Efeito utilizado para carregar os dados do usuário ao montar o componente
-  useEffect(() => {
-    profileLoad()
-  }, [])
-
-  async function AlternateProfilePicture() {
-    const formData = new FormData();
-    formData.append("Arquivo", { 
-      uri: route.params.photoUriRoute,
-      name: `image.${route.params.photoUri.split(".")[1]}`,
-      type: `image/${route.params.photoUri.split(".")[1]}`
-    })
-
-    console.log(`/Usuario/AlterarFotoPerfil?id=${profile.user}`)
-    await api.put(`/Usuario/AlterarFotoPerfil?id=${profile.user}`, formData, {
-      headers:{
-        "Content-Type" : "multipart/form-data"
-      }
-    }).then(response =>{
-      console.log(response);
-    }).catch(error =>{
-      console.log(error);
-    })
-}
-
-useEffect(() => {
-  if (route.params.photoUri) {
-    AlternateProfilePicture()
-  }
-}, [route.params]);
-
+		// Formata a data no formato dd/mm/aaaa
+		const formattedDate = `${day}/${month}/${year}`;
 
 		return formattedDate;
 	}
 
+	// Função para formatar o CPF
+	function formatCPF(cpfString) {
+		// Extrai os três primeiros dígitos do CPF
+		const firstDigits = cpfString.substring(0, 3);
+		// Oculta todos os demais dígitos com "*"
+		const hiddenDigits = cpfString.substring(3).replace(/\d/g, '*');
+		// Concatena os três primeiros dígitos com os demais ocultos
+		const formattedCPF = `${firstDigits}${hiddenDigits}`;
+		return formattedCPF;
+	}
 
+	async function AlternateProfilePicture() {
+		// Obter o token
+		const token = await UserDecodeToken();
 
-// Retorno do componente
-return (
-  <ScrollContainer>
-    {
-      informations != null ? (
-        <Container>
-          <ContainerImage>
-            <ProfilePicture source={{ uri: "https://github.com/marqzzs.png" }} />
-            <ButtonCamera onPress={() => navigation.navigate('CameraPhoto', {})}>
-              <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
-            </ButtonCamera>
-          </ContainerImage>
-          <ContentName>
-            <TextProfileName> {userName} </TextProfileName>
-            <TextProfileEmail>{userEmail}</TextProfileEmail>
-          </ContentName>
-          <ContentProfile>
+		console.log(token);
 
-            <TextProfileInput> {userLogin === 'Medico' ? 'Specialized' : 'Birthday date'}</TextProfileInput>
-            <InputProfile editable={!inputsBlocked}>
-              {userLogin === 'Medico' ? `${informations?.especialidade?.especialidade1}` : `${formatarDataNascimento(informations.dataNascimento)}`}
+		if (!token) {
+			console.log('Token não encontrado');
+			return;
+		}
 
-            </InputProfile>
-          </ContentProfile>
-          {/*  */}
-          <ContentProfile>
-            <TextProfileInput> {userLogin === 'Medico' ? 'CRM' : 'CPF'}</TextProfileInput>
-            <InputProfile editable={!inputsBlocked}>
-              {userLogin === 'Medico' ? `${informations.crm}` : `${informations?.cpf}`}
-              {/* {userLogin === 'Medico' && informations?.crm ? informations.crm : ''} */}
-            </InputProfile>
-          </ContentProfile>
-          {/*  */}
-          <ContentProfile>
-            <TextProfileInput>Address:</TextProfileInput>
-            <InputProfile editable={!inputsBlocked}>
-              {/* {userLogin ==='Medico' ? `${informations.endereco.logradouro}`: `${informations.endereco.logradouro}`} */}
-              {`${informations.endereco.logradouro}`}
-            </InputProfile>
-          </ContentProfile>
-          {/*  */}
-          <ContentRow>
-            <RowContentProfile>
-              <TextProfileInput>CEP:</TextProfileInput>
-              <InputRow editable={!inputsBlocked} //placeholder={"05545-333"}
-              >
-                {`${informations.endereco.cep}`}
-              </InputRow>
-            </RowContentProfile>
-            {/*  */}
-            <RowContentProfile>
-              <TextProfileInput>City:</TextProfileInput>
-              <InputRow editable={!inputsBlocked}
-              //placeholder={"Capao Redondo - SP"}
-              >
-                {`${informations.endereco.cidade}`}
-                {/* {userLogin === 'Medico' ? `${informations.endereco.cidade}`: `${informations.endereco.cidade}`} */}
-              </InputRow>
-            </RowContentProfile>
-          </ContentRow>
+		const formData = new FormData();
 
-          <Button onPress={handleEditButtonClickFalse}>
-            <ButtonTitle>Save</ButtonTitle>
-          </Button>
+		formData.append('Arquivo', {
+			uri: route.params.photoUri,
+			name: `image.${route.params.photoUri.split('.').pop()}`,
+			type: `image/${route.params.photoUri.split('.').pop()}`,
+		});
 
-          <Button onPress={handleEditButtonClick}>
-            <ButtonTitle>Edit</ButtonTitle>
-          </Button>
+		await api
+			.put(`/Usuario/AlterarFotoPerfil?id=${token.user}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
 
-          <ButtonExitApp onPress={() => Logout()}>
-            <ButtonTitle>Exit the app</ButtonTitle>
-          </ButtonExitApp>
-        </Container>
-      ) : (
-        <ActivityIndicator />
-      )
-    }
+	useEffect(() => {
+		profileLoad();
+		loggedUser();
+	}, []);
 
-  </ScrollContainer>
-);
+	useEffect(() => {
+		BuscarPorId();
+		dados;
+	}, []);
+	useEffect(() => {
+		if (route.params != undefined) {
+			AlternateProfilePicture();
+		}
 
+		console.log(route.params);
+	}, [dados, route.params]);
 
+	return (
+		<ScrollContainer>
+			<Container>
+				<ContainerImage>
+					{dados && dados.foto && (
+						<ProfilePicture
+							source={{
+								uri: dados && dados.foto,
+							}}
+						/>
+					)}
+
+					<ButtonCamera
+						onPress={() =>
+							navigation.navigate('CameraPhoto', {
+								isProfile: true,
+							})
+						}
+					>
+						<MaterialCommunityIcons
+							name="camera-plus"
+							size={20}
+							color={'#fbfbfb'}
+						/>
+					</ButtonCamera>
+				</ContainerImage>
+
+				<ContentName>
+					<TextProfileName> {nameUser} </TextProfileName>
+					<TextProfileEmail>{userEmail}</TextProfileEmail>
+				</ContentName>
+				{/*  */}
+				<ContentProfile>
+					<TextProfileInput>Date of birth:</TextProfileInput>
+					<InputProfile placeholder={'04/05/1999'}>
+						{userData.dataNascimento}
+					</InputProfile>
+				</ContentProfile>
+				{/*  */}
+				<ContentProfile>
+					<TextProfileInput>CPF:</TextProfileInput>
+					<InputProfile placeholder={'859*********'}>
+						{userData.cpf}
+					</InputProfile>
+				</ContentProfile>
+				{/*  */}
+				<ContentProfile>
+					<TextProfileInput>Address:</TextProfileInput>
+					<InputProfile placeholder={'Rua Vincenso Silva, 987'}>
+						{userData.endereco ? userData.endereco.logradouro : ''}
+					</InputProfile>
+				</ContentProfile>
+				{/*  */}
+				<ContentRow>
+					<RowContentProfile>
+						<TextProfileInput>CEP:</TextProfileInput>
+						<InputRow placeholder={'05545-333'}>
+							{userData.endereco ? userData.endereco.cep : ''}
+						</InputRow>
+					</RowContentProfile>
+					{/*  */}
+					<RowContentProfile>
+						<TextProfileInput>City:</TextProfileInput>
+						<InputRow placeholder={'Capao Redondo - SP'}>
+							{userData.endereco ? userData.endereco.cidade : ''}
+						</InputRow>
+					</RowContentProfile>
+				</ContentRow>
+
+				<Button>
+					<ButtonTitle>Save</ButtonTitle>
+				</Button>
+
+				<Button>
+					<ButtonTitle>Edit</ButtonTitle>
+				</Button>
+
+				<ButtonExitApp onPress={() => Logout()}>
+					<ButtonTitle>Exit the app</ButtonTitle>
+				</ButtonExitApp>
+			</Container>
+		</ScrollContainer>
+	);
+};

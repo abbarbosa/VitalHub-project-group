@@ -31,12 +31,6 @@ export const AppointmentModal = ({
 
 		console.log(consulta);
 
-<<<<<<< HEAD
-		if (screen == 'LocationAppointment') {
-			navigation.replace(screen, {
-				clinicaid: consulta.medicoClinica.clinicaId,
-			});
-=======
 		if (consulta) {
 			if (screen === 'LocationAppointment') {
 				navigation.replace(screen, {
@@ -51,11 +45,11 @@ export const AppointmentModal = ({
 					consultaid: consulta?.id,
 				});
 			}
->>>>>>> b7fd4de8fa4fe851da5300da6cc7366ef92155d9
 		} else {
 			navigation.replace(screen);
 		}
 	}
+
 
 	const calcularIdade = (dataNascimento) => {
 		const hoje = moment();
