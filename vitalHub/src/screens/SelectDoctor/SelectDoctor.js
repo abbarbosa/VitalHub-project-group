@@ -12,30 +12,48 @@ import { TitleSelection } from '../SelectClinic/Style';
 
 import { api } from '../../services/Service';
 
-export const SelectDoctor = ({ navigation}) => {
+export const SelectDoctor = ({ navigation, route }) => {
 	const [selectedDoctor, setSelectedDoctor] = useState(null);
 
 	const handleDoctorSelection = (doctorId) => {
-		setSelectedDoctor(
-			doctorId === selectedDoctor?.toString()
-				? null
-				: doctorId,
-		);
+		setSelectedDoctor(doctorId === selectedDoctor ? null : doctorId);
 	};
 
-	const [medicoLista, setMedicoLista] = useState([])
-	async function ListarMedico(){
+	const [medicoLista, setMedicoLista] = useState([]);
+	const [doctor, setDoctor] = useState(null);
+
+	async function ListarMedico() {
 		//instanciaar a chamada da api
-		await api.get('/Medicos').then(response => {
-			setMedicoLista(response.data)
-		}).catch(error => {
-			console.log(error);
-		})
+		console.log(route.params.agendamento.clinicaiId);
+		await api
+			.get(
+				`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaiId}`,
+			)
+			.then((response) => {
+				setMedicoLista(response.data);
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}
 
 	useEffect(() => {
-		ListarMedico()
-	},[])
+		ListarMedico();
+	}, []);
+
+	// useEffect(() => {
+	// 	console.log(route);
+	// }, [route.params]);
+
+	async function handleContinue() {
+		navigation.replace('SelectDate', {
+			agendamento: {
+				...route.params.agendamento,
+				...doctor,
+			},
+		});
+	}
 
 	return (
 		<Container>
@@ -45,15 +63,22 @@ export const SelectDoctor = ({ navigation}) => {
 				data={medicoLista}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
-					<DoctorsCard 
+					<DoctorsCard
 						medico={item}
-						selected={item.id === selectedDoctor}
-						onPress={handleDoctorSelection}
+						selected={item.id === selectedDoctor} // Corrigido aqui
+						onPress={() => {
+							handleDoctorSelection(item.id);
+
+							setDoctor({
+								medicoClinicaId: item.id,
+								medicoLabel: item.idNavigation.nome,
+							});
+						}}
 					/>
 				)}
 			/>
 
-			<Button onPress={() => navigation.navigate('SelectDate')}>
+			<Button onPress={() => handleContinue()}>
 				<ButtonTitle>Continue</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Home')}>

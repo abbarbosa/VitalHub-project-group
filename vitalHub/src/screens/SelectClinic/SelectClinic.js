@@ -12,62 +12,85 @@ import { TouchableOpacity } from 'react-native';
 import { ClinicCard } from '../../components/ClinicCard/ClinicCard';
 import { api } from '../../services/Service';
 
+export const SelectClinic = ({ navigation, route }) => {
+	// const [listaClinica, setListaClinica] = useState([]);
+	// async function ListarClinica() {
+	// 	//instanciaar a chamada da api
+	// 	await api
+	// 		.get('/Clinica/ListarTodas')
+	// 		.then((response) => {
+	// 			setListaClinica(response.data);
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error);
+	// 		});
+	// }
 
-export const SelectClinic = ({ navigation }) => {
-	const [listaClinica, setListaClinica] = useState([])
-	async function ListarClinica(){
-		//instanciaar a chamada da api
-		await api.get('/Clinica/ListarTodas').then(response => {
-			setListaClinica(response.data)
-		}).catch(error => {
-			console.log(error);
-		})
-	}
+	// useEffect(() => {
+	// 	ListarClinica();
+	// }, []);
 
-	useEffect(() => {
-		ListarClinica()
-	},[])
-	const [selectedClinic, setSelectedClinic] = useState('');
-	const [clinicList, setClinicList] = useState()
+	const [selectedClinic, setSelectedClinic] = useState(null);
+	const [clinica, setClinica] = useState();
 
 	const handleClinicSelection = (name) => {
 		setSelectedClinic(name);
 	};
 
 	async function ListClinic() {
-		await api.get('/Clinica/ListarTodas')
-			.then(Response => {
-				setClinicList(Response.data)
-			}).catch(error => {
-				console.log(error);
+		await api
+			.get(
+				`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`,
+			)
+			.then((response) => {
+				setClinica(response.data);
 			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}
 
 	useEffect(() => {
-		ListClinic()
-	}, [])
+		console.log(route.params);
+		ListClinic();
+	}, []);
+
+	async function handleContinue() {
+		navigation.replace('SelectDoctor', {
+			agendamento: { ...route.params.agendamento, ...clinica },
+		});
+	}
 
 	return (
 		<Container>
 			<TitleSelection>Select Clinic</TitleSelection>
 			<ListComponent
-
-				data={clinicList}
+				data={clinica}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
 					<TouchableOpacity
-						onPress={() => handleClinicSelection(item.id)}
+						onPress={() =>
+							setClinica({
+								clinicaiId: item.id,
+								clinicaLabel: item.nomeFantasia,
+							})
+						}
 					>
 						<ClinicCard
 							selected={item.id === selectedClinic}
-							onPress={() => handleClinicSelection(item.id)}
+							onPress={() =>
+								setClinica({
+									clinicaiId: item.id,
+									clinicaLabel: item.nomeFantasia,
+								})
+							}
 							clinic={item}
-
+							setSelectedClinic={setSelectedClinic}
 						/>
 					</TouchableOpacity>
 				)}
 			/>
-			<Button onPress={() => navigation.navigate('SelectDoctor')}>
+			<Button onPress={() => handleContinue()}>
 				<ButtonTitle>Continue</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Home')}>
