@@ -55,9 +55,22 @@ export const CameraPhoto = ({ navigation }) => {
 	}
 
 	async function SendPhoto() {
+<<<<<<< HEAD
 		if (photo) {
 			navigation.navigate('Main', { photoUri: photo , screen: 'Profile'});
 
+=======
+		if (route.params && route.params.isProfile) {
+			navigation.navigate(
+				route.params.isProfile === true
+					? 'Profile'
+					: 'VisualizePrescription',
+				{ photoUri: photo },
+			);
+		} else {
+			// Se isProfile não estiver definido ou for falso, navegue de volta para VisualizePrescription
+			navigation.navigate('VisualizePrescription', { photoUri: photo });
+>>>>>>> c6fb77431a492d3aeaea059f9bb57bd19c335bdd
 		}
 	}
 

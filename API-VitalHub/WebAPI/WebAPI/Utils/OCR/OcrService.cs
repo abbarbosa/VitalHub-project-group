@@ -6,8 +6,11 @@ namespace WebAPI.Utils.OCR
 {
     public class OcrService
     {
+ 
 
-        
+
+        private readonly string _endpoint = "https://computervvitalhub3dm.cognitiveservices.azure.com/";
+
 
         //metodo para reconhecer o caracteres(texto) a partir de uma imagem
         public async Task<string > RecognizeTextAsync(Stream imageStream)
