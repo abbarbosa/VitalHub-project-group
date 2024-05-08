@@ -31,10 +31,10 @@ namespace WebAPI.Controllers
 
                 return Ok("Email enviado com sucesso!");
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                return BadRequest("Falha ao enviar o e-mail");
+                return BadRequest(e.Message);
             }
         }
 

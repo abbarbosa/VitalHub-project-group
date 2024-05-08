@@ -19,20 +19,21 @@ import { TitleSelection } from '../SelectClinic/Style';
 // Importando a API de serviços para fazer chamadas à API
 import { api } from '../../services/Service';
 
+<<<<<<< HEAD
 // Definindo o componente SelectDoctor
 export const SelectDoctor = ({ navigation}) => {
 	// Estado para armazenar o médico selecionado
+=======
+export const SelectDoctor = ({ navigation, route }) => {
+>>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 	const [selectedDoctor, setSelectedDoctor] = useState(null);
 
 	// Função para lidar com a seleção de médicos
 	const handleDoctorSelection = (doctorId) => {
-		setSelectedDoctor(
-			doctorId === selectedDoctor?.toString()
-				? null
-				: doctorId,
-		);
+		setSelectedDoctor(doctorId === selectedDoctor ? null : doctorId);
 	};
 
+<<<<<<< HEAD
 	// Estado para armazenar a lista de médicos
 	const [medicoLista, setMedicoLista] = useState([])
 
@@ -46,12 +47,44 @@ export const SelectDoctor = ({ navigation}) => {
 		} catch (error) {
 			console.log(error);
 		}
+=======
+	const [medicoLista, setMedicoLista] = useState([]);
+	const [doctor, setDoctor] = useState(null);
+
+	async function ListarMedico() {
+		//instanciaar a chamada da api
+		console.log(route.params.agendamento.clinicaiId);
+		await api
+			.get(
+				`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaiId}`,
+			)
+			.then((response) => {
+				setMedicoLista(response.data);
+				console.log(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+>>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 	}
 
 	// Efeito para listar os médicos ao montar o componente
 	useEffect(() => {
-		ListarMedico()
-	},[])
+		ListarMedico();
+	}, []);
+
+	// useEffect(() => {
+	// 	console.log(route);
+	// }, [route.params]);
+
+	async function handleContinue() {
+		navigation.replace('SelectDate', {
+			agendamento: {
+				...route.params.agendamento,
+				...doctor,
+			},
+		});
+	}
 
 	// Retorno do componente
 	return (
@@ -63,17 +96,32 @@ export const SelectDoctor = ({ navigation}) => {
 				data={medicoLista}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
+<<<<<<< HEAD
 					// Componente DoctorsCard para exibição dos médicos
 					<DoctorsCard 
+=======
+					<DoctorsCard
+>>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 						medico={item}
-						selected={item.id === selectedDoctor}
-						onPress={handleDoctorSelection}
+						selected={item.id === selectedDoctor} // Corrigido aqui
+						onPress={() => {
+							handleDoctorSelection(item.id);
+
+							setDoctor({
+								medicoClinicaId: item.id,
+								medicoLabel: item.idNavigation.nome,
+							});
+						}}
 					/>
 				)}
 			/>
 
+<<<<<<< HEAD
 			{/* Botão para continuar */}
 			<Button onPress={() => navigation.navigate('SelectDate')}>
+=======
+			<Button onPress={() => handleContinue()}>
+>>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 				<ButtonTitle>Continue</ButtonTitle>
 			</Button>
 			{/* Botão secundário para cancelar */}

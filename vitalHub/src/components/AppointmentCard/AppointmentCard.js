@@ -37,7 +37,6 @@ export const AppointmentCard = ({
 		const nascimento = moment(dataNascimento);
 		return hoje.diff(nascimento, 'years');
 	};
-
 	// const formatarDataNascimento = (dataNascimento) => {
 	// 	return moment(dataNascimento).format('DD/MM/YYYY');
 	// };
@@ -47,6 +46,10 @@ export const AppointmentCard = ({
 			setProfile(await UserDecodeToken());
 		}
 
+		console.log(consulta);
+		console.log('\n');
+		console.log(usuarioConsulta);
+
 		ProfileLoad();
 	}, []);
 	
@@ -54,7 +57,7 @@ export const AppointmentCard = ({
 		<ContainerCardList>
 			<ProfileImage
 				source={{
-					uri: 'https://dabiatlante.com.br/wp-content/uploads/2022/11/como-proteger-o-paciente-contra-as-radiacoes.jpg',
+					uri: `${usuarioConsulta.idNavigation.foto}`,
 				}}
 			/>
 			<ContentCard>
@@ -73,7 +76,13 @@ export const AppointmentCard = ({
 										consulta?.paciente?.dataNascimento,
 								  )} anos`}
 						</TextAge>
-						<TextBold>Rotina</TextBold>
+						<TextBold>
+							{consulta.prioridade.prioridade === 0
+								? 'Checkup'
+								: consulta.prioridade.prioridade === 1
+								? 'Exam'
+								: 'Urgency'}
+						</TextBold>
 					</ProfileData>
 				</DataProfileCard>
 

@@ -74,14 +74,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 					'Content-Type': 'multipart/form-data',
 				},
 			});
-
-			console.log('ta chegando');
-			console.log('\n');
-			console.log('vai colocar');
 			setDescricaoExame(descricaoExame + '\n' + response.data.descricao);
-			console.log('\n');
-			console.log('Colocou');
-			console.log(response.data.descricao);
 		} catch (error) {
 			console.error('Deu erro:', error);
 		}
@@ -93,6 +86,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 
 			InserirExame();
 		}
+		console.log(consulta);
 	}, [route.params]);
 
 	return (
@@ -102,7 +96,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 					<>
 						<ProfilePicture
 							source={{
-								uri: 'https://i.ibb.co/pzb7dV8/4ac0d625-25c8-40b1-a39c-6389a4066e25.jpg',
+								uri: `${consulta.medicoClinica.medico.idNavigation.foto}`,
 							}}
 						/>
 						<ContentName>
@@ -202,10 +196,12 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						<ContentProfile>
 							<InputRecord
 								placeholder={'Blood test result: all normal'}
-								editable={false}
 								value={descricaoExame}
 								multiline={true}
-							/>
+								editable={false}
+							>
+								{consulta.exames[0].descricao}
+							</InputRecord>
 						</ContentProfile>
 						<ButtonSecundaryTitle
 							onPress={() => navigation.navigate('Home')}

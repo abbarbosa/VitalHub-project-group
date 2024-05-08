@@ -11,6 +11,7 @@ import { ModalContent, ModalText, PatientModal } from './Style';
 
 // Importando a biblioteca de notificação
 import * as Notifications from 'expo-notifications';
+import { api } from '../../services/Service';
 
 //definir como as notificacoes devem ser tratados quando recebidos
 Notifications.setNotificationHandler({
@@ -30,12 +31,34 @@ const CancellationModal = ({
 	visible,
 	setShowModalCancel,
 	navigation,
+	consulta,
 	...rest
 }) => {
 	// Função para lidar com o fechamento do modal e navegação
 	const handleClose = (screen) => {
 		setShowModalCancel(false);
 		navigation.replace(screen);
+	};
+
+	const handleCancel = async () => {
+		console.log(
+			api.put(
+				`/Consultas/Status?idConsulta=${consulta.id}&status=1A4C4AAB-3097-45B1-9AD2-EEAE7CFD6BD2`,
+			),
+		);
+		try {
+			const response = await api.put(
+				`/Consultas/Status?idConsulta=${
+					consulta.id
+				}&status=${'1A4C4AAB-3097-45B1-9AD2-EEAE7CFD6BD2'}`,
+			);
+
+			console.log('Consulta cancelada com sucesso \n\n');
+			console.log(response.data);
+		} catch (error) {
+			// Lidar com o erro
+			console.error('Erro ao cancelar consulta:', error);
+		}
 	};
 
 	// Função para lidar com a chamada da notificação
@@ -70,6 +93,7 @@ const CancellationModal = ({
 	useEffect(() => {
 		// Solicitar as permissões de notificação ao montar o componente
 		Notifications.requestPermissionsAsync();
+		console.log(consulta);
 	}, []);
 
 	return (
@@ -89,7 +113,8 @@ const CancellationModal = ({
 					</ModalText>
 					<ButtonModal
 						onPress={() => {
-							handleClose('Home');
+							handleCancel();
+							handleClose('Main');
 							handleCallNotifications(); // Chamando a função de notificação ao confirmar o cancelamento
 						}}
 					>

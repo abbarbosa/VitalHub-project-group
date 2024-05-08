@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from '../../components/Container/Style';
 import { TitleSelection } from '../SelectClinic/Style';
 import { FullCalendar } from '../../components/FullCalendar/FullCalendar';
@@ -10,16 +10,31 @@ import {
 } from '../../components/Button/Style';
 import { ConfirmModal } from '../../components/ConfirmModal/ConfirmModal';
 
-export const SelectDate = ({ navigation }) => {
+export const SelectDate = ({ navigation, route }) => {
 	const [selectedDate, setSelectedDate] = useState();
 	const [selectedTime, setSelectedTime] = useState();
+	const [agendamento, setAgendamento] = useState(null);
 	const [showModalConfirm, setShowModalConfirm] = useState(false);
+
+	useEffect(() => {
+		console.log(route.params);
+	});
+
+	function handleContinue() {
+		setAgendamento({
+			...route.params.agendamento,
+			dataConsulta: `${selectedDate} ${selectedTime}`,
+		});
+
+		setShowModalConfirm(true);
+	}
 
 	return (
 		<Container>
 			<TitleSelection>Select Date</TitleSelection>
 
 			<FullCalendar
+				setSelectedDate={setSelectedDate}
 				selectedDate={selectedDate}
 				handleSelectedDateFn={setSelectedDate}
 			/>
@@ -27,10 +42,11 @@ export const SelectDate = ({ navigation }) => {
 			<SelectInput
 				labelText="Select an available time slot"
 				defaultText="Select a time"
+				setSelectedTime={setSelectedTime}
 				handleSelectedFn={setSelectedTime}
 			/>
 
-			<Button onPress={() => setShowModalConfirm(true)}>
+			<Button onPress={() => handleContinue()}>
 				<ButtonTitle onPress={() => setShowModalConfirm(true)}>
 					Confirm
 				</ButtonTitle>
@@ -43,6 +59,7 @@ export const SelectDate = ({ navigation }) => {
 				navigation={navigation}
 				visible={showModalConfirm}
 				setShowModalConfirm={setShowModalConfirm}
+				agendamento={agendamento}
 			/>
 		</Container>
 	);
