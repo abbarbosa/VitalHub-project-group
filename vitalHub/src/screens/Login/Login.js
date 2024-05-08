@@ -46,10 +46,8 @@ export const Login = ({ navigation }) => {
 				'Erro ao fazer login. Verifique suas credenciais e tente novamente.',
 			);
 		} finally {
-			console.log('Finalizando...');
 			setTimeout(() => {
 				setLoading(false);
-				console.log('Finalizado.');
 			}, 2000);
 		}
 	}
@@ -64,7 +62,7 @@ export const Login = ({ navigation }) => {
 				placeholder={'Username or email...'}
 				value={email}
 				onChangeText={(txt) => setEmail(txt)}
-				//onChange={event => event.nativeEvent.text}
+			//onChange={event => event.nativeEvent.text}
 			/>
 
 			<Input

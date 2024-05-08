@@ -4,16 +4,16 @@ import { useEffect, useState } from "react";
 import { Button, ButtonExitApp, ButtonTitle } from "../../components/Button/Style";
 import { Container, ScrollContainer } from "../../components/Container/Style";
 import {
-  ContentName,
-  ContentProfile,
-  ContentRow,
-  InputProfile,
-  InputRow,
-  ProfilePicture,
-  RowContentProfile,
-  TextProfileEmail,
-  TextProfileInput,
-  TextProfileName,
+	ContentName,
+	ContentProfile,
+	ContentRow,
+	InputProfile,
+	InputRow,
+	ProfilePicture,
+	RowContentProfile,
+	TextProfileEmail,
+	TextProfileInput,
+	TextProfileName,
 } from "./Style"; // Importando os estilos específicos para este componente
 
 
@@ -28,15 +28,27 @@ import { ButtonCamera, ContainerImage } from "../Login/Style";
 
 // Definição do componente Profile
 export const Profile = ({ navigation, route }) => {
-	const [nameUser, setUserName] = useState('');
+	const [nameUser, setNameUser] = useState('');
 	const [userEmail, setUserEmail] = useState('');
 	const [userData, setUserData] = useState('');
 	const [photoUri, setPhotoUri] = useState(null);
 	const [profile, setProfile] = useState();
 	const [dados, setDados] = useState();
 
+	const [loading, setLoading] = useState();
+
 	//carregamento dos dados do usuario
 	async function profileLoad() {
+
+		const token = await UserDecodeToken();
+
+		setProfile(token);
+		const { role } = token
+
+		if (role) {
+			await BuscarPorId()
+		}s
+
 		try {
 			const token = await UserDecodeToken();
 
@@ -51,11 +63,12 @@ export const Profile = ({ navigation, route }) => {
 			const limitedName =
 				name.length > 16 ? name.substring(0, 16) + '...' : name;
 
-			setUserName(limitedName);
+			setNameUser(limitedName);
 			setUserEmail(email);
 		} catch (error) {
 			console.log(error);
 		}
+
 	}
 
 	async function loggedUser() {
@@ -97,12 +110,20 @@ export const Profile = ({ navigation, route }) => {
 	}
 
 	async function BuscarPorId() {
+
+		const token = await UserDecodeToken();
+
+		const url = token.role === 'Medico' ? 'Medicos' : 'Pacientes';
+
+		console.log(url);
+
 		try {
 			const token = await UserDecodeToken();
 
 			await api
-				.get(`/Usuario/BuscarPorId?id=${token.user}`)
+				.get(`${url}/BuscarPorId?id=${token.user}`)
 				.then((response) => {
+					console.log("Aqui jaz as informacoes \n");
 					setDados(response.data);
 					console.log(response.data);
 				})
@@ -196,10 +217,6 @@ export const Profile = ({ navigation, route }) => {
 	}, []);
 
 	useEffect(() => {
-		BuscarPorId();
-		dados;
-	}, []);
-	useEffect(() => {
 		if (route.params != undefined) {
 			AlternateProfilePicture();
 		}
@@ -210,83 +227,112 @@ export const Profile = ({ navigation, route }) => {
 	return (
 		<ScrollContainer>
 			<Container>
-				<ContainerImage>
-					{dados && dados.foto && (
-						<ProfilePicture
-							source={{
-								uri: dados && dados.foto,
-							}}
-						/>
-					)}
+				{dados ? (
+					<>
+						<ContainerImage>
+							{dados && dados.foto && (
+								<ProfilePicture
+									source={{
+										uri: `${dados.idNavigation.foto}`
+									}}
+								/>
+							)}
 
-					<ButtonCamera
-						onPress={() =>
-							navigation.navigate('CameraPhoto', {
-								isProfile: true,
-							})
-						}
-					>
-						<MaterialCommunityIcons
-							name="camera-plus"
-							size={20}
-							color={'#fbfbfb'}
-						/>
-					</ButtonCamera>
-				</ContainerImage>
+							<ButtonCamera
+								onPress={() =>
+									navigation.navigate('CameraPhoto', {
+										isProfile: true,
+									})
+								}
+							>
+								<MaterialCommunityIcons
+									name="camera-plus"
+									size={20}
+									color={'#fbfbfb'}
+								/>
+							</ButtonCamera>
+						</ContainerImage>
 
-				<ContentName>
-					<TextProfileName> {nameUser} </TextProfileName>
-					<TextProfileEmail>{userEmail}</TextProfileEmail>
-				</ContentName>
-				{/*  */}
-				<ContentProfile>
-					<TextProfileInput>Date of birth:</TextProfileInput>
-					<InputProfile placeholder={'04/05/1999'}>
-						{userData.dataNascimento}
-					</InputProfile>
-				</ContentProfile>
-				{/*  */}
-				<ContentProfile>
-					<TextProfileInput>CPF:</TextProfileInput>
-					<InputProfile placeholder={'859*********'}>
-						{userData.cpf}
-					</InputProfile>
-				</ContentProfile>
-				{/*  */}
-				<ContentProfile>
-					<TextProfileInput>Address:</TextProfileInput>
-					<InputProfile placeholder={'Rua Vincenso Silva, 987'}>
-						{userData.endereco ? userData.endereco.logradouro : ''}
-					</InputProfile>
-				</ContentProfile>
-				{/*  */}
-				<ContentRow>
-					<RowContentProfile>
-						<TextProfileInput>CEP:</TextProfileInput>
-						<InputRow placeholder={'05545-333'}>
-							{userData.endereco ? userData.endereco.cep : ''}
-						</InputRow>
-					</RowContentProfile>
-					{/*  */}
-					<RowContentProfile>
-						<TextProfileInput>City:</TextProfileInput>
-						<InputRow placeholder={'Capao Redondo - SP'}>
-							{userData.endereco ? userData.endereco.cidade : ''}
-						</InputRow>
-					</RowContentProfile>
-				</ContentRow>
+						<ContentName>
+							<TextProfileName> {nameUser} </TextProfileName>
+							<TextProfileEmail>{userEmail}</TextProfileEmail>
+						</ContentName>
+						{/*  */}
+						<ContentProfile>
+							{profile.role === 'Paciente' ? (
+								<TextProfileInput>Date of birth</TextProfileInput>
+							) : (
+								<TextProfileInput>specialty</TextProfileInput>
+							)}
 
-				<Button>
-					<ButtonTitle>Save</ButtonTitle>
-				</Button>
+							<InputProfile placeholder={'04/05/1999'}>
+							{profile.role === 'Paciente' ? (
+								userData.dataNascimento
+							) : (
+							 userData.dataNascimento
+							)}
+							</InputProfile>
+						</ContentProfile>
+						{/*  */}
+						<ContentProfile>
+						{profile.role === 'Paciente' ? (
+								<TextProfileInput>CPF</TextProfileInput>
+							) : (
+								<TextProfileInput>CRM</TextProfileInput>
+							)}
 
-				<Button>
-					<ButtonTitle>Edit</ButtonTitle>
-				</Button>
+							<InputProfile placeholder={'859********'}>
+							{profile.role === 'Paciente' ? (
+								userData.cpf
+							) : (
+								userData.crm
+							)}
+							</InputProfile>
+							
+								
+								{/* {userData.cpf} */}
+							
+						</ContentProfile>
+						{/*  */}
+						<ContentProfile>
+							<TextProfileInput>Address:</TextProfileInput>
+							<InputProfile placeholder={'Rua Vincenso Silva, 987'}>
+								{userData.endereco ? userData.endereco.logradouro : ''}
+							</InputProfile>
+						</ContentProfile>
+						{/*  */}
+						<ContentRow>
+							<RowContentProfile>
+								<TextProfileInput>CEP:</TextProfileInput>
+								<InputRow placeholder={'05545-333'}>
+									{userData.endereco ? userData.endereco.cep : ''}
+								</InputRow>
+							</RowContentProfile>
+							{/*  */}
+							<RowContentProfile>
+								<TextProfileInput>City:</TextProfileInput>
+								<InputRow placeholder={'Capao Redondo - SP'}>
+									{userData.endereco ? userData.endereco.cidade : ''}
+								</InputRow>
+							</RowContentProfile>
+						</ContentRow>
 
-				<ButtonExitApp onPress={() => Logout()}>
-					<ButtonTitle>Exit the app</ButtonTitle>
-				</ButtonExitApp>
+						<Button>
+							<ButtonTitle>Save</ButtonTitle>
+						</Button>
+
+						<Button>
+							<ButtonTitle>Edit</ButtonTitle>
+						</Button>
+
+						<ButtonExitApp onPress={() => Logout()}>
+							<ButtonTitle>Exit the app</ButtonTitle>
+						</ButtonExitApp>
+					</>
+				) : (
+					<ActivityIndicator />
+				)}
+
 			</Container>
 		</ScrollContainer>
 	);

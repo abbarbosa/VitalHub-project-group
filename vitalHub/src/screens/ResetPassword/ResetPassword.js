@@ -7,6 +7,7 @@ import { ContentIconSetinha, SubText } from '../RecoverPassword/Style';
 import { Input, RecoverInput } from '../../components/Input/Style';
 import { Button, ButtonTitle } from '../../components/Button/Style';
 import { AntDesign } from '@expo/vector-icons';
+import { api } from '../../services/Service';
 
 export const ResetPassword = ({ navigation, route }) => {
 
@@ -14,47 +15,48 @@ export const ResetPassword = ({ navigation, route }) => {
 	const [conffirm, setConffirm] = useState('')
 
 	async function UptadePwd(){
-		if(password === conffirm){
-			await api.post(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,{
-			senhaNova: password
-			}).then(() =>{
-				navigation.replace("Login")
-			}).catch(error=>{
-				console.log(error);
-			})
-		}
+		if (password === conffirm) {
+            try {
+                await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+                    senhaNova: password
+                });
+                navigation.replace("Login");
+            } catch (error) {
+                console.log(error);
+                // Trate o erro de acordo com suas necessidades
+            }
+        } else {
+            // Senhas não coincidem, você pode mostrar uma mensagem de erro ao usuário
+            console.log("As senhas não coincidem");
+        }
 	}
 	return (
 		<Container>
-			<ContentIconSetinha onPress={() => navigation.navigate('Login')}>
+            <ContentIconSetinha onPress={() => navigation.navigate('Login')}>
+                <AntDesign name="closecircle" size={30} color="#49B3BA" />
+            </ContentIconSetinha>
 
-				<AntDesign name="closecircle" size={30} color="#49B3BA" />
+            <Logo source={require('../../assets/logoVitalHub.png')} />
+            <Title>Reset Password</Title>
+            <SubText>Insert and confirm your new password</SubText>
 
-			</ContentIconSetinha>
+            <Input
+                placeholder={'New Password'}
+                value={password}
+                onChangeText={(txt) => { setPassword(txt) }}
+                secureTextEntry={true}
+            />
 
-			<Logo source={require('../../assets/logoVitalHub.png')} />
+            <RecoverInput
+                placeholder={'Confirm new password'}
+                value={conffirm}
+                onChangeText={(txt) => { setConffirm(txt) }}
+                secureTextEntry={true}
+            />
 
-			<Title>Reset Password</Title>
-
-			<SubText>Insert and confirm your new password</SubText>
-
-			<Input 
-				placeholder={'New Password'} 
-				value={password} 
-				onChangeText={(txt)=>{setPassword(txt)}}
-				secureTextEntry={true}
-			/>
-
-			<RecoverInput 
-			placeholder={'Confirm new password'} 
-			value={conffirm} 
-			onChangeText={(txt)=>{setConffirm(txt)}}
-			secureTextEntry={true}
-			/>
-			
-			<Button onPress={() => navigation.navigate('Login')}>
-				<ButtonTitle>Confirm new password</ButtonTitle>
-			</Button>
-		</Container>
+            <Button onPress={UptadePwd}>
+                <ButtonTitle>Confirm new password</ButtonTitle>
+            </Button>
+        </Container>
 	);
 };

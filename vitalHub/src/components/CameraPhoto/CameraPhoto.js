@@ -10,13 +10,13 @@ import {
 	Alert,
 } from 'react-native';
 import { FontAwesome, MaterialIcons, FontAwesome6 } from '@expo/vector-icons';
-import { Camera } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 import { ButtonGallery, ImageGallery } from './Style';
 
 // Componente CameraPhoto
-export const CameraPhoto = ({ navigation }) => {
+export const CameraPhoto = ({ navigation, route }) => {
 	// Referência para a câmera
 	const cameraRef = useRef(null);
 
@@ -27,13 +27,18 @@ export const CameraPhoto = ({ navigation }) => {
 	const [openModal, setOpenModal] = useState(false);
 
 	// Estado para definir o tipo da câmera (traseira ou frontal)
-	const [tipoCamera, setTipoCamera] = useState(Camera.Constants.Type.back);
+	const [tipoCamera, setTipoCamera] = useState('back');
+
+	//satete pra permissao da camera
+	const [permission, requestPermission] = useCameraPermissions();
+
+
 
 	// Estado para controlar o modo de flash (ligado ou desligado)
-	const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+	const [flashMode, setFlashMode] = useState('off');
 
 	// Estado para controlar o foco automático (ligado ou desligado)
-	const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.off);
+	const [autoFocus, setAutoFocus] = useState('off');
 
 	const [lastedPhoto, setLastedPhoto] = useState(null)
 
@@ -41,7 +46,7 @@ export const CameraPhoto = ({ navigation }) => {
 	// Função para capturar a foto
 	async function CapturePhoto() {
 		// Ativar o foco automático antes de tirar a foto
-		setAutoFocus(Camera.Constants.AutoFocus.on);
+		setAutoFocus('on');
 
 		// Esperar um curto período de tempo para permitir que o foco automático seja aplicado
 		await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -55,11 +60,6 @@ export const CameraPhoto = ({ navigation }) => {
 	}
 
 	async function SendPhoto() {
-<<<<<<< HEAD
-		if (photo) {
-			navigation.navigate('Main', { photoUri: photo , screen: 'Profile'});
-
-=======
 		if (route.params && route.params.isProfile) {
 			navigation.navigate(
 				route.params.isProfile === true
@@ -70,7 +70,6 @@ export const CameraPhoto = ({ navigation }) => {
 		} else {
 			// Se isProfile não estiver definido ou for falso, navegue de volta para VisualizePrescription
 			navigation.navigate('VisualizePrescription', { photoUri: photo });
->>>>>>> c6fb77431a492d3aeaea059f9bb57bd19c335bdd
 		}
 	}
 
@@ -83,9 +82,9 @@ export const CameraPhoto = ({ navigation }) => {
 	// Função para alternar o modo de flash
 	function ToggleFlashMode() {
 		setFlashMode(
-			flashMode === Camera.Constants.FlashMode.on
-				? Camera.Constants.FlashMode.off
-				: Camera.Constants.FlashMode.on,
+			flashMode === 'on'
+				? 'off'
+				: 'on',
 		);
 	}
 
@@ -102,26 +101,25 @@ export const CameraPhoto = ({ navigation }) => {
 		}
 	}
 
-	async function getLastPhoto() {
-		const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
+	async function GetLastPhoto() {
+		const { assets } = await MediaLibrary.getAssetsAsync({
+			sortBy: [[MediaLibrary.SortBy.creationTime, false]],
+			first: 1,
+		});
+
 		console.log(assets);
 
 		if (assets.length > 0) {
-			setLastedPhoto(assets[0].uri)
+			setLastedPhoto(assets[0].uri);
 		}
-
-
-
 	}
 
 	async function SelectImageGallery() {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			quality: 1
-			// mediaTypes: ImagePicker.mediaTypeOptions.Images,
-			// quality: 1
+			quality: 1,
 		});
-		console.log("foto galeria");
+
 		console.log(result.assets[0].uri);
 
 		if (!result.canceled) {
@@ -132,39 +130,39 @@ export const CameraPhoto = ({ navigation }) => {
 
 	// Solicitar permissões da câmera e da galeria ao montar o componente
 	useEffect(() => {
-
-		(async () => {
-			const { status: cameraStatus } =
-				await Camera.requestCameraPermissionsAsync();
-			const { status: mediaStatus } =
-				await MediaLibrary.requestPermissionsAsync();
-		})();
-
-		getLastPhoto();
+		GetLastPhoto();
 	}, []);
 
+
+	if (!permission) {
+		alert('carregando permissao');
+	}
+
+	// if (!permission.granted) {
+	// 	return(
+	// 		<></>
+	// 	)
+	// }
+
+	function toggleCameraFacing() {
+		setTipoCamera(current => (current === 'back' ? 'front' : 'back'));
+	}
 
 	// Renderização do componente
 	return (
 		<View style={styles.container}>
-			<Camera
+			<CameraView
 				style={styles.camera}
-				type={tipoCamera}
+				facing={tipoCamera}
 				ratio={'16:9'}
 				ref={cameraRef}
-				flashMode={flashMode}
+				flash={flashMode}
 				autoFocus={autoFocus}
 			>
 				<View style={styles.viewFlip}>
 					<TouchableOpacity
 						style={styles.btnFlip}
-						onPress={() =>
-							setTipoCamera(
-								tipoCamera === Camera.Constants.Type.front
-									? Camera.Constants.Type.back
-									: Camera.Constants.Type.front,
-							)
-						}
+						onPress={toggleCameraFacing}
 					>
 						<FontAwesome6
 							name="camera-rotate"
@@ -182,35 +180,30 @@ export const CameraPhoto = ({ navigation }) => {
 						<MaterialIcons
 							style={[
 								styles.btnFlash,
-								flashMode === Camera.Constants.FlashMode.on
+								flashMode === 'on'
 									? styles.flashOn
 									: styles.flashOff,
 							]}
 							name={
-								flashMode === Camera.Constants.FlashMode.on
+								flashMode === 'on'
 									? 'flash-on'
 									: 'flash-off'
 							}
 							size={36}
 							color={
-								flashMode === Camera.Constants.FlashMode.on
+								flashMode === 'on'
 									? '#007bff'
 									: '#fff'
 							}
 						/>
 					</TouchableOpacity>
 					<ButtonGallery onPress={() => SelectImageGallery()}>
-
-						{
-							lastedPhoto != null ? (
-								< ImageGallery source={{ uri: lastedPhoto }} />
-							) : null
-						}
-
-
+						{lastedPhoto != null ? (
+							<ImageGallery source={{ uri: lastedPhoto }} />
+						) : null}
 					</ButtonGallery>
 				</View>
-			</Camera>
+			</CameraView>
 
 			{/* Modal para exibir a foto */}
 			<Modal
@@ -250,6 +243,7 @@ export const CameraPhoto = ({ navigation }) => {
 		</View>
 	);
 };
+
 
 // Estilos do componente
 const styles = StyleSheet.create({
