@@ -47,7 +47,9 @@ export const CameraPhoto = ({ navigation, route }) => {
 
 		// Tirar a foto após o foco automático ser aplicado
 		if (cameraRef) {
-			const photo = await cameraRef.current.takePictureAsync();
+			const photo = await cameraRef.current.takePictureAsync({
+				quality: 1,
+			});
 			await setPhoto(photo.uri);
 			setOpenModal(true);
 		}

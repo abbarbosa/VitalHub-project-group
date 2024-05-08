@@ -62,7 +62,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 				})
 				.then((response) => {
 					setEdicaoHabilitada(false);
-					console.log(`Sucesso na edicao: ${response}`);
+					console.log(`Sucesso na edicao: ${response.data}`);
 				})
 				.catch((error) => {
 					console.log(`Deu erro no metodo: ${error}`);
@@ -76,7 +76,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 			<Container>
 				<ProfilePicture
 					source={{
-						uri: 'https://i.ibb.co/pzb7dV8/4ac0d625-25c8-40b1-a39c-6389a4066e25.jpg',
+						uri: `${consulta.paciente.idNavigation.foto}`,
 					}}
 				/>
 				<ContentName>

@@ -85,7 +85,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("Status")]
-        public IActionResult UpdateStatus(Guid idConsulta, string status)
+        public IActionResult UpdateStatus(Guid idConsulta, Guid status)
         {
             try
             {

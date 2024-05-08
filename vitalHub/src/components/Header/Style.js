@@ -5,6 +5,11 @@ export const BoxUser = styled.TouchableOpacity.attrs({ activeOpacity: 1 })`
 	align-items: center;
 	gap: 10px;
 	margin-left: 20px;
+	margin-top: 30px;
+`;
+
+export const BoxIcon = styled.View`
+	margin-top: 30px;
 `;
 
 export const ImageUser = styled.Image`

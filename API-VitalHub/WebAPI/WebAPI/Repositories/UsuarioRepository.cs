@@ -97,8 +97,13 @@ namespace WebAPI.Repositories
         {
             try
             {
+                Guid.TryParse("5D014948-D906-439C-B4ED-CC6728541E9D", out var guid);
+                usuario.Paciente = new Paciente();
+                usuario.Paciente.Endereco = new Endereco();
+                usuario.TipoUsuarioId = guid;
                 usuario.Senha = Criptografia.GerarHash(usuario.Senha!);
                 ctx.Add(usuario);
+
                 ctx.SaveChanges();
             }
             catch (Exception)

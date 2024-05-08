@@ -23,84 +23,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../../services/Service';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ButtonCamera, ContainerImage } from './Style';
+import moment from 'moment';
+import { ActivityIndicator } from 'react-native';
 
 export const Profile = ({ navigation, route }) => {
-	const [nameUser, setUserName] = useState('');
-	const [userEmail, setUserEmail] = useState('');
-	const [userData, setUserData] = useState('');
-	const [photoUri, setPhotoUri] = useState(null);
 	const [profile, setProfile] = useState();
 	const [dados, setDados] = useState();
-
-	//carregamento dos dados do usuario
-	async function profileLoad() {
-		try {
-			const token = await UserDecodeToken();
-
-			const { name } = token;
-			const { email } = token;
-			const { dateBirth } = token;
-
-			if (token) {
-				const { name, email } = token;
-			}
-			// Limitamos o tamanho do nome a, por exemplo, 20 caracteres
-			const limitedName =
-				name.length > 16 ? name.substring(0, 16) + '...' : name;
-
-			setUserName(limitedName);
-			setUserEmail(email);
-		} catch (error) {
-			console.log(error);
-		}
-	}
-
-	async function loggedUser() {
-		try {
-			// Recuperação do token de acesso
-			const token = JSON.parse(await AsyncStorage.getItem('token')).token;
-
-			if (token) {
-				await api
-					.get('/Pacientes/PerfilLogado', {
-						headers: {
-							// Adicionando o token ao cabeçalho de autorização
-							Authorization: `Bearer ${token}`,
-						},
-					})
-					.then((response) => {
-						// Formata a data de nascimento antes de definir no estado
-						const formattedBirthDate = formatBirthDate(
-							response.data.dataNascimento,
-						);
-						// Formata o CPF antes de definir no estado
-						const formattedCPF = formatCPF(response.data.cpf);
-						// Define a data de nascimento formatada no estado
-						setUserData({
-							...response.data,
-							dataNascimento: formattedBirthDate,
-							cpf: formattedCPF,
-						});
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-			} else {
-				console.log(`deu erro no if`);
-			}
-		} catch (error) {
-			console.log(`Deu erro nl catch: ${error}`);
-		}
-	}
+	const [edicaoHabilitada, setEdicaoHabilitada] = useState(false);
+	const [dateBirth, setDateBirth] = useState('');
+	const [cpf, setCpf] = useState('');
+	const [rg, setRg] = useState('');
+	const [logradouro, setLogradouro] = useState('');
+	const [number, setNumber] = useState('');
+	const [cep, setCep] = useState('');
+	const [city, setCity] = useState('');
+	const [photoAtualizada, setPhotoAtualizada] = useState();
 
 	async function BuscarPorId() {
 		try {
 			const token = await UserDecodeToken();
 
+			setProfile(token.role);
+
+			const url = token.role === 'Medico' ? 'Medicos' : 'Pacientes';
+			console.log(`/${url}/BuscarPorId?id=${token.user}`);
 			await api
-				.get(`/Usuario/BuscarPorId?id=${token.user}`)
+				.get(`/${url}/BuscarPorId?id=${token.user}`)
 				.then((response) => {
 					setDados(response.data);
+					console.log(`Dados do usuario`);
 					console.log(response.data);
 				})
 				.catch((error) => {
@@ -108,6 +59,43 @@ export const Profile = ({ navigation, route }) => {
 				});
 		} catch (error) {
 			console.log('Erro ao buscar usuário por ID:', error);
+		}
+	}
+
+	async function AlternateProfile() {
+		try {
+			const token = await UserDecodeToken();
+
+			const formattedDate = moment(dateBirth).format('YYYY-MM-DD');
+
+			const url = profile === 'Medico' ? 'Medicos' : 'Pacientes';
+
+			let dataToSend = {
+				rg: rg,
+				cpf: cpf,
+				dataNascimento: formattedDate,
+			};
+
+			if (profile === 'Medico') {
+				dataToSend = {
+					cep: cep,
+					logradouro: logradouro,
+					numero: number,
+					cidade: city,
+				};
+			}
+
+			await api
+				.put(`/${url}?idUsuario=${token.user}`, dataToSend)
+				.then((response) => {
+					setEdicaoHabilitada(false);
+					console.log(`Sucesso na edicao: ${response.data}`);
+				})
+				.catch((error) => {
+					console.log(`Deu erro no metodo: ${error}`);
+				});
+		} catch (error) {
+			console.log(`Deu erro na chamada da api: ${error}`);
 		}
 	}
 
@@ -127,22 +115,6 @@ export const Profile = ({ navigation, route }) => {
 		}
 	}
 
-	// Função para formatar a data de nascimento
-	function formatBirthDate(dateString) {
-		// Cria um objeto de data a partir da string da data de nascimento
-		const birthDate = new Date(dateString);
-
-		// Obtém o dia, mês e ano da data de nascimento
-		const day = String(birthDate.getDate()).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
-		const month = String(birthDate.getMonth() + 1).padStart(2, '0'); // Adiciona zeros à esquerda se necessário
-		const year = birthDate.getFullYear();
-
-		// Formata a data no formato dd/mm/aaaa
-		const formattedDate = `${day}/${month}/${year}`;
-
-		return formattedDate;
-	}
-
 	// Função para formatar o CPF
 	function formatCPF(cpfString) {
 		// Extrai os três primeiros dígitos do CPF
@@ -152,6 +124,16 @@ export const Profile = ({ navigation, route }) => {
 		// Concatena os três primeiros dígitos com os demais ocultos
 		const formattedCPF = `${firstDigits}${hiddenDigits}`;
 		return formattedCPF;
+	}
+
+	function formatRG(rgString) {
+		// Extrai os dois primeiros dígitos do rg
+		const firstDigits = rgString.substring(0, 2);
+		// Oculta todos os demais dígitos com "*"
+		const hiddenDigits = rgString.substring(2).replace(/\d/g, '*');
+		// Concatena os três primeiros dígitos com os demais ocultos
+		const formattedRG = `${firstDigits}${hiddenDigits}`;
+		return formattedRG;
 	}
 
 	async function AlternateProfilePicture() {
@@ -180,6 +162,7 @@ export const Profile = ({ navigation, route }) => {
 				},
 			})
 			.then((response) => {
+				setPhotoAtualizada(dados.idNavigation.foto);
 				console.log(response);
 			})
 			.catch((error) => {
@@ -188,14 +171,9 @@ export const Profile = ({ navigation, route }) => {
 	}
 
 	useEffect(() => {
-		profileLoad();
-		loggedUser();
-	}, []);
-
-	useEffect(() => {
 		BuscarPorId();
-		dados;
-	}, []);
+	}, [dados != null]);
+
 	useEffect(() => {
 		if (route.params != undefined) {
 			AlternateProfilePicture();
@@ -207,83 +185,187 @@ export const Profile = ({ navigation, route }) => {
 	return (
 		<ScrollContainer>
 			<Container>
-				<ContainerImage>
-					{dados && dados.foto && (
-						<ProfilePicture
-							source={{
-								uri: dados && dados.foto,
-							}}
-						/>
-					)}
+				{dados ? (
+					<>
+						<ContainerImage>
+							<ProfilePicture
+								source={{
+									uri: `${dados.idNavigation.foto}`,
+								}}
+							/>
 
-					<ButtonCamera
-						onPress={() =>
-							navigation.navigate('CameraPhoto', {
-								isProfile: true,
-							})
-						}
-					>
-						<MaterialCommunityIcons
-							name="camera-plus"
-							size={20}
-							color={'#fbfbfb'}
-						/>
-					</ButtonCamera>
-				</ContainerImage>
+							<ButtonCamera
+								onPress={() =>
+									navigation.navigate('CameraPhoto', {
+										isProfile: true,
+									})
+								}
+							>
+								<MaterialCommunityIcons
+									name="camera-plus"
+									size={20}
+									color={'#fbfbfb'}
+								/>
+							</ButtonCamera>
+						</ContainerImage>
 
-				<ContentName>
-					<TextProfileName> {nameUser} </TextProfileName>
-					<TextProfileEmail>{userEmail}</TextProfileEmail>
-				</ContentName>
-				{/*  */}
-				<ContentProfile>
-					<TextProfileInput>Date of birth:</TextProfileInput>
-					<InputProfile placeholder={'04/05/1999'}>
-						{userData.dataNascimento}
-					</InputProfile>
-				</ContentProfile>
-				{/*  */}
-				<ContentProfile>
-					<TextProfileInput>CPF:</TextProfileInput>
-					<InputProfile placeholder={'859*********'}>
-						{userData.cpf}
-					</InputProfile>
-				</ContentProfile>
-				{/*  */}
-				<ContentProfile>
-					<TextProfileInput>Address:</TextProfileInput>
-					<InputProfile placeholder={'Rua Vincenso Silva, 987'}>
-						{userData.endereco ? userData.endereco.logradouro : ''}
-					</InputProfile>
-				</ContentProfile>
-				{/*  */}
-				<ContentRow>
-					<RowContentProfile>
-						<TextProfileInput>CEP:</TextProfileInput>
-						<InputRow placeholder={'05545-333'}>
-							{userData.endereco ? userData.endereco.cep : ''}
-						</InputRow>
-					</RowContentProfile>
-					{/*  */}
-					<RowContentProfile>
-						<TextProfileInput>City:</TextProfileInput>
-						<InputRow placeholder={'Capao Redondo - SP'}>
-							{userData.endereco ? userData.endereco.cidade : ''}
-						</InputRow>
-					</RowContentProfile>
-				</ContentRow>
+						<ContentName>
+							<TextProfileName>
+								{dados.idNavigation.nome}
+							</TextProfileName>
+							<TextProfileEmail>
+								{dados.idNavigation.email}
+							</TextProfileEmail>
+						</ContentName>
+						{/*  */}
+						<ContentProfile>
+							{profile === 'Paciente' ? (
+								<>
+									<TextProfileInput>
+										Date of birth:
+									</TextProfileInput>
+									<InputProfile
+										placeholder={'04-05-1999'}
+										onChangeText={(text) =>
+											setDateBirth(text)
+										}
+										editable={edicaoHabilitada}
+									>
+										{moment(dados.dataNascimento).format(
+											`DD-MM-YYYY`,
+										)}
+									</InputProfile>
+								</>
+							) : (
+								<>
+									<TextProfileInput>
+										Speciality:
+									</TextProfileInput>
+									<InputProfile
+										placeholder={'Surgeon'}
+										// onChangeText={(text) =>
+										// 	setDateBirth(text)
+										// }
+										editable={false}
+									>
+										{dados.especialidade.especialidade1}
+									</InputProfile>
+								</>
+							)}
+						</ContentProfile>
+						{/*  */}
+						<ContentProfile>
+							{profile === 'Paciente' ? (
+								<>
+									<TextProfileInput>CPF:</TextProfileInput>
+									<InputProfile
+										placeholder={'859*********'}
+										onChangeText={(text) => setCpf(text)}
+										editable={edicaoHabilitada}
+									>
+										{dados.cpf}
+									</InputProfile>
+								</>
+							) : (
+								<>
+									<TextProfileInput>CRM:</TextProfileInput>
+									<InputProfile
+										placeholder={'88*****'}
+										// onChangeText={(text) => setCpf(text)}
+										editable={false}
+									>
+										{dados.crm}
+									</InputProfile>
+								</>
+							)}
+						</ContentProfile>
+						<ContentProfile>
+							{profile === 'Paciente' ? (
+								<>
+									<TextProfileInput>RG:</TextProfileInput>
+									<InputProfile
+										placeholder={'52*******'}
+										onChangeText={(text) => setRg(text)}
+										editable={edicaoHabilitada}
+									>
+										{dados.rg}
+									</InputProfile>
+								</>
+							) : (
+								<></>
+							)}
+						</ContentProfile>
+						{/*  */}
 
-				<Button>
-					<ButtonTitle>Save</ButtonTitle>
-				</Button>
+						<ContentRow>
+							<RowContentProfile>
+								<TextProfileInput>Address:</TextProfileInput>
+								<InputRow
+									placeholder={'Av. Dos Estados'}
+									onChangeText={(text) => setLogradouro(text)}
+									editable={edicaoHabilitada}
+								>
+									{dados.endereco.logradouro}
+								</InputRow>
+							</RowContentProfile>
+							{/*  */}
+							<RowContentProfile>
+								<TextProfileInput>Number:</TextProfileInput>
+								<InputRow
+									placeholder={'10990'}
+									onChangeText={(text) => setNumber(text)}
+									editable={edicaoHabilitada}
+								>
+									{dados.endereco.numero}
+								</InputRow>
+							</RowContentProfile>
+						</ContentRow>
+						{/*  */}
+						<ContentRow>
+							<RowContentProfile>
+								<TextProfileInput>CEP:</TextProfileInput>
+								<InputRow
+									placeholder={'05545-333'}
+									onChangeText={(text) => setCep(text)}
+									editable={edicaoHabilitada}
+								>
+									{dados.endereco.cep}
+								</InputRow>
+							</RowContentProfile>
+							{/*  */}
+							<RowContentProfile>
+								<TextProfileInput>City:</TextProfileInput>
+								<InputRow
+									placeholder={'Capao Redondo - SP'}
+									onChangeText={(text) => setCity(text)}
+									editable={edicaoHabilitada}
+								>
+									{dados.endereco.cidade}
+								</InputRow>
+							</RowContentProfile>
+						</ContentRow>
 
-				<Button>
-					<ButtonTitle>Edit</ButtonTitle>
-				</Button>
+						<Button
+							onPress={() => AlternateProfile()}
+							disabled={!edicaoHabilitada}
+						>
+							<ButtonTitle>Save</ButtonTitle>
+						</Button>
 
-				<ButtonExitApp onPress={() => Logout()}>
-					<ButtonTitle>Exit the app</ButtonTitle>
-				</ButtonExitApp>
+						<Button
+							onPress={() => setEdicaoHabilitada(true)}
+							disabled={edicaoHabilitada}
+						>
+							<ButtonTitle>Edit</ButtonTitle>
+						</Button>
+
+						<ButtonExitApp onPress={() => Logout()}>
+							<ButtonTitle>Exit the app</ButtonTitle>
+						</ButtonExitApp>
+					</>
+				) : (
+					<ActivityIndicator />
+				)}
 			</Container>
 		</ScrollContainer>
 	);

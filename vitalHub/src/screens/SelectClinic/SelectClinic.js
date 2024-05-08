@@ -13,25 +13,9 @@ import { ClinicCard } from '../../components/ClinicCard/ClinicCard';
 import { api } from '../../services/Service';
 
 export const SelectClinic = ({ navigation, route }) => {
-	// const [listaClinica, setListaClinica] = useState([]);
-	// async function ListarClinica() {
-	// 	//instanciaar a chamada da api
-	// 	await api
-	// 		.get('/Clinica/ListarTodas')
-	// 		.then((response) => {
-	// 			setListaClinica(response.data);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// }
-
-	// useEffect(() => {
-	// 	ListarClinica();
-	// }, []);
-
 	const [selectedClinic, setSelectedClinic] = useState(null);
 	const [clinica, setClinica] = useState();
+	const [clinicaSelecionada, SetClinicaSelecionada] = useState();
 
 	const handleClinicSelection = (name) => {
 		setSelectedClinic(name);
@@ -52,29 +36,25 @@ export const SelectClinic = ({ navigation, route }) => {
 
 	useEffect(() => {
 		console.log(route.params);
+		console.log(clinica);
 		ListClinic();
 	}, []);
 
 	async function handleContinue() {
 		navigation.replace('SelectDoctor', {
-			agendamento: { ...route.params.agendamento, ...clinica },
+			agendamento: { ...route.params.agendamento, ...clinicaSelecionada },
 		});
 	}
 
 	return (
 		<Container>
 			<TitleSelection>Select Clinic</TitleSelection>
-			<ListComponent
+			{/* <ListComponent
 				data={clinica}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
 					<TouchableOpacity
-						onPress={() =>
-							setClinica({
-								clinicaiId: item.id,
-								clinicaLabel: item.nomeFantasia,
-							})
-						}
+						onPress={() => handleClinicSelection(item.id)}
 					>
 						<ClinicCard
 							selected={item.id === selectedClinic}
@@ -89,7 +69,37 @@ export const SelectClinic = ({ navigation, route }) => {
 						/>
 					</TouchableOpacity>
 				)}
+			/> */}
+			<ListComponent
+				data={clinica}
+				keyExtractor={(item) => item.id}
+				renderItem={({ item }) => (
+					<TouchableOpacity
+						onPress={() =>
+							setClinica({
+								clinicaiId: item.id,
+								clinicaLabel: item.nomeFantasia,
+							})
+						}
+					>
+						<ClinicCard
+							selected={item.id === selectedClinic}
+							clinic={item}
+							setSelectedClinic={setSelectedClinic}
+							onPress={() =>
+								handleClinicSelection(
+									item.id,
+									SetClinicaSelecionada({
+										clinicaiId: item.id,
+										clinicaLabel: item.nomeFantasia,
+									}),
+								)
+							}
+						/>
+					</TouchableOpacity>
+				)}
 			/>
+
 			<Button onPress={() => handleContinue()}>
 				<ButtonTitle>Continue</ButtonTitle>
 			</Button>

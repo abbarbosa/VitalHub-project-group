@@ -49,11 +49,11 @@ namespace WebAPI.Repositories
             ctx.SaveChanges();
         }
 
-        public void EditarStatus(Guid idConsulta, string status)
+        public void EditarStatus(Guid idConsulta, Guid situacaoId)
         {
             try
             {
-                SituacaoConsulta situacao = ctx.Situacoes.FirstOrDefault(x => x.Situacao == status)!;
+                SituacaoConsulta situacao = ctx.Situacoes.Find(situacaoId)!;
 
                 Consulta buscada = ctx.Consultas.Find(idConsulta)!;
 

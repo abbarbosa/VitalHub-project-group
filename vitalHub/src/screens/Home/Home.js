@@ -173,6 +173,7 @@ export const Home = ({ navigation }) => {
 				navigation={navigation}
 				visible={showModalCancel}
 				setShowModalCancel={setShowModalCancel}
+				consulta={consultaSelecionada}
 			/>
 			<AppointmentModal
 				situacao={statusLista}

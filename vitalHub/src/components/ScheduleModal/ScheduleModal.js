@@ -19,7 +19,8 @@ import {
 	InputModal,
 	TextProfileInputModal,
 } from './Style';
-import { Modal } from 'react-native';
+import { Modal, TouchableOpacity } from 'react-native';
+import { FormChoice } from '../Button/FormChoice';
 
 export const ScheduleModal = ({
 	visible,
@@ -28,10 +29,14 @@ export const ScheduleModal = ({
 	...rest
 }) => {
 	const nivelConsulta = [
-		{ id: 'B39A70B7-4C20-498C-9629-EADC52E0F11A', tipo: 'Rotina' },
-		{ id: '1C3C0584-8BD9-4AAD-BCF6-583D734CA65B', tipo: 'Exame' },
-		{ id: '5DD567DC-3F9B-4FD0-AD06-7C29C31D4789', tipo: 'Urgencia' },
+		{ id: 'B39A70B7-4C20-498C-9629-EADC52E0F11A', prioridade: 'Rotina' },
+		{ id: '1C3C0584-8BD9-4AAD-BCF6-583D734CA65B', prioridade: 'Exame' },
+		{ id: '5DD567DC-3F9B-4FD0-AD06-7C29C31D4789', prioridade: 'Urgencia' },
 	];
+
+	const [checkupActive, setCheckupActive] = useState(false);
+	const [examActive, setExamActive] = useState(false);
+	const [urgencyActive, setUrgencyActive] = useState(false);
 
 	const [agendamento, setAgendamento] = useState(null);
 
@@ -60,22 +65,32 @@ export const ScheduleModal = ({
 							What level of consultation
 						</TextProfileInputModal>
 						<ContentButton>
-							<ButtonFilterModal>
-								<ButtonTitleFilterModal
-									onPress={() =>
-										setAgendamento({
-											...agendamento,
-											prioridadeId:
-												'B39A70B7-4C20-498C-9629-EADC52E0F11A',
-											prioridadeLabel: 'Checkup',
-										})
-									}
-								>
-									Checkup
-								</ButtonTitleFilterModal>
-							</ButtonFilterModal>
+							<FormChoice
+								textButton={'Checkup'}
+								actived={nivelConsulta.prioridade === 'Rotina'}
+								onPress={() => {
+									setAgendamento({
+										...agendamento,
+										prioridadeId:
+											'B39A70B7-4C20-498C-9629-EADC52E0F11A',
+										prioridadeLabel: 'Checkup',
+									});
+								}}
+							/>
 							{/*  */}
-							<ButtonFilterModal>
+							<FormChoice
+								textButton={'Exam'}
+								actived={nivelConsulta.prioridade === 'Exame'}
+								onPress={() =>
+									setAgendamento({
+										...agendamento,
+										prioridadeId:
+											'1C3C0584-8BD9-4AAD-BCF6-583D734CA65B',
+										prioridadeLabel: 'Exam',
+									})
+								}
+							/>
+							{/* <ButtonFilterModal>
 								<ButtonTitleFilterModal
 									onPress={() =>
 										setAgendamento({
@@ -88,22 +103,22 @@ export const ScheduleModal = ({
 								>
 									Exam
 								</ButtonTitleFilterModal>
-							</ButtonFilterModal>
+							</ButtonFilterModal> */}
 							{/*  */}
-							<ButtonFilterModal>
-								<ButtonTitleFilterModal
-									onPress={() =>
-										setAgendamento({
-											...agendamento,
-											prioridadeId:
-												'5DD567DC-3F9B-4FD0-AD06-7C29C31D4789',
-											prioridadeLabel: 'Urgency',
-										})
-									}
-								>
-									Urgency
-								</ButtonTitleFilterModal>
-							</ButtonFilterModal>
+							<FormChoice
+								textButton={'Urgency'}
+								actived={
+									nivelConsulta.prioridade === 'Urgencia'
+								}
+								onPress={() =>
+									setAgendamento({
+										...agendamento,
+										prioridadeId:
+											'5DD567DC-3F9B-4FD0-AD06-7C29C31D4789',
+										prioridadeLabel: 'Urgency',
+									})
+								}
+							/>
 						</ContentButton>
 					</ContentProfile>
 					{/*  */}

@@ -71,7 +71,12 @@ export const AppointmentModal = ({
 				<ModalContent>
 					<ImageModal
 						source={{
-							uri: 'https://img.elo7.com.br/product/600x380/3473C40/dobby-harry-potter-hogwarts.jpg',
+							uri: `${
+								roleUsuario === 'Paciente'
+									? consulta?.medicoClinica?.medico
+											?.idNavigation?.foto
+									: consulta?.paciente?.idNavigation?.foto
+							}`,
 						}}
 					/>
 

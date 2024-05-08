@@ -1,5 +1,5 @@
 // ClinicCard.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { ContainerCardList, TextBold } from '../AppointmentCard/Style';
 import {
@@ -8,6 +8,7 @@ import {
 	ContentStar,
 	ContentTime,
 	NumberStar,
+	SegurarOEndereco,
 	TextTime,
 	TitleCard,
 } from './Style';
@@ -15,6 +16,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const ClinicCard = ({ selected, onPress, clinic }) => {
+	useEffect(() => {
+		console.log(clinic);
+	});
 	return (
 		<TouchableOpacity onPress={onPress}>
 			<ContainerCardList
@@ -25,7 +29,12 @@ export const ClinicCard = ({ selected, onPress, clinic }) => {
 			>
 				<ContentNameClinicCard>
 					<TitleCard>{clinic.nomeFantasia}</TitleCard>
-					<TextBold>{clinic.endereco.logadouro}</TextBold>
+					<SegurarOEndereco>
+						<TextBold>
+							{clinic.endereco.logradouro} -{' '}
+							{clinic.endereco.cidade}
+						</TextBold>
+					</SegurarOEndereco>
 				</ContentNameClinicCard>
 				<ContentInformationCard>
 					<ContentStar>

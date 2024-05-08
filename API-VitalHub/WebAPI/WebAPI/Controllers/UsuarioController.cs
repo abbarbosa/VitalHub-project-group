@@ -82,5 +82,19 @@ namespace WebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult Post(Usuario usuario)
+        {
+            try
+            {
+                usuarioRepository.Cadastrar(usuario);
+                return StatusCode(201, usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

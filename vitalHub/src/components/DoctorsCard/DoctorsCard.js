@@ -1,6 +1,10 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { ContainerCardList, TextBold } from '../AppointmentCard/Style';
+import {
+	BottomShadow,
+	ContainerCardList,
+	TextBold,
+} from '../AppointmentCard/Style';
 import { ContentNameDoctorCard, TitleCard } from '../ClinicCard/Style';
 import { DoctorCardImage } from './Style';
 
@@ -16,7 +20,7 @@ export const DoctorsCard = ({ id, selected, onPress, medico }) => {
 				{/* Utilize o componente Image para exibir a imagem */}
 				<DoctorCardImage
 					source={{
-						uri: 'https://images.tcdn.com.br/img/img_prod/1050053/dr_hans_chucrutes_19_1_6c8e017aaca4306cfc68b17052ba77cd.jpg',
+						uri: `${medico.idNavigation.foto}`,
 					}}
 				/>
 				<ContentNameDoctorCard>
