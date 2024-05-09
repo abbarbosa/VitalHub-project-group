@@ -9,7 +9,7 @@ import { api } from '../../services/Service';
 import { ContentIconSetinha, SubText } from '../RecoverPassword/Style';
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Alert } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 
 export const CreateAccount = ({ navigation, route }) => {
 
@@ -28,6 +28,7 @@ export const CreateAccount = ({ navigation, route }) => {
 	const [logradouro, setLogradouro] = useState('')
 	const [numero, setNumero] = useState('')
 	const [cidade, setCidade] = useState('')
+	const [loading, setLoading] = useState(false)
 
 
 
@@ -60,14 +61,14 @@ export const CreateAccount = ({ navigation, route }) => {
 			return; // Retorna para evitar que a função continue executando
 		}
 
+		setLoading(true)
+
 		try {
 			const response = await api.post('/Usuario', {
 				nome: userName,
 				email: userEmail,
 				senha: password,
 			});
-
-
 
 			//Arquivo: '../../assets/images.png' // Verifique se o caminho do arquivo está correto
 
@@ -82,9 +83,10 @@ export const CreateAccount = ({ navigation, route }) => {
 			}
 		} catch (error) {
 			console.log(error);
+		}finally{
+			setLoading(false)
 		}
 
-		
 	};
 
 	return (
@@ -117,8 +119,14 @@ export const CreateAccount = ({ navigation, route }) => {
 				value={confirmPassword}
 				onChangeText={setConfirmPassword}
 			/>
-			<Button onPress={handleRegister}>
-				<ButtonTitle>Register</ButtonTitle>
+			<Button onPress={handleRegister}>{
+				loading? (
+					<ActivityIndicator size="small" color="#ffffff" />
+				): (
+					<ButtonTitle>Register</ButtonTitle>
+				)
+			}
+				
 			</Button>
 			<MiniLink onPress={() => navigation.navigate('Login')}>Cancel</MiniLink>
 

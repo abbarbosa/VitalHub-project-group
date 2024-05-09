@@ -58,7 +58,7 @@ export const RecoverPassword = ({ navigation }) => {
 			<RecoverInput
 				placeholder={'Username or E-mail'}
 				value={email} onChangeText={(text) => setEmail(text)} />
-			<Button onPress={() => SendEmail()} disabled={loading}>
+			<Button onPress={() => SendEmail()} >
 				{loading ? (
 					<ActivityIndicator size="small" color="#ffffff" />
 				) : (
