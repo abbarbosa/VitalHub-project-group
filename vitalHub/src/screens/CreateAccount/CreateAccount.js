@@ -9,6 +9,7 @@ import { api } from '../../services/Service';
 import { ContentIconSetinha, SubText } from '../RecoverPassword/Style';
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
+import { Alert } from 'react-native';
 
 export const CreateAccount = ({ navigation, route }) => {
 
@@ -43,12 +44,16 @@ export const CreateAccount = ({ navigation, route }) => {
 		// Verifica se todos os campos estão preenchidos
 		if (!userEmail || !password || !confirmPassword) {
 			console.log('Erro: Por favor, preencha todos os campos.');
+			Alert.alert('Erro!', 'Por favor, preencha todos os campos')
+
 			return; // Retorna para evitar que a função continue executando
 		}
 
 		// Verifica se as senhas coincidem
 		if (password !== confirmPassword) {
 			console.log('Erro: As senhas não coincidem.');
+			Alert.alert('Erro!', 'As senhas não coincidem')
+
 			// Salva os valores dos campos antes de limpar
 			setUserName(userName);
 			setUserEmail(userEmail);
@@ -70,12 +75,16 @@ export const CreateAccount = ({ navigation, route }) => {
 			if (response.status === 200) {
 
 				console.log('Usuário cadastrado com sucesso!');
+				navigation.navigate('Login')
 			} else {
 				console.log('Erro ao cadastrar usuário:', response.data);
+				Alert.alert('Erro!', 'Não foi possivel cadastrar um usuário')
 			}
 		} catch (error) {
 			console.log(error);
 		}
+
+		
 	};
 
 	return (

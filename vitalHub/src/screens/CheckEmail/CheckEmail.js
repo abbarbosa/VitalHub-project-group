@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { Logo } from '../../components/Logo/Style';
 import { Title } from '../../components/Title/Style';
 import { Container } from '../../components/Container/Style';
@@ -45,6 +45,7 @@ export const CheckEmail = ({ navigation, route }) => {
 				navigation.replace("ResetPassword", {emailRecuperacao: route.params.emailRecuperacao});
 			}).catch(error => {
 				console.log(error);
+				Alert.alert('Erro!', 'Código Inválido')
 			})
 	}
 

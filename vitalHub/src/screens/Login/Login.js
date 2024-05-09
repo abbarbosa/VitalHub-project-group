@@ -18,7 +18,7 @@ import { api } from '../../services/Service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //import para a função de carregamento
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 
 export const Login = ({ navigation }) => {
 	const [email, setEmail] = useState('');
@@ -29,7 +29,7 @@ export const Login = ({ navigation }) => {
 		setLoading(true);
 		try {
 			if (!email || !senha) {
-				alert('Por favor, preencha todos os campos.');
+				Alert.alert('Erro', 'Por favor, preencha todos os campos');
 				return;
 			}
 
@@ -42,9 +42,7 @@ export const Login = ({ navigation }) => {
 			navigation.navigate('Main');
 		} catch (error) {
 			console.log('Erro ao fazer login:', error);
-			alert(
-				'Erro ao fazer login. Verifique suas credenciais e tente novamente.',
-			);
+			Alert.alert('Erro', 'Erro ao fazer login. Verifique suas credenciais e tente novamente..');
 		} finally {
 			setTimeout(() => {
 				setLoading(false);

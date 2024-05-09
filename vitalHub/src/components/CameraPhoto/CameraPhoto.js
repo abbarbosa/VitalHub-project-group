@@ -136,9 +136,9 @@ export const CameraPhoto = ({ navigation, route }) => {
 	}, []);
 
 
-	if (!permission) {
-		alert('carregando permissao');
-	}
+	// if (!permission) {
+	// 	alert('carregando permissao');
+	// }
 
 	// if (!permission.granted) {
 	// 	return(

@@ -1,8 +1,10 @@
-
-// Importando os módulos necessários do React e do React Native
-import { useEffect, useState } from "react";
-import { Button, ButtonExitApp, ButtonTitle } from "../../components/Button/Style";
-import { Container, ScrollContainer } from "../../components/Container/Style";
+import { useEffect, useState } from 'react';
+import {
+	Button,
+	ButtonExitApp,
+	ButtonTitle,
+} from '../../components/Button/Style';
+import { Container, ScrollContainer } from '../../components/Container/Style';
 import {
 	ContentName,
 	ContentProfile,
@@ -14,111 +16,17 @@ import {
 	TextProfileEmail,
 	TextProfileInput,
 	TextProfileName,
-} from "./Style"; // Importando os estilos específicos para este componente
+} from './Style';
 
-
-// Importando funções e componentes adicionais necessários
 import { UserDecodeToken } from '../../services/Utils/Auth';
-<<<<<<< HEAD
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { api } from "../../services/Service";
-import moment from "moment";
-import { ActivityIndicator } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { ButtonCamera, ContainerImage } from "../Login/Style";
-=======
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from '../../services/Service';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ButtonCamera, ContainerImage } from './Style';
 import moment from 'moment';
 import { ActivityIndicator } from 'react-native';
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 
-// Definição do componente Profile
 export const Profile = ({ navigation, route }) => {
-<<<<<<< HEAD
-	const [nameUser, setNameUser] = useState('');
-	const [userEmail, setUserEmail] = useState('');
-	const [userData, setUserData] = useState('');
-	const [photoUri, setPhotoUri] = useState(null);
-	const [profile, setProfile] = useState();
-	const [dados, setDados] = useState();
-
-	const [loading, setLoading] = useState();
-
-	//carregamento dos dados do usuario
-	async function profileLoad() {
-
-		const token = await UserDecodeToken();
-
-		setProfile(token);
-		const { role } = token
-
-		if (role) {
-			await BuscarPorId()
-		}s
-
-		try {
-			const token = await UserDecodeToken();
-
-			const { name } = token;
-			const { email } = token;
-			const { dateBirth } = token;
-
-			if (token) {
-				const { name, email } = token;
-			}
-			// Limitamos o tamanho do nome a, por exemplo, 20 caracteres
-			const limitedName =
-				name.length > 16 ? name.substring(0, 16) + '...' : name;
-
-			setNameUser(limitedName);
-			setUserEmail(email);
-		} catch (error) {
-			console.log(error);
-		}
-
-	}
-
-	async function loggedUser() {
-		try {
-			// Recuperação do token de acesso
-			const token = JSON.parse(await AsyncStorage.getItem('token')).token;
-
-			if (token) {
-				await api
-					.get('/Pacientes/PerfilLogado', {
-						headers: {
-							// Adicionando o token ao cabeçalho de autorização
-							Authorization: `Bearer ${token}`,
-						},
-					})
-					.then((response) => {
-						// Formata a data de nascimento antes de definir no estado
-						const formattedBirthDate = formatBirthDate(
-							response.data.dataNascimento,
-						);
-						// Formata o CPF antes de definir no estado
-						const formattedCPF = formatCPF(response.data.cpf);
-						// Define a data de nascimento formatada no estado
-						setUserData({
-							...response.data,
-							dataNascimento: formattedBirthDate,
-							cpf: formattedCPF,
-						});
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-			} else {
-				console.log(`deu erro no if`);
-			}
-		} catch (error) {
-			console.log(`Deu erro nl catch: ${error}`);
-		}
-	}
-=======
 	const [profile, setProfile] = useState();
 	const [dados, setDados] = useState();
 	const [edicaoHabilitada, setEdicaoHabilitada] = useState(false);
@@ -130,16 +38,8 @@ export const Profile = ({ navigation, route }) => {
 	const [cep, setCep] = useState('');
 	const [city, setCity] = useState('');
 	const [photoAtualizada, setPhotoAtualizada] = useState();
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 
 	async function BuscarPorId() {
-
-		const token = await UserDecodeToken();
-
-		const url = token.role === 'Medico' ? 'Medicos' : 'Pacientes';
-
-		console.log(url);
-
 		try {
 			const token = await UserDecodeToken();
 
@@ -148,13 +48,8 @@ export const Profile = ({ navigation, route }) => {
 			const url = token.role === 'Medico' ? 'Medicos' : 'Pacientes';
 			console.log(`/${url}/BuscarPorId?id=${token.user}`);
 			await api
-<<<<<<< HEAD
-				.get(`${url}/BuscarPorId?id=${token.user}`)
-=======
 				.get(`/${url}/BuscarPorId?id=${token.user}`)
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 				.then((response) => {
-					console.log("Aqui jaz as informacoes \n");
 					setDados(response.data);
 					console.log(`Dados do usuario`);
 					console.log(response.data);
@@ -276,14 +171,8 @@ export const Profile = ({ navigation, route }) => {
 	}
 
 	useEffect(() => {
-<<<<<<< HEAD
-		profileLoad();
-		loggedUser();
-	}, []);
-=======
 		BuscarPorId();
 	}, [dados != null]);
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 
 	useEffect(() => {
 		if (route.params != undefined) {
@@ -299,21 +188,11 @@ export const Profile = ({ navigation, route }) => {
 				{dados ? (
 					<>
 						<ContainerImage>
-<<<<<<< HEAD
-							{dados && dados.foto && (
-								<ProfilePicture
-									source={{
-										uri: `${dados.idNavigation.foto}`
-									}}
-								/>
-							)}
-=======
 							<ProfilePicture
 								source={{
 									uri: `${dados.idNavigation.foto}`,
 								}}
 							/>
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 
 							<ButtonCamera
 								onPress={() =>
@@ -331,87 +210,6 @@ export const Profile = ({ navigation, route }) => {
 						</ContainerImage>
 
 						<ContentName>
-<<<<<<< HEAD
-							<TextProfileName> {nameUser} </TextProfileName>
-							<TextProfileEmail>{userEmail}</TextProfileEmail>
-						</ContentName>
-						{/*  */}
-						<ContentProfile>
-							{profile.role === 'Paciente' ? (
-								<TextProfileInput>Date of birth</TextProfileInput>
-							) : (
-								<TextProfileInput>specialty</TextProfileInput>
-							)}
-
-							<InputProfile placeholder={'04/05/1999'}>
-							{profile.role === 'Paciente' ? (
-								userData.dataNascimento
-							) : (
-							 userData.dataNascimento
-							)}
-							</InputProfile>
-						</ContentProfile>
-						{/*  */}
-						<ContentProfile>
-						{profile.role === 'Paciente' ? (
-								<TextProfileInput>CPF</TextProfileInput>
-							) : (
-								<TextProfileInput>CRM</TextProfileInput>
-							)}
-
-							<InputProfile placeholder={'859********'}>
-							{profile.role === 'Paciente' ? (
-								userData.cpf
-							) : (
-								userData.crm
-							)}
-							</InputProfile>
-							
-								
-								{/* {userData.cpf} */}
-							
-						</ContentProfile>
-						{/*  */}
-						<ContentProfile>
-							<TextProfileInput>Address:</TextProfileInput>
-							<InputProfile placeholder={'Rua Vincenso Silva, 987'}>
-								{userData.endereco ? userData.endereco.logradouro : ''}
-							</InputProfile>
-						</ContentProfile>
-						{/*  */}
-						<ContentRow>
-							<RowContentProfile>
-								<TextProfileInput>CEP:</TextProfileInput>
-								<InputRow placeholder={'05545-333'}>
-									{userData.endereco ? userData.endereco.cep : ''}
-								</InputRow>
-							</RowContentProfile>
-							{/*  */}
-							<RowContentProfile>
-								<TextProfileInput>City:</TextProfileInput>
-								<InputRow placeholder={'Capao Redondo - SP'}>
-									{userData.endereco ? userData.endereco.cidade : ''}
-								</InputRow>
-							</RowContentProfile>
-						</ContentRow>
-
-						<Button>
-							<ButtonTitle>Save</ButtonTitle>
-						</Button>
-
-						<Button>
-							<ButtonTitle>Edit</ButtonTitle>
-						</Button>
-
-						<ButtonExitApp onPress={() => Logout()}>
-							<ButtonTitle>Exit the app</ButtonTitle>
-						</ButtonExitApp>
-					</>
-				) : (
-					<ActivityIndicator />
-				)}
-
-=======
 							<TextProfileName>
 								{dados.idNavigation.nome}
 							</TextProfileName>
@@ -568,7 +366,6 @@ export const Profile = ({ navigation, route }) => {
 				) : (
 					<ActivityIndicator />
 				)}
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 			</Container>
 		</ScrollContainer>
 	);

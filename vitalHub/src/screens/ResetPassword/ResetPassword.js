@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text } from 'react-native';
+import { Alert, Text } from 'react-native';
 import { Logo } from '../../components/Logo/Style';
 import { Title } from '../../components/Title/Style';
 import { Container } from '../../components/Container/Style';
@@ -28,6 +28,7 @@ export const ResetPassword = ({ navigation, route }) => {
         } else {
             // Senhas não coincidem, você pode mostrar uma mensagem de erro ao usuário
             console.log("As senhas não coincidem");
+            Alert.alert('Erro!', 'As senhas não coincidem!')
         }
 	}
 	return (

@@ -14,14 +14,9 @@ import { api } from '../../services/Service';
 import { ActivityIndicator } from 'react-native';
 
 export const Header = ({ navigation }) => {
-<<<<<<< HEAD
-
-	const [userName, setUserName] = useState('')
-=======
 	const [nameUser, setUserName] = useState('');
 	const [profile, setProfile] = useState();
 	const [data, setData] = useState();
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 
 	// chamada da funcao para carregar o perfil do usuario e carregar as informacoes
 	async function profileLoad() {
@@ -63,17 +58,6 @@ export const Header = ({ navigation }) => {
 
 	return (
 		<ContainerHeader>
-<<<<<<< HEAD
-			<BoxUser onPress={() => navigation.navigate('Profile')}>
-				<ImageUser source={{ uri: 'https://github.com/marqzzs.png' }} />
-				<DataUser>
-					<TextDefault>Welcome!</TextDefault>
-					<NameUser>{userName}</NameUser>
-				</DataUser>
-			</BoxUser>
-			<Ionicons name="notifications" size={24} color="white" />
-			{/* Material icons */}
-=======
 			{data ? (
 				<>
 					<BoxUser onPress={() => navigation.navigate('Profile')}>
@@ -98,7 +82,6 @@ export const Header = ({ navigation }) => {
 					<ActivityIndicator />
 				</>
 			)}
->>>>>>> 6cfcb6ec150ee0ff454d0a186c1042fa12968907
 		</ContainerHeader>
 	);
 };
