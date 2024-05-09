@@ -38,7 +38,7 @@ export const Main = ({ navigation, route }) => {
 										size={22}
 										color="#4E4B59"
 									/>
-									{focused && <TextIcon>Agenda</TextIcon>}
+									{focused && <TextIcon>Schedule</TextIcon>}
 								</ContentIcon>
 							</>
 						);

@@ -11,6 +11,7 @@ namespace WebAPI.Repositories
         public Clinica BuscarPorId(Guid id)
         {
             return ctx.Clinicas
+                .Include(c => c.Endereco)
                 .Select(c => new Clinica
                 {
                     Id = id,
@@ -19,6 +20,7 @@ namespace WebAPI.Repositories
                 })
                 .FirstOrDefault(c => c.Id == id)!;
         }
+
 
         public void Cadastrar(Clinica clinica)
         {

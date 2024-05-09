@@ -72,22 +72,9 @@ export const Home = ({ navigation }) => {
 			setShowModalCancel(true);
 		} else if (modal === 'prontuario') {
 			setShowModalAppointment(true);
+		} else {
+			<></>;
 		}
-	}
-
-	async function CancelarConsulta() {
-		try {
-			await api
-				.patch(
-					`/Consultas/Status?id=${consultaSelecionada}$situacaoid=${'1A4C4AAB-3097-45B1-9AD2-EEAE7CFD6BD2'}`,
-				)
-				.then((response) => {
-					setListaConsulta(response.data);
-				})
-				.catch((error) => {
-					console.log(`Deu erro na requisicao: ${error}`);
-				});
-		} catch (error) {}
 	}
 
 	useEffect(() => {
@@ -109,17 +96,17 @@ export const Home = ({ navigation }) => {
 			{/* Buttons(Filtros) */}
 			<FilterAppointment>
 				<AbsListAppontment
-					textButton={'Agendadas'}
+					textButton={'Scheduled'}
 					clickButton={statusLista === 'Pendentes'}
 					onPress={() => setStatusLista('Pendentes')}
 				/>
 				<AbsListAppontment
-					textButton={'Realizadas'}
+					textButton={'Realized'}
 					clickButton={statusLista === 'Realizados'}
 					onPress={() => setStatusLista('Realizados')}
 				/>
 				<AbsListAppontment
-					textButton={'Cancelada'}
+					textButton={'Canceled'}
 					clickButton={statusLista === 'Cancelados'}
 					onPress={() => setStatusLista('Cancelados')}
 				/>

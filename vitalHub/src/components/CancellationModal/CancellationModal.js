@@ -108,11 +108,11 @@ const CancellationModal = ({
 		>
 			<PatientModal>
 				<ModalContent>
-					<Title>Cancelar consulta</Title>
+					<Title>Cancel appointment</Title>
 					<ModalText>
-						Ao cancelar essa consulta, abrirá uma possível
-						disponibilidade no seu horário. Deseja mesmo cancelar
-						essa consulta?
+						Canceling this appointment will open up a possible
+						availability in your time slot. Do you really want to
+						cancel this appointment?
 					</ModalText>
 					<ButtonModal
 						onPress={() => {
@@ -121,11 +121,11 @@ const CancellationModal = ({
 							handleCallNotifications(); // Chamando a função de notificação ao confirmar o cancelamento
 						}}
 					>
-						<ButtonTitle>Confirmar</ButtonTitle>
+						<ButtonTitle>Confirm</ButtonTitle>
 					</ButtonModal>
 
 					<ButtonSecundary onPress={() => setShowModalCancel(false)}>
-						<ButtonSecundaryTitle>Cancelar</ButtonSecundaryTitle>
+						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
 					</ButtonSecundary>
 				</ModalContent>
 			</PatientModal>
