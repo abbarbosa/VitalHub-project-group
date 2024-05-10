@@ -81,7 +81,7 @@ export const SelectDoctor = ({ navigation, route }) => {
 			<Button onPress={() => handleContinue()}>
 				<ButtonTitle>Continue</ButtonTitle>
 			</Button>
-			<ButtonSecundaryTitle onPress={() => navigation.navigate('Home')}>
+			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
 				Cancel
 			</ButtonSecundaryTitle>
 		</Container>

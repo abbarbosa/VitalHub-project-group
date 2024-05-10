@@ -48,6 +48,11 @@ export const ScheduleModal = ({
 		navigation.replace('SelectClinic', { agendamento: agendamento });
 	}
 
+	async function handleCancel() {
+		setShowModalSchedule(false);
+		navigation.replace('Main');
+	}
+
 	// Função para lidar com a pressão de um botão
 	const handlePress = (buttonId, prioridadeId, prioridadeLabel) => {
 		// Atualiza o estado do botão ativo
@@ -132,9 +137,7 @@ export const ScheduleModal = ({
 						<ButtonTitle>Continue</ButtonTitle>
 					</Button>
 
-					<ButtonSecundary
-						onPress={() => setShowModalSchedule(false)}
-					>
+					<ButtonSecundary onPress={() => handleCancel()}>
 						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
 					</ButtonSecundary>
 				</ContentSModal>

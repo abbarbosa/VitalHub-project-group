@@ -11,6 +11,7 @@ import {
 import { ProfileData, TextAge, TextBold } from '../AppointmentCard/Style';
 import { useEffect } from 'react';
 import moment from 'moment';
+import { api } from '../../services/Service';
 
 export const AppointmentModal = ({
 	visible,
@@ -47,6 +48,24 @@ export const AppointmentModal = ({
 			}
 		} else {
 			navigation.replace(screen);
+		}
+	}
+
+	async function handleConfirmSchedule() {
+		try {
+			const response = await api.put(
+				`/Consultas/Status?idConsulta=${
+					consulta.id
+				}&status=${'E2B80175-539F-42C3-9D72-D5B281ED81DC'}`,
+			);
+
+			console.log('Consulta realizada com sucesso \n\n');
+			console.log(response.data);
+
+			navigation.replace('Main');
+		} catch (error) {
+			// Lidar com o erro
+			console.error('Erro ao realizar consulta:', error);
 		}
 	}
 
@@ -119,6 +138,10 @@ export const AppointmentModal = ({
 								<ButtonTitle>Insert medical record</ButtonTitle>
 							</ButtonModal> // Se não for 'Paciente', renderiza um fragmento vazio
 						)
+					) : roleUsuario === 'Medico' ? (
+						<ButtonModal onPress={() => handleConfirmSchedule()}>
+							<ButtonTitle>Confirm schedule</ButtonTitle>
+						</ButtonModal>
 					) : (
 						<ButtonModal
 							onPress={() => handleClose('LocationAppointment')}

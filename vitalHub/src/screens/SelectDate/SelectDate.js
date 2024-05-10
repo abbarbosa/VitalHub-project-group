@@ -51,7 +51,7 @@ export const SelectDate = ({ navigation, route }) => {
 					Confirm
 				</ButtonTitle>
 			</Button>
-			<ButtonSecundaryTitle onPress={() => navigation.navigate('Home')}>
+			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
 				Cancel
 			</ButtonSecundaryTitle>
 

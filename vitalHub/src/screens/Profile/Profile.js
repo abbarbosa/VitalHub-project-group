@@ -232,7 +232,7 @@ export const Profile = ({ navigation, route }) => {
 										editable={edicaoHabilitada}
 									>
 										{moment(dados.dataNascimento).format(
-											`DD-MM-YYYY`,
+											`YYYY-MM-DD`,
 										)}
 									</InputProfile>
 								</>

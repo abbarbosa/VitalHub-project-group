@@ -7,6 +7,7 @@ namespace WebAPI.Utils.OCR
     public class OcrService
     {
 
+       
 
 
         private readonly string _endpoint = "https://computervvitalhub3dm.cognitiveservices.azure.com/";
