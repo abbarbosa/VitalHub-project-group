@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { Input } from '../../components/Input/Style';
 
 export const ProfilePicture = styled.Image`
-	width: 100%;
-	height: 280px;
-`;
+  width: 100%;
+  height: 280px;
+  position: relative;
+`
 
 export const ContentName = styled.View`
 	width: 289px;
@@ -100,3 +101,4 @@ export const ContainerImage = styled.View`
 	align-items: center;
 	justify-content: flex-start;
 `;
+  

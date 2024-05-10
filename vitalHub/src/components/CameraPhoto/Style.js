@@ -7,6 +7,7 @@ export const ButtonGallery = styled.TouchableOpacity`
 `;
 
 export const ImageGallery = styled.Image`
-	width: 100%;
+	width: 100%; 
 	height: 100%;
 `;
+

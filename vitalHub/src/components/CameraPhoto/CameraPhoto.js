@@ -1,5 +1,5 @@
 // Importações necessárias
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
 	StyleSheet,
 	Text,
@@ -9,8 +9,8 @@ import {
 	Image,
 	Alert,
 } from 'react-native';
-import { Camera } from 'expo-camera';
 import { FontAwesome, MaterialIcons, FontAwesome6 } from '@expo/vector-icons';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 import { ButtonGallery, ImageGallery } from './Style';
@@ -27,20 +27,26 @@ export const CameraPhoto = ({ navigation, route }) => {
 	const [openModal, setOpenModal] = useState(false);
 
 	// Estado para definir o tipo da câmera (traseira ou frontal)
-	const [tipoCamera, setTipoCamera] = useState(Camera.Constants.Type.back);
+	const [tipoCamera, setTipoCamera] = useState('back');
+
+	//satete pra permissao da camera
+	const [permission, requestPermission] = useCameraPermissions();
+
+
 
 	// Estado para controlar o modo de flash (ligado ou desligado)
-	const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+	const [flashMode, setFlashMode] = useState('off');
 
 	// Estado para controlar o foco automático (ligado ou desligado)
-	const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.off);
+	const [autoFocus, setAutoFocus] = useState('off');
 
-	const [lastedPhoto, setLastedPhoto] = useState(null);
+	const [lastedPhoto, setLastedPhoto] = useState(null)
+
 
 	// Função para capturar a foto
 	async function CapturePhoto() {
 		// Ativar o foco automático antes de tirar a foto
-		setAutoFocus(Camera.Constants.AutoFocus.on);
+		setAutoFocus('on');
 
 		// Esperar um curto período de tempo para permitir que o foco automático seja aplicado
 		await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -78,9 +84,9 @@ export const CameraPhoto = ({ navigation, route }) => {
 	// Função para alternar o modo de flash
 	function ToggleFlashMode() {
 		setFlashMode(
-			flashMode === Camera.Constants.FlashMode.on
-				? Camera.Constants.FlashMode.off
-				: Camera.Constants.FlashMode.on,
+			flashMode === 'on'
+				? 'off'
+				: 'on',
 		);
 	}
 
@@ -126,37 +132,39 @@ export const CameraPhoto = ({ navigation, route }) => {
 
 	// Solicitar permissões da câmera e da galeria ao montar o componente
 	useEffect(() => {
-		(async () => {
-			const { status: cameraStatus } =
-				await Camera.requestCameraPermissionsAsync();
-			const { status: mediaStatus } =
-				await MediaLibrary.requestPermissionsAsync();
-		})();
-
 		GetLastPhoto();
 	}, []);
+
+
+	// if (!permission) {
+	// 	alert('carregando permissao');
+	// }
+
+	// if (!permission.granted) {
+	// 	return(
+	// 		<></>
+	// 	)
+	// }
+
+	function toggleCameraFacing() {
+		setTipoCamera(current => (current === 'back' ? 'front' : 'back'));
+	}
 
 	// Renderização do componente
 	return (
 		<View style={styles.container}>
-			<Camera
+			<CameraView
 				style={styles.camera}
-				type={tipoCamera}
+				facing={tipoCamera}
 				ratio={'16:9'}
 				ref={cameraRef}
-				flashMode={flashMode}
+				flash={flashMode}
 				autoFocus={autoFocus}
 			>
 				<View style={styles.viewFlip}>
 					<TouchableOpacity
 						style={styles.btnFlip}
-						onPress={() =>
-							setTipoCamera(
-								tipoCamera === Camera.Constants.Type.front
-									? Camera.Constants.Type.back
-									: Camera.Constants.Type.front,
-							)
-						}
+						onPress={toggleCameraFacing}
 					>
 						<FontAwesome6
 							name="camera-rotate"
@@ -174,18 +182,18 @@ export const CameraPhoto = ({ navigation, route }) => {
 						<MaterialIcons
 							style={[
 								styles.btnFlash,
-								flashMode === Camera.Constants.FlashMode.on
+								flashMode === 'on'
 									? styles.flashOn
 									: styles.flashOff,
 							]}
 							name={
-								flashMode === Camera.Constants.FlashMode.on
+								flashMode === 'on'
 									? 'flash-on'
 									: 'flash-off'
 							}
 							size={36}
 							color={
-								flashMode === Camera.Constants.FlashMode.on
+								flashMode === 'on'
 									? '#007bff'
 									: '#fff'
 							}
@@ -197,7 +205,7 @@ export const CameraPhoto = ({ navigation, route }) => {
 						) : null}
 					</ButtonGallery>
 				</View>
-			</Camera>
+			</CameraView>
 
 			{/* Modal para exibir a foto */}
 			<Modal
@@ -237,6 +245,7 @@ export const CameraPhoto = ({ navigation, route }) => {
 		</View>
 	);
 };
+
 
 // Estilos do componente
 const styles = StyleSheet.create({
@@ -281,7 +290,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	flashOn: {
-		backgroundColor: '#1212', // Cor de fundo quando o flash está ativado
+		backgroundColor: '#121212', // Cor de fundo quando o flash está ativado
 	},
 	flashOff: {
 		backgroundColor: '#121212', // Cor de fundo quando o flash está desativado

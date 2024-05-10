@@ -13,9 +13,6 @@ import { ModalContent, ModalText, PatientModal } from './Style';
 import * as Notifications from 'expo-notifications';
 import { api } from '../../services/Service';
 
-//solicitar as permissoes de notificacao ao iniciar o app
-Notifications.requestPermissionsAsync();
-
 //definir como as notificacoes devem ser tratados quando recebidos
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({

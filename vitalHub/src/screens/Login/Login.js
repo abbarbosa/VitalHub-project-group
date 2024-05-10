@@ -18,7 +18,7 @@ import { api } from '../../services/Service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //import para a função de carregamento
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 
 export const Login = ({ navigation }) => {
 	const [email, setEmail] = useState('');
@@ -29,7 +29,7 @@ export const Login = ({ navigation }) => {
 		setLoading(true);
 		try {
 			if (!email || !senha) {
-				alert('Por favor, preencha todos os campos.');
+				Alert.alert('Erro', 'Por favor, preencha todos os campos');
 				return;
 			}
 
@@ -42,14 +42,10 @@ export const Login = ({ navigation }) => {
 			navigation.navigate('Main');
 		} catch (error) {
 			console.log('Erro ao fazer login:', error);
-			alert(
-				'Erro ao fazer login. Verifique suas credenciais e tente novamente.',
-			);
+			Alert.alert('Erro', 'Erro ao fazer login. Verifique suas credenciais e tente novamente..');
 		} finally {
-			console.log('Finalizando...');
 			setTimeout(() => {
 				setLoading(false);
-				console.log('Finalizado.');
 			}, 2000);
 		}
 	}
@@ -64,7 +60,7 @@ export const Login = ({ navigation }) => {
 				placeholder={'Username or email...'}
 				value={email}
 				onChangeText={(txt) => setEmail(txt)}
-				//onChange={event => event.nativeEvent.text}
+			//onChange={event => event.nativeEvent.text}
 			/>
 
 			<Input
@@ -97,7 +93,7 @@ export const Login = ({ navigation }) => {
 					<LinkBold
 						onPress={() => navigation.navigate('CreateAccount')}
 					>
-						Create an account now
+						Create an account now!
 					</LinkBold>
 				</TextAccount>
 			</ContentAccount>

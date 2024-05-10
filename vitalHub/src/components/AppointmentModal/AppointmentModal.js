@@ -50,6 +50,7 @@ export const AppointmentModal = ({
 		}
 	}
 
+
 	const calcularIdade = (dataNascimento) => {
 		const hoje = moment();
 		const nascimento = moment(dataNascimento);

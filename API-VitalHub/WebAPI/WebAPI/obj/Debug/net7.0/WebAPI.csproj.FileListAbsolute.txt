@@ -342,3 +342,14 @@ C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\o
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Microsoft.Azure.CognitiveServices.Vision.ComputerVision.dll
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.dll
 C:\Users\55358961879\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.Azure.dll
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.csproj.AssemblyReference.cache
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.AssemblyInfoInputs.cache
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.AssemblyInfo.cs
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.csproj.CoreCompileInputs.cache
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.sourcelink.json
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.dll
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\refint\WebAPI.dll
+C:\Users\52161105850\Desktop\VitalHub-project-group\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb

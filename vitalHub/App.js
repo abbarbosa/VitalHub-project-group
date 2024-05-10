@@ -1,18 +1,13 @@
+import { useEffect } from 'react';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Navigation } from './src/screens/Navigation/Navigation';
 import { Login } from './src/screens/Login/Login';
 import { RecoverPassword } from './src/screens/RecoverPassword/RecoverPassword';
 import { ResetPassword } from './src/screens/ResetPassword/ResetPassword';
 import { MedicalRecords } from './src/screens/MedicalRecords/MedicalRecords';
 
-// Import library moment
-import moment from 'moment';
-
-// import calendar strip
-import { CalendarHome } from './src/components/CalendarHome/CalendarHome';
 
 //StackNavigator instance
 const Stack = createNativeStackNavigator();
@@ -41,7 +36,14 @@ import { LocationAppointment } from './src/screens/LocationAppointment/LocationA
 import { VisualizePrescription } from './src/screens/VisualizePrescription/VisualizePrescription';
 import { Main } from './src/screens/Main/Main';
 
-import { Camera, CameraPhoto } from './src/components/CameraPhoto/CameraPhoto';
+import { Camera } from 'expo-camera';
+
+
+import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
+import { CameraPhoto } from './src/components/CameraPhoto/CameraPhoto';
+
+
 
 export default function App() {
 	const [fontsLoaded, fontsError] = useFonts({
@@ -56,6 +58,22 @@ export default function App() {
 	if (!fontsLoaded && !fontsError) {
 		return null;
 	}
+
+	async function requestCamera() {
+		await Camera.requestCameraPermissionsAsync();
+	}
+
+	async function requestGalery() {
+		await MediaLibrary.requestPermissionsAsync();
+
+		await ImagePicker.requestMediaLibraryPermissionsAsync();
+	}
+
+	// useEffect(() => {
+	// 	requestCamera()
+
+	// 	requestGalery()
+	// }, [])
 
 	return (
 		//involves the structure of navigation
