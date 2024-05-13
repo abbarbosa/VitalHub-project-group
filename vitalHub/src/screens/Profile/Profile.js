@@ -90,9 +90,11 @@ export const Profile = ({ navigation, route }) => {
 				.then((response) => {
 					setEdicaoHabilitada(false);
 					console.log(`Sucesso na edicao: ${response.data}`);
+					LogBox.ignoreAllLogs();
 				})
 				.catch((error) => {
 					console.log(`Deu erro no metodo: ${error}`);
+					LogBox.ignoreAllLogs();
 				});
 		} catch (error) {
 			console.log(`Deu erro na chamada da api: ${error}`);
@@ -162,8 +164,9 @@ export const Profile = ({ navigation, route }) => {
 				},
 			})
 			.then((response) => {
-				setPhotoAtualizada(dados.idNavigation.foto);
+				setPhotoAtualizada(response.data.foto);
 				console.log(response);
+				LogBox.ignoreAllLogs();
 			})
 			.catch((error) => {
 				console.log(error);
@@ -179,6 +182,7 @@ export const Profile = ({ navigation, route }) => {
 			AlternateProfilePicture();
 		}
 
+		photoAtualizada;
 		console.log(route.params);
 	}, [dados, route.params]);
 
@@ -190,7 +194,10 @@ export const Profile = ({ navigation, route }) => {
 						<ContainerImage>
 							<ProfilePicture
 								source={{
-									uri: `${dados.idNavigation.foto}`,
+									uri: `${
+										photoAtualizada ||
+										dados.idNavigation.foto
+									}`,
 								}}
 							/>
 

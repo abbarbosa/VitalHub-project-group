@@ -19,7 +19,7 @@ import {
 	InputModal,
 	TextProfileInputModal,
 } from './Style';
-import { Modal, TouchableOpacity } from 'react-native';
+import { Alert, Modal, TouchableOpacity } from 'react-native';
 import { FormChoice } from '../Button/FormChoice';
 
 export const ScheduleModal = ({
@@ -30,23 +30,31 @@ export const ScheduleModal = ({
 }) => {
 	const nivelConsulta = [{ id: 0 }, { id: 1, id: 2 }];
 
-	const [checkupActive, setCheckupActive] = useState(false);
-	const [examActive, setExamActive] = useState(false);
-	const [urgencyActive, setUrgencyActive] = useState(false);
-
-	const [actived, setActived] = useState();
 	const [activeButton, setActiveButton] = useState(null);
-	const [agendamento, setAgendamento] = useState(null);
+	const [agendamento, setAgendamento] = useState({
+		prioridadeId: null,
+		localizacao: '',
+	});
 
 	const [prioridadeConsulta, setPrioridadeConsulta] = useState(
 		'ADD341BE-8E85-40F1-BCA3-71C72A1585D3',
 	);
 
-	async function handleContinue() {
-		setShowModalSchedule(false);
-
-		navigation.replace('SelectClinic', { agendamento: agendamento });
-	}
+	const handleContinue = () => {
+		// Verifica se um botão foi selecionado e se a cidade foi digitada
+		if (
+			agendamento.prioridadeId &&
+			agendamento.localizacao &&
+			agendamento.localizacao.trim() !== ''
+		) {
+			// Se a validação for bem-sucedida, fecha o modal e navega para a próxima página
+			setShowModalSchedule(false);
+			navigation.replace('SelectClinic', { agendamento: agendamento });
+		} else {
+			// Caso contrário, exibe uma mensagem de erro ou toma outra ação apropriada
+			Alert.alert('Please select a type of query or enter a city.');
+		}
+	};
 
 	async function handleCancel() {
 		setShowModalSchedule(false);

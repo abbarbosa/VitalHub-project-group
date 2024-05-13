@@ -9,6 +9,7 @@ import {
 	ButtonTitle,
 } from '../../components/Button/Style';
 import { ConfirmModal } from '../../components/ConfirmModal/ConfirmModal';
+import { Alert } from 'react-native';
 
 export const SelectDate = ({ navigation, route }) => {
 	const [selectedDate, setSelectedDate] = useState();
@@ -21,12 +22,16 @@ export const SelectDate = ({ navigation, route }) => {
 	});
 
 	function handleContinue() {
-		setAgendamento({
-			...route.params.agendamento,
-			dataConsulta: `${selectedDate} ${selectedTime}`,
-		});
+		if (selectedDate && selectedTime) {
+			setAgendamento({
+				...route.params.agendamento,
+				dataConsulta: `${selectedDate} ${selectedTime}`,
+			});
 
-		setShowModalConfirm(true);
+			setShowModalConfirm(true);
+		} else {
+			Alert.alert('Please select a date and time.');
+		}
 	}
 
 	return (

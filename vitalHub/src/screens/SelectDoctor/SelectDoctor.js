@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import {
 	Button,
 	ButtonSecundaryTitle,
@@ -47,12 +47,16 @@ export const SelectDoctor = ({ navigation, route }) => {
 	// }, [route.params]);
 
 	async function handleContinue() {
-		navigation.replace('SelectDate', {
-			agendamento: {
-				...route.params.agendamento,
-				...doctor,
-			},
-		});
+		if (selectedDoctor) {
+			navigation.replace('SelectDate', {
+				agendamento: {
+					...route.params.agendamento,
+					...doctor,
+				},
+			});
+		} else {
+			Alert.alert('Please select a doctor.');
+		}
 	}
 
 	return (

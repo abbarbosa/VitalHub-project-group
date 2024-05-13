@@ -8,7 +8,7 @@ import {
 	ButtonSecundaryTitle,
 	ButtonTitle,
 } from '../../components/Button/Style';
-import { LogBox, TouchableOpacity } from 'react-native';
+import { Alert, LogBox, TouchableOpacity } from 'react-native';
 import { ClinicCard } from '../../components/ClinicCard/ClinicCard';
 import { api } from '../../services/Service';
 
@@ -42,9 +42,16 @@ export const SelectClinic = ({ navigation, route }) => {
 	}, []);
 
 	async function handleContinue() {
-		navigation.replace('SelectDoctor', {
-			agendamento: { ...route.params.agendamento, ...clinicaSelecionada },
-		});
+		if (clinicaSelecionada) {
+			navigation.replace('SelectDoctor', {
+				agendamento: {
+					...route.params.agendamento,
+					...clinicaSelecionada,
+				},
+			});
+		} else {
+			Alert.alert('Please select a clinic.');
+		}
 	}
 
 	return (
