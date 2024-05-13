@@ -79,7 +79,7 @@ export const CreateAccount = ({ navigation, route }) => {
 				navigation.navigate('Login')
 			} else {
 				console.log('Erro ao cadastrar usuário:', response.data);
-				Alert.alert('Erro!', 'Não foi possivel cadastrar um usuário')
+			
 			}
 		} catch (error) {
 			console.log(error);
