@@ -53,6 +53,7 @@ export const ConfirmModal = ({
 	// Correção na definição do componente
 	const closeModal = () => {
 		setShowModalConfirm(false); // Correção do nome da função
+		navigation.replace('SelectDate');
 	};
 
 	useEffect(() => {
