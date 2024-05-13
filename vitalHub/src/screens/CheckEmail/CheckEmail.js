@@ -20,6 +20,7 @@ import { InputNumbers } from '../../components/Input/Style';
 import { api } from '../../services/Service';
 
 export const CheckEmail = ({ navigation, route }) => {
+<<<<<<< HEAD
 	const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
 	const [code, setCode] = useState('')
 
@@ -28,10 +29,20 @@ export const CheckEmail = ({ navigation, route }) => {
 		//Se o index é menor do que a quantidade de campos 
 		if (index < inputs.length - 1) {
 			inputs[index + 1].current.focus()
+=======
+	const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+	const [code, setCode] = useState('');
+
+	function focusNextInput(index) {
+		//Se o index é menor do que a quantidade de campos
+		if (index < inputs.length - 1) {
+			inputs[index + 1].current.focus();
+>>>>>>> 386569977ea7e7c73ce08ad3f05ae84bf3697cf4
 		}
 	}
 
 	function FocusPrevInput(index) {
+<<<<<<< HEAD
 		if (index > 0) { }
 		inputs[index - 1].current.focus()
 	}
@@ -52,6 +63,36 @@ export const CheckEmail = ({ navigation, route }) => {
 	useEffect(() =>{
 		inputs[0].current.focus()
 	},[])
+=======
+		if (index > 0) {
+		}
+		inputs[index - 1].current.focus();
+	}
+
+	async function ValidadeCode() {
+		console.log(
+			`/RecuperarSenha/ValidarCodigoRecuperacaoSenha?email=${route.params.emailRecuperacao}&codigo=${code}`,
+		);
+
+		await api
+			.post(
+				`/RecuperarSenha/ValidarCodigoRecuperacaoSenha?email=${route.params.emailRecuperacao}&codigo=${code}`,
+			)
+			.then(() => {
+				navigation.replace('ResetPassword', {
+					emailRecuperacao: route.params.emailRecuperacao,
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+				Alert.alert('Erro!', 'Código Inválido');
+			});
+	}
+
+	useEffect(() => {
+		inputs[0].current.focus();
+	}, []);
+>>>>>>> 386569977ea7e7c73ce08ad3f05ae84bf3697cf4
 	return (
 		<Container>
 			<ContentIconSetinha onPress={() => navigation.navigate('Login')}>
@@ -62,6 +103,7 @@ export const CheckEmail = ({ navigation, route }) => {
 			<ContentCheck>
 				<SubText>Enter the 4-digit code sent to</SubText>
 				<TextEmail>{route.params.emailRecuperacao}</TextEmail>
+<<<<<<< HEAD
 				<View style={{
 					justifyContent: "center",
 					alignItems: "center",
@@ -102,6 +144,44 @@ export const CheckEmail = ({ navigation, route }) => {
 			</ContentCheck>
 			<Button onPress={() => ValidadeCode()}>
 				<ButtonTitle >Send</ButtonTitle>
+=======
+				<View
+					style={{
+						justifyContent: 'center',
+						alignItems: 'center',
+						flexDirection: 'row',
+						gap: 15,
+					}}
+				>
+					{/* <InputNumbers placeholder="0" /> */}
+
+					{[0, 1, 2, 3].map((index) => (
+						<InputNumbers
+							key={index}
+							ref={inputs[index]} //chave de acordo com o index
+							keyBoardType="numeric" //ref de acordo com o index do app
+							placeholder="0"
+							maxLength={1}
+							caretHidden={true}
+							onChangeText={(text) => {
+								//verifica se o campo está vazio
+								if (text == '') {
+									FocusPrevInput(index);
+								} else {
+									const newCode = [...code]; //separa os valores das casinhas
+									newCode[index] = text; //corrige o valor de acordo com a posição
+									setCode(newCode.join('')); //junta todos em uma string
+
+									focusNextInput(index);
+								}
+							}}
+						/>
+					))}
+				</View>
+			</ContentCheck>
+			<Button onPress={() => ValidadeCode()}>
+				<ButtonTitle>Send</ButtonTitle>
+>>>>>>> 386569977ea7e7c73ce08ad3f05ae84bf3697cf4
 			</Button>
 			<MiniLink>Resend Code</MiniLink>
 		</Container>

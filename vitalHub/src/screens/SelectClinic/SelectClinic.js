@@ -8,7 +8,7 @@ import {
 	ButtonSecundaryTitle,
 	ButtonTitle,
 } from '../../components/Button/Style';
-import { TouchableOpacity } from 'react-native';
+import { Alert, LogBox, TouchableOpacity } from 'react-native';
 import { ClinicCard } from '../../components/ClinicCard/ClinicCard';
 import { api } from '../../services/Service';
 
@@ -38,38 +38,25 @@ export const SelectClinic = ({ navigation, route }) => {
 		console.log(route.params);
 		console.log(clinica);
 		ListClinic();
+		LogBox.ignoreAllLogs();
 	}, []);
 
 	async function handleContinue() {
-		navigation.replace('SelectDoctor', {
-			agendamento: { ...route.params.agendamento, ...clinicaSelecionada },
-		});
+		if (clinicaSelecionada) {
+			navigation.replace('SelectDoctor', {
+				agendamento: {
+					...route.params.agendamento,
+					...clinicaSelecionada,
+				},
+			});
+		} else {
+			Alert.alert('Please select a clinic.');
+		}
 	}
 
 	return (
 		<Container>
 			<TitleSelection>Select Clinic</TitleSelection>
-			{/* <ListComponent
-				data={clinica}
-				keyExtractor={(item) => item.id}
-				renderItem={({ item }) => (
-					<TouchableOpacity
-						onPress={() => handleClinicSelection(item.id)}
-					>
-						<ClinicCard
-							selected={item.id === selectedClinic}
-							onPress={() =>
-								setClinica({
-									clinicaiId: item.id,
-									clinicaLabel: item.nomeFantasia,
-								})
-							}
-							clinic={item}
-							setSelectedClinic={setSelectedClinic}
-						/>
-					</TouchableOpacity>
-				)}
-			/> */}
 			<ListComponent
 				data={clinica}
 				keyExtractor={(item) => item.id}
@@ -103,7 +90,7 @@ export const SelectClinic = ({ navigation, route }) => {
 			<Button onPress={() => handleContinue()}>
 				<ButtonTitle>Continue</ButtonTitle>
 			</Button>
-			<ButtonSecundaryTitle onPress={() => navigation.navigate('Home')}>
+			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
 				Cancel
 			</ButtonSecundaryTitle>
 		</Container>

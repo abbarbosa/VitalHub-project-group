@@ -32,9 +32,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 	const [edicaoHabilitada, setEdicaoHabilitada] = useState(false);
 
 	useEffect(() => {
-		if (consulta == null && route.params.consultaid) {
-			console.log(consulta);
-
+		if (consulta === null && route.params.consultaid) {
 			BuscarConsulta();
 		}
 	}, [consulta, route.params.consultaid]);
@@ -43,8 +41,17 @@ export const MedicalRecords = ({ navigation, route }) => {
 		await api
 			.get(`/Consultas/BuscarPorId?id=${route.params.consultaid}`)
 			.then((response) => {
+				console.log(
+					'alallalalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \n',
+				);
 				setConsulta(response.data);
+
+				console.log(
+					'alallalalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \n',
+				);
+
 				console.log(response.data);
+				console.log(consulta);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -76,17 +83,29 @@ export const MedicalRecords = ({ navigation, route }) => {
 			<Container>
 				<ProfilePicture
 					source={{
-						uri: `${consulta.paciente.idNavigation.foto}`,
+						uri: `${
+							consulta &&
+							consulta.paciente &&
+							consulta.paciente.idNavigation &&
+							consulta.paciente.idNavigation.foto
+						}`,
 					}}
 				/>
 				<ContentName>
 					<TextProfileName>
-						{consulta && consulta.paciente?.idNavigation?.nome}
+						{consulta &&
+							consulta.paciente &&
+							consulta.paciente.idNavigation &&
+							consulta.paciente.idNavigation.nome}
 					</TextProfileName>
 					<TextProfileEmail>
-						{consulta && consulta.paciente?.idNavigation?.email}
+						{consulta &&
+							consulta.paciente &&
+							consulta.paciente.idNavigation &&
+							consulta.paciente.idNavigation.email}
 					</TextProfileEmail>
 				</ContentName>
+
 				<ContentProfile>
 					<TextProfileInput>Query description:</TextProfileInput>
 					<InputRecord

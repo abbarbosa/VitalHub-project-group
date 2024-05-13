@@ -39,7 +39,7 @@ export const LocationAppointment = ({ navigation, route }) => {
 			.get(`/Clinica/BuscarPorId?id=${route.params.clinicaid}`)
 			.then((response) => {
 				setClinica(response.data);
-				console.log(response.data);
+				console.log(JSON.stringify(response.data));
 			})
 			.catch((error) => {
 				console.log(error);
@@ -51,7 +51,7 @@ export const LocationAppointment = ({ navigation, route }) => {
 			{clinica !== null ? (
 				<>
 					<ImageLocation>
-						<Map />
+						<Map clinica={clinica} />
 					</ImageLocation>
 
 					<SpaceView>
