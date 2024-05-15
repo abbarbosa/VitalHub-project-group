@@ -61,7 +61,7 @@ export const SelectDoctor = ({ navigation, route }) => {
 
 	return (
 		<Container>
-			<TitleSelection>Select Doctor</TitleSelection>
+			<TitleSelection>Selecionar médico</TitleSelection>
 
 			<ListComponent
 				data={medicoLista}
@@ -83,10 +83,10 @@ export const SelectDoctor = ({ navigation, route }) => {
 			/>
 
 			<Button onPress={() => handleContinue()}>
-				<ButtonTitle>Continue</ButtonTitle>
+				<ButtonTitle>Continuar</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
-				Cancel
+				Cancelar
 			</ButtonSecundaryTitle>
 		</Container>
 	);

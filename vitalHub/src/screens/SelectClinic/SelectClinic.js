@@ -56,7 +56,7 @@ export const SelectClinic = ({ navigation, route }) => {
 
 	return (
 		<Container>
-			<TitleSelection>Select Clinic</TitleSelection>
+			<TitleSelection>Selecionar Clinica</TitleSelection>
 			<ListComponent
 				data={clinica}
 				keyExtractor={(item) => item.id}
@@ -88,10 +88,10 @@ export const SelectClinic = ({ navigation, route }) => {
 			/>
 
 			<Button onPress={() => handleContinue()}>
-				<ButtonTitle>Continue</ButtonTitle>
+				<ButtonTitle>Continuar</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
-				Cancel
+				Cancelar
 			</ButtonSecundaryTitle>
 		</Container>
 	);

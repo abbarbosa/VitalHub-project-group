@@ -8,82 +8,45 @@ import { Input, RecoverInput } from '../../components/Input/Style';
 import { Button, ButtonTitle } from '../../components/Button/Style';
 import { AntDesign } from '@expo/vector-icons';
 import { api } from '../../services/Service';
+import * as Yup from 'yup';
 
 export const ResetPassword = ({ navigation, route }) => {
-<<<<<<< HEAD
-
-	const [password, setPassword] = useState('')
-	const [conffirm, setConffirm] = useState('')
-
-	async function UptadePwd(){
-		if (password === conffirm) {
-            try {
-                await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
-                    senhaNova: password
-                });
-                navigation.replace("Login");
-            } catch (error) {
-                console.log(error);
-                // Trate o erro de acordo com suas necessidades
-            }
-        } else {
-            // Senhas não coincidem, você pode mostrar uma mensagem de erro ao usuário
-            console.log("As senhas não coincidem");
-            Alert.alert('Erro!', 'As senhas não coincidem!')
-        }
-	}
-	return (
-		<Container>
-            <ContentIconSetinha onPress={() => navigation.navigate('Login')}>
-                <AntDesign name="closecircle" size={30} color="#49B3BA" />
-            </ContentIconSetinha>
-
-            <Logo source={require('../../assets/logoVitalHub.png')} />
-            <Title>Reset Password</Title>
-            <SubText>Insert and confirm your new password</SubText>
-
-            <Input
-                placeholder={'New Password'}
-                value={password}
-                onChangeText={(txt) => { setPassword(txt) }}
-                secureTextEntry={true}
-            />
-
-            <RecoverInput
-                placeholder={'Confirm new password'}
-                value={conffirm}
-                onChangeText={(txt) => { setConffirm(txt) }}
-                secureTextEntry={true}
-            />
-
-            <Button onPress={UptadePwd}>
-                <ButtonTitle>Confirm new password</ButtonTitle>
-            </Button>
-        </Container>
-=======
 	const [password, setPassword] = useState('');
-	const [conffirm, setConffirm] = useState('');
+	const [confirm, setConfirm] = useState('');
+	const [errors, setErrors] = useState({});
 
-	async function UptadePwd() {
-		if (password === conffirm) {
-			try {
-				await api.put(
-					`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
-					{
-						senhaNova: password,
-					},
-				);
-				navigation.replace('Login');
-			} catch (error) {
+	async function UpdatePwd() {
+		try {
+			const schema = Yup.object().shape({
+				password: Yup.string().required('Password is required'),
+				confirm: Yup.string()
+					.oneOf([Yup.ref('password'), null], 'Passwords must match')
+					.required('Confirm password is required'),
+			});
+
+			await schema.validate({ password, confirm }, { abortEarly: false });
+
+			await api.put(
+				`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
+				{
+					senhaNova: password,
+				},
+			);
+
+			navigation.replace('Login');
+		} catch (error) {
+			if (error instanceof Yup.ValidationError) {
+				const validationErrors = {};
+				error.inner.forEach((e) => {
+					validationErrors[e.path] = e.message;
+				});
+				setErrors(validationErrors);
+			} else {
 				console.log(error);
-				// Trate o erro de acordo com suas necessidades
 			}
-		} else {
-			// Senhas não coincidem, você pode mostrar uma mensagem de erro ao usuário
-			console.log('As senhas não coincidem');
-			Alert.alert('Erro!', 'As senhas não coincidem!');
 		}
 	}
+
 	return (
 		<Container>
 			<ContentIconSetinha onPress={() => navigation.navigate('Login')}>
@@ -91,31 +54,36 @@ export const ResetPassword = ({ navigation, route }) => {
 			</ContentIconSetinha>
 
 			<Logo source={require('../../assets/logoVitalHub.png')} />
-			<Title>Reset Password</Title>
-			<SubText>Insert and confirm your new password</SubText>
+			<Title>Redefinir senha</Title>
+			<SubText>Insira e confirme a sua nova senha</SubText>
 
 			<Input
-				placeholder={'New Password'}
+				placeholder={'Nova senha'}
 				value={password}
-				onChangeText={(txt) => {
-					setPassword(txt);
-				}}
+				onChangeText={(txt) => setPassword(txt)}
 				secureTextEntry={true}
 			/>
+			{errors.password && (
+				<Text style={{ color: 'red' }}>{errors.password}</Text>
+			)}
 
 			<RecoverInput
-				placeholder={'Confirm new password'}
-				value={conffirm}
-				onChangeText={(txt) => {
-					setConffirm(txt);
-				}}
+				placeholder={'Confirmar nova senha'}
+				value={confirm}
+				onChangeText={(txt) => setConfirm(txt)}
 				secureTextEntry={true}
 			/>
+			{errors.confirm && (
+				<Text
+					style={{ color: 'red', marginBottom: 10, marginTop: -30 }}
+				>
+					{errors.confirm}
+				</Text>
+			)}
 
-			<Button onPress={UptadePwd}>
-				<ButtonTitle>Confirm new password</ButtonTitle>
+			<Button onPress={UpdatePwd}>
+				<ButtonTitle>Confirmar nova senha</ButtonTitle>
 			</Button>
 		</Container>
->>>>>>> 386569977ea7e7c73ce08ad3f05ae84bf3697cf4
 	);
 };

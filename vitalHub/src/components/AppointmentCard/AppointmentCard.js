@@ -108,20 +108,20 @@ export const AppointmentCard = ({
 					{situacao === 'Pendentes' ? (
 						<ButtonCard onPress={onPressCancel}>
 							<ButtonText situacao={situacao.situacao}>
-								Cancel
+								Cancelar
 							</ButtonText>
 						</ButtonCard>
 					) : situacao === 'Realizados' ? (
 						roleUsuario === 'Paciente' ? (
 							<ButtonCard onPress={onPressAppointment}>
 								<ButtonText situacao={situacao.situacao}>
-									View Medical Records
+									Ver Prontuário
 								</ButtonText>
 							</ButtonCard>
 						) : (
 							<ButtonCard onPress={onPressAppointment}>
 								<ButtonText situacao={situacao.situacao}>
-									Insert medical records
+									Inserir prontuário
 								</ButtonText>
 							</ButtonCard>
 						)

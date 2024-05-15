@@ -107,9 +107,9 @@ export const MedicalRecords = ({ navigation, route }) => {
 				</ContentName>
 
 				<ContentProfile>
-					<TextProfileInput>Query description:</TextProfileInput>
+					<TextProfileInput>Descrição da consulta:</TextProfileInput>
 					<InputRecord
-						placeholder={'Description'}
+						placeholder={'Descrição'}
 						multiline={true}
 						onChangeText={(text) => setDescricao(text)}
 						editable={edicaoHabilitada}
@@ -118,9 +118,9 @@ export const MedicalRecords = ({ navigation, route }) => {
 					</InputRecord>
 				</ContentProfile>
 				<ContentProfile>
-					<TextProfileInput>Patient diagnosis:</TextProfileInput>
+					<TextProfileInput>Diagnóstico do paciente:</TextProfileInput>
 					<InputMedicalRecords
-						placeholder={'Diagnosis'}
+						placeholder={'Diagnóstico'}
 						onChangeText={(text) => setDiagnostico(text)}
 						editable={edicaoHabilitada}
 					>
@@ -128,9 +128,9 @@ export const MedicalRecords = ({ navigation, route }) => {
 					</InputMedicalRecords>
 				</ContentProfile>
 				<ContentProfile>
-					<TextProfileInput>Medical prescription:</TextProfileInput>
+					<TextProfileInput>Prescrição médica:</TextProfileInput>
 					<InputRecord
-						placeholder={'Prescription'}
+						placeholder={'Prescrição'}
 						onChangeText={(text) => setPrescricao(text)}
 						editable={edicaoHabilitada}
 					>
@@ -156,13 +156,13 @@ export const MedicalRecords = ({ navigation, route }) => {
 					onPress={() => setEdicaoHabilitada(true)}
 					disabled={edicaoHabilitada}
 				>
-					<ButtonTitle>Edit</ButtonTitle>
+					<ButtonTitle>Editar</ButtonTitle>
 				</Button>
 
 				<ButtonSecundaryTitle
 					onPress={() => navigation.navigate('Home')}
 				>
-					Cancel
+					Cancelar
 				</ButtonSecundaryTitle>
 			</Container>
 		</ScrollContainer>

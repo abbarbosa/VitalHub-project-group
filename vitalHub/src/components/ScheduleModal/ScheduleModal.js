@@ -81,15 +81,13 @@ export const ScheduleModal = ({
 		>
 			<AgendModal>
 				<ContentSModal>
-					<Title>Make an appointment</Title>
+					<Title>Agendar uma consulta</Title>
 
 					<ContentProfile>
-						<TextProfileInputModal>
-							What level of consultation
-						</TextProfileInputModal>
+
 						<ContentButton>
 							<FormChoice
-								textButton={'Checkup'}
+								textButton={'Rotina'}
 								actived={activeButton === 'Checkup'}
 								onPress={() =>
 									handlePress(
@@ -101,7 +99,7 @@ export const ScheduleModal = ({
 							/>
 
 							<FormChoice
-								textButton={'Exam'}
+								textButton={'Exame'}
 								actived={activeButton === 'Exam'}
 								onPress={() =>
 									handlePress(
@@ -113,7 +111,7 @@ export const ScheduleModal = ({
 							/>
 
 							<FormChoice
-								textButton={'Urgency'}
+								textButton={'Urgência'}
 								actived={activeButton === 'Urgency'}
 								onPress={() =>
 									handlePress(
@@ -128,10 +126,10 @@ export const ScheduleModal = ({
 					{/*  */}
 					<ContentProfile>
 						<TextProfileInputModal>
-							Enter the desired city
+							Informe a localização desejada
 						</TextProfileInputModal>
 						<InputModal
-							placeholder="Enter the city"
+							placeholder="Informe a localização"
 							onChangeText={(txt) =>
 								setAgendamento({
 									...agendamento,
@@ -142,11 +140,11 @@ export const ScheduleModal = ({
 						/>
 					</ContentProfile>
 					<Button onPress={() => handleContinue()}>
-						<ButtonTitle>Continue</ButtonTitle>
+						<ButtonTitle>Continuar</ButtonTitle>
 					</Button>
 
 					<ButtonSecundary onPress={() => handleCancel()}>
-						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
+						<ButtonSecundaryTitle>Cancelar</ButtonSecundaryTitle>
 					</ButtonSecundary>
 				</ContentSModal>
 			</AgendModal>

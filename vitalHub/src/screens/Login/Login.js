@@ -54,46 +54,46 @@ export const Login = ({ navigation }) => {
 		<Container>
 			<Logo source={require('../../assets/logoVitalHub.png')} />
 
-			<Title>Log in or create an account</Title>
+			<Title>Entrar ou criar uma conta</Title>
 
 			<Input
-				placeholder={'Username or email...'}
+				placeholder={'Usuário email...'}
 				value={email}
 				onChangeText={(txt) => setEmail(txt)}
 			//onChange={event => event.nativeEvent.text}
 			/>
 
 			<Input
-				placeholder={'Password...'}
+				placeholder={'Senha...'}
 				secureTextEntry={true}
 				value={senha}
 				onChangeText={(txt) => setSenha(txt)}
 			/>
 
 			<LinkMedium onPress={() => navigation.navigate('RecoverPassword')}>
-				Forgot you password?
+				Esqueceu sua senha?
 			</LinkMedium>
 
 			<Button onPress={Login}>
 				{loading ? (
 					<ActivityIndicator size="small" color="#ffffff" />
 				) : (
-					<ButtonTitle>Log in</ButtonTitle>
+					<ButtonTitle>Entrar</ButtonTitle>
 				)}
 			</Button>
 
 			<ButtonGoogle>
 				<AntDesign name="google" size={18} color="#496BBA" />
-				<ButtonTitleGoogle>Log in with Google</ButtonTitleGoogle>
+				<ButtonTitleGoogle>Entrar com o  Google</ButtonTitleGoogle>
 			</ButtonGoogle>
 
 			<ContentAccount>
 				<TextAccount>
-					Don't have an account?{' '}
+					Não tem uma conta?{' '}
 					<LinkBold
 						onPress={() => navigation.navigate('CreateAccount')}
 					>
-						Create an account now!
+						Faça uma agora!
 					</LinkBold>
 				</TextAccount>
 			</ContentAccount>

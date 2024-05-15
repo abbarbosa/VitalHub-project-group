@@ -48,8 +48,7 @@ const CancellationModal = ({
 		);
 		try {
 			const response = await api.put(
-				`/Consultas/Status?idConsulta=${
-					consulta.id
+				`/Consultas/Status?idConsulta=${consulta.id
 				}&status=${'1A4C4AAB-3097-45B1-9AD2-EEAE7CFD6BD2'}`,
 			);
 
@@ -105,11 +104,10 @@ const CancellationModal = ({
 		>
 			<PatientModal>
 				<ModalContent>
-					<Title>Cancel appointment</Title>
+					<Title>Cancelar Consulta</Title>
 					<ModalText>
-						Canceling this appointment will open up a possible
-						availability in your time slot. Do you really want to
-						cancel this appointment?
+						Ao cancelar essa consulta, abrirá uma possível 
+						disponibilidade no seu horário, deseja mesmo cancelar essa consulta?
 					</ModalText>
 					<ButtonModal
 						onPress={() => {
@@ -118,11 +116,11 @@ const CancellationModal = ({
 							handleCallNotifications(); // Chamando a função de notificação ao confirmar o cancelamento
 						}}
 					>
-						<ButtonTitle>Confirm</ButtonTitle>
+						<ButtonTitle>Confirmar</ButtonTitle>
 					</ButtonModal>
 
 					<ButtonSecundary onPress={() => setShowModalCancel(false)}>
-						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
+						<ButtonSecundaryTitle>Cancelar</ButtonSecundaryTitle>
 					</ButtonSecundary>
 				</ModalContent>
 			</PatientModal>

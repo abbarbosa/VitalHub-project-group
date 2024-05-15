@@ -36,7 +36,7 @@ export const SelectDate = ({ navigation, route }) => {
 
 	return (
 		<Container>
-			<TitleSelection>Select Date</TitleSelection>
+			<TitleSelection>Selecinar Data</TitleSelection>
 
 			<FullCalendar
 				setSelectedDate={setSelectedDate}
@@ -53,11 +53,11 @@ export const SelectDate = ({ navigation, route }) => {
 
 			<Button onPress={() => handleContinue()}>
 				<ButtonTitle onPress={() => setShowModalConfirm(true)}>
-					Confirm
+					Confirmar
 				</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
-				Cancel
+				Cancelar
 			</ButtonSecundaryTitle>
 
 			<ConfirmModal

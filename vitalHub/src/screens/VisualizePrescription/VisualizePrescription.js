@@ -118,10 +118,10 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						</ContentName>
 						<ContentProfile>
 							<TextProfileInput>
-								Query description:
+								Descrição da consulta:
 							</TextProfileInput>
 							<InputRecord
-								placeholder={'Description here'}
+								placeholder={'Descrição da consulta'}
 								multiline={true}
 								editable={false}
 							>
@@ -130,10 +130,10 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						</ContentProfile>
 						<ContentProfile>
 							<TextProfileInput>
-								Patient diagnosis:
+								Diagnóstico do paciente:
 							</TextProfileInput>
 							<InputMedicalRecords
-								placeholder={'Diagnosis here'}
+								placeholder={'Diagnóstico'}
 								editable={false}
 							>
 								{consulta.diagnostico}
@@ -144,7 +144,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 								Medical prescription:
 							</TextProfileInput>
 							<InputRecord
-								placeholder={'Prescription here'}
+								placeholder={'Prescrição'}
 								editable={false}
 							>
 								{consulta.receita?.medicamento}
@@ -159,7 +159,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 											size={24}
 											color="black"
 										/>
-										<Title>No photo informed</Title>
+										<Title>Nenhuma foto informada</Title>
 									</FileVisualize>
 								</>
 							) : (
@@ -183,11 +183,11 @@ export const VisualizePrescription = ({ navigation, route }) => {
 									size={24}
 									color="white"
 								/>
-								<TextSend>Send</TextSend>
+								<TextSend>Enviar</TextSend>
 							</ViewPhotoSend>
 							<TouchableOpacity>
 								<ButtonTextVisualize>
-									Cancel
+									Cancelar
 								</ButtonTextVisualize>
 							</TouchableOpacity>
 						</ContentSend>
@@ -208,7 +208,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						<ButtonSecundaryTitle
 							onPress={() => navigation.navigate('Home')}
 						>
-							Back
+							Voltar
 						</ButtonSecundaryTitle>
 					</>
 				) : (

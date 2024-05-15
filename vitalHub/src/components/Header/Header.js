@@ -65,7 +65,7 @@ export const Header = ({ navigation }) => {
 							source={{ uri: `${data.idNavigation.foto}` }}
 						/>
 						<DataUser>
-							<TextDefault>Welcome!</TextDefault>
+							<TextDefault>Bem vindo(a)!</TextDefault>
 							<NameUser>{nameUser}</NameUser>
 						</DataUser>
 					</BoxUser>

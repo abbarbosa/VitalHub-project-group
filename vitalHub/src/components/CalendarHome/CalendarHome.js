@@ -6,17 +6,17 @@ import { StyledCalendarStrip } from '../../screens/Home/Style';
 const CalendarHome = ({ setDateSelected }) => {
 	// Atualização das configurações de localização do momento
 	moment.updateLocale('pt-br', {
-		months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+		months: 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split(
 			'_',
 		),
-		monthsShort: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split(
+		monthsShort: 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split(
 			'_',
 		),
 		weekdays:
-			'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split(
+			'Domingo_Segunda_Terça_Quarta_Quinta_Sexta_Sabádo'.split(
 				'_',
 			),
-		weekdaysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
+		weekdaysShort: 'Dom_Seg_Ter_Qua_Qui_Sex_Sab'.split('_'),
 		weekdaysMin: 'dom_2ª_3ª_4ª_5ª_6ª_sáb'.split('_'),
 	});
 

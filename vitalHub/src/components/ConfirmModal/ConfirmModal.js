@@ -65,9 +65,9 @@ export const ConfirmModal = ({
 			{agendamento ? (
 				<PatientModal>
 					<ContentConfirmModal>
-						<Title>Schedule an appointment</Title>
+						<Title>Agendar consulta</Title>
 						<ModalText>
-							Consult the data selected for your query
+							Data da consulta
 						</ModalText>
 						<SmallGroupModal>
 							<SubTitleModal>Appointment Date</SubTitleModal>
@@ -78,7 +78,7 @@ export const ConfirmModal = ({
 							</SmallTextModal>
 						</SmallGroupModal>
 						<SmallGroupModal>
-							<SubTitleModal>Doctor</SubTitleModal>
+							<SubTitleModal>Medico(a) da consulta</SubTitleModal>
 							<SmallTextModal>
 								{agendamento.medicoLabel}
 							</SmallTextModal>
@@ -87,22 +87,22 @@ export const ConfirmModal = ({
 							</SmallTextModal>
 						</SmallGroupModal>
 						<SmallGroupModal>
-							<SubTitleModal>Appoitment location</SubTitleModal>
+							<SubTitleModal>Local da consulta</SubTitleModal>
 							<SmallTextModal>
 								{agendamento.localizacao}
 							</SmallTextModal>
 						</SmallGroupModal>
 						<SmallGroupModal>
-							<SubTitleModal>Appointment type</SubTitleModal>
+							<SubTitleModal>Tipo de consulta</SubTitleModal>
 							<SmallTextModal>
 								{agendamento.prioridadeLabel}
 							</SmallTextModal>
 						</SmallGroupModal>
 						<Button onPress={() => ConfirmarConsulta()}>
-							<ButtonTitle>Continue</ButtonTitle>
+							<ButtonTitle>Confirmar</ButtonTitle>
 						</Button>
 						<ButtonSecundaryTitle onPress={closeModal}>
-							Cancel
+							Cancelar
 						</ButtonSecundaryTitle>
 					</ContentConfirmModal>
 				</PatientModal>
