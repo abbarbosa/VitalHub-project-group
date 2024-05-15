@@ -32,9 +32,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 	const [descricaoExame, setDescricaoExame] = useState();
 
 	useEffect(() => {
-		if (consulta == null && route.params.consultaid) {
-			console.log(consulta);
-
+		if (consulta === null && route.params.consultaid) {
 			BuscarConsulta();
 		}
 	}, [consulta, route.params.consultaid]);
@@ -200,7 +198,11 @@ export const VisualizePrescription = ({ navigation, route }) => {
 								multiline={true}
 								editable={false}
 							>
-								{consulta.exames[0].descricao}
+								{consulta.exames &&
+								consulta.exames.length > 0 &&
+								consulta.exames[0].descricao
+									? consulta.exames[0].descricao
+									: ''}
 							</InputRecord>
 						</ContentProfile>
 						<ButtonSecundaryTitle

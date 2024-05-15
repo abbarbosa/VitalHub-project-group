@@ -1,11 +1,9 @@
-// Importando hooks necessários do React
 import { useEffect, useState } from 'react';
-// Importando componentes e estilos específicos
 import { AbsListAppontment } from '../../components/AbsListAppointment/AbsListAppointment';
 import CalendarHome from '../../components/CalendarHome/CalendarHome';
 import { Container } from '../../components/Container/Style';
 import { Header } from '../../components/Header/Header';
-import { FilterAppointment } from './Style'; // Importando estilos específicos para filtro de consulta
+import { FilterAppointment } from './Style';
 import { ListComponent } from '../../components/List/List';
 import { AppointmentCard } from '../../components/AppointmentCard/AppointmentCard';
 import CancellationModal from '../../components/CancellationModal/CancellationModal';
@@ -14,36 +12,29 @@ import { ScheduleButton } from '../../components/ScheduleButton/ScheduleButton';
 import { ScheduleModal } from '../../components/ScheduleModal/ScheduleModal';
 import { TouchableOpacity } from 'react-native';
 import { LocationModal } from '../../components/LocationModal/LocationModal';
-import { api } from '../../services/Service'; // Importando API de serviços
-import { UserDecodeToken } from '../../services/Utils/Auth'; // Importando função para decodificar token de usuário
+import { api } from '../../services/Service';
+import { UserDecodeToken } from '../../services/Utils/Auth';
 
-// Definindo componente Home
 export const Home = ({ navigation }) => {
-	// Estados para controle dos modais e informações
 	const [statusLista, setStatusLista] = useState('Pendentes');
 	const [showModalCancel, setShowModalCancel] = useState(false);
 	const [showModalAppointment, setShowModalAppointment] = useState(false);
 	const [showModalSchedule, setShowModalSchedule] = useState(false);
 	const [showModalLocationAppointment, setShowModalLocationAppointment] =
 		useState(false);
+
 	const [dateSelected, setDateSelected] = useState('');
+
 	const [listaConsulta, setListaConsulta] = useState([]);
+
 	const [profile, setProfile] = useState({});
+
 	const [userLogin, setUserLogin] = useState('');
+
 	const [consultaSelecionada, setConsultaSelecionada] = useState();
 
-	// Função assíncrona para carregar o perfil do usuário
 	async function ProfileLoad() {
 		const token = await UserDecodeToken();
-
-		setProfile(token);
-		setUserLogin(token.role);
-	}
-
-	// Função assíncrona para listar as consultas com base na data selecionada
-	async function ListarConsulta() {
-		const url = (profile.role === 'Medico' ? 'Medicos' : 'Pacientes');
-
 
 		console.log(token);
 
@@ -60,7 +51,6 @@ export const Home = ({ navigation }) => {
 
 		console.log(url);
 
-
 		await api
 			.get(`${url}/BuscarPorData?data=${dateSelected}&id=${profile.user}`)
 			.then((response) => {
@@ -75,71 +65,53 @@ export const Home = ({ navigation }) => {
 			});
 	}
 
-	// Função para exibir um modal específico
 	function MostrarModal(modal, consulta) {
 		setConsultaSelecionada(consulta);
+
 		if (modal === 'cancelar') {
 			setShowModalCancel(true);
 		} else if (modal === 'prontuario') {
 			setShowModalAppointment(true);
+		} else {
+			<></>;
 		}
 	}
-
-	// Efeito para carregar o perfil do usuário ao montar o componente
-	async function CancelarConsulta() {
-		try {
-			await api
-				.patch(
-					`/Consultas/Status?id=${consultaSelecionada}$situacaoid=${'1A4C4AAB-3097-45B1-9AD2-EEAE7CFD6BD2'}`,
-				)
-				.then((response) => {
-					setListaConsulta(response.data);
-				})
-				.catch((error) => {
-					console.log(`Deu erro na requisicao: ${error}`);
-				});
-		} catch (error) { }
-	}
-
 
 	useEffect(() => {
 		ProfileLoad();
 	}, []);
 
-	// Efeito para listar as consultas quando a data selecionada é alterada
 	useEffect(() => {
-		if (dateSelected !== '') {
+		if (dateSelected != '') {
 			ListarConsulta();
 		}
 	}, [dateSelected]);
 
-	// Retorno do componente
 	return (
 		<Container>
-			{/* Cabeçalho */}
+			{/* Header */}
 			<Header navigation={navigation} />
-			{/* Calendário */}
+			{/* Calendario */}
 			<CalendarHome setDateSelected={setDateSelected} />
-			{/* Botões de filtro de consulta */}
+			{/* Buttons(Filtros) */}
 			<FilterAppointment>
 				<AbsListAppontment
-					textButton={'Agendadas'}
+					textButton={'Scheduled'}
 					clickButton={statusLista === 'Pendentes'}
 					onPress={() => setStatusLista('Pendentes')}
 				/>
 				<AbsListAppontment
-					textButton={'Realizadas'}
+					textButton={'Realized'}
 					clickButton={statusLista === 'Realizados'}
 					onPress={() => setStatusLista('Realizados')}
 				/>
 				<AbsListAppontment
-					textButton={'Cancelada'}
+					textButton={'Canceled'}
 					clickButton={statusLista === 'Cancelados'}
 					onPress={() => setStatusLista('Cancelados')}
 				/>
 			</FilterAppointment>
 
-			{/* Lista de consultas */}
 			<ListComponent
 				data={listaConsulta}
 				key={(item) => item.id}
@@ -208,4 +180,3 @@ export const Home = ({ navigation }) => {
 		</Container>
 	);
 };
-

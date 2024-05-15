@@ -19,7 +19,7 @@ import {
 	InputModal,
 	TextProfileInputModal,
 } from './Style';
-import { Modal, TouchableOpacity } from 'react-native';
+import { Alert, Modal, TouchableOpacity } from 'react-native';
 import { FormChoice } from '../Button/FormChoice';
 
 export const ScheduleModal = ({
@@ -28,27 +28,50 @@ export const ScheduleModal = ({
 	navigation,
 	...rest
 }) => {
-	const nivelConsulta = [
-		{ id: 'B39A70B7-4C20-498C-9629-EADC52E0F11A', prioridade: 'Rotina' },
-		{ id: '1C3C0584-8BD9-4AAD-BCF6-583D734CA65B', prioridade: 'Exame' },
-		{ id: '5DD567DC-3F9B-4FD0-AD06-7C29C31D4789', prioridade: 'Urgencia' },
-	];
+	const nivelConsulta = [{ id: 0 }, { id: 1, id: 2 }];
 
-	const [checkupActive, setCheckupActive] = useState(false);
-	const [examActive, setExamActive] = useState(false);
-	const [urgencyActive, setUrgencyActive] = useState(false);
-
-	const [agendamento, setAgendamento] = useState(null);
+	const [activeButton, setActiveButton] = useState(null);
+	const [agendamento, setAgendamento] = useState({
+		prioridadeId: null,
+		localizacao: '',
+	});
 
 	const [prioridadeConsulta, setPrioridadeConsulta] = useState(
 		'ADD341BE-8E85-40F1-BCA3-71C72A1585D3',
 	);
 
-	async function handleContinue() {
-		setShowModalSchedule(false);
+	const handleContinue = () => {
+		// Verifica se um botão foi selecionado e se a cidade foi digitada
+		if (
+			agendamento.prioridadeId &&
+			agendamento.localizacao &&
+			agendamento.localizacao.trim() !== ''
+		) {
+			// Se a validação for bem-sucedida, fecha o modal e navega para a próxima página
+			setShowModalSchedule(false);
+			navigation.replace('SelectClinic', { agendamento: agendamento });
+		} else {
+			// Caso contrário, exibe uma mensagem de erro ou toma outra ação apropriada
+			Alert.alert('Please select a type of query or enter a city.');
+		}
+	};
 
-		navigation.replace('SelectClinic', { agendamento: agendamento });
+	async function handleCancel() {
+		setShowModalSchedule(false);
+		navigation.replace('Main');
 	}
+
+	// Função para lidar com a pressão de um botão
+	const handlePress = (buttonId, prioridadeId, prioridadeLabel) => {
+		// Atualiza o estado do botão ativo
+		setActiveButton(buttonId);
+		// Atualiza o estado do agendamento com os novos valores
+		setAgendamento({
+			...agendamento,
+			prioridadeId: prioridadeId,
+			prioridadeLabel: prioridadeLabel,
+		});
+	};
 	return (
 		<Modal
 			{...rest}
@@ -67,56 +90,37 @@ export const ScheduleModal = ({
 						<ContentButton>
 							<FormChoice
 								textButton={'Checkup'}
-								actived={nivelConsulta.prioridade === 'Rotina'}
-								onPress={() => {
-									setAgendamento({
-										...agendamento,
-										prioridadeId:
-											'B39A70B7-4C20-498C-9629-EADC52E0F11A',
-										prioridadeLabel: 'Checkup',
-									});
-								}}
+								actived={activeButton === 'Checkup'}
+								onPress={() =>
+									handlePress(
+										'Checkup',
+										'B39A70B7-4C20-498C-9629-EADC52E0F11A',
+										'Checkup',
+									)
+								}
 							/>
-							{/*  */}
+
 							<FormChoice
 								textButton={'Exam'}
-								actived={nivelConsulta.prioridade === 'Exame'}
+								actived={activeButton === 'Exam'}
 								onPress={() =>
-									setAgendamento({
-										...agendamento,
-										prioridadeId:
-											'1C3C0584-8BD9-4AAD-BCF6-583D734CA65B',
-										prioridadeLabel: 'Exam',
-									})
+									handlePress(
+										'Exam',
+										'1C3C0584-8BD9-4AAD-BCF6-583D734CA65B',
+										'Exam',
+									)
 								}
 							/>
-							{/* <ButtonFilterModal>
-								<ButtonTitleFilterModal
-									onPress={() =>
-										setAgendamento({
-											...agendamento,
-											prioridadeId:
-												'1C3C0584-8BD9-4AAD-BCF6-583D734CA65B',
-											prioridadeLabel: 'Exam',
-										})
-									}
-								>
-									Exam
-								</ButtonTitleFilterModal>
-							</ButtonFilterModal> */}
-							{/*  */}
+
 							<FormChoice
 								textButton={'Urgency'}
-								actived={
-									nivelConsulta.prioridade === 'Urgencia'
-								}
+								actived={activeButton === 'Urgency'}
 								onPress={() =>
-									setAgendamento({
-										...agendamento,
-										prioridadeId:
-											'5DD567DC-3F9B-4FD0-AD06-7C29C31D4789',
-										prioridadeLabel: 'Urgency',
-									})
+									handlePress(
+										'Urgency',
+										'5DD567DC-3F9B-4FD0-AD06-7C29C31D4789',
+										'Urgency',
+									)
 								}
 							/>
 						</ContentButton>
@@ -141,9 +145,7 @@ export const ScheduleModal = ({
 						<ButtonTitle>Continue</ButtonTitle>
 					</Button>
 
-					<ButtonSecundary
-						onPress={() => setShowModalSchedule(false)}
-					>
+					<ButtonSecundary onPress={() => handleCancel()}>
 						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
 					</ButtonSecundary>
 				</ContentSModal>
