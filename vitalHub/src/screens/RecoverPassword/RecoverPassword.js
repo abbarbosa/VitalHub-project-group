@@ -1,4 +1,4 @@
-import { Alert, Text } from 'react-native';
+import { Text } from 'react-native';
 import { Container } from '../../components/Container/Style';
 import { AntDesign } from '@expo/vector-icons';
 import { Logo } from '../../components/Logo/Style';
@@ -10,17 +10,25 @@ import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { api } from '../../services/Service';
 import { ActivityIndicator } from 'react-native';
+import * as Yup from 'yup';
 
 export const RecoverPassword = ({ navigation }) => {
 	const [email, setEmail] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 
+	const validationSchema = Yup.object().shape({
+		email: Yup.string()
+			.email('E-mail inválido')
+			.required('Por favor, digite seu e-mail.'),
+	});
+
 	async function SendEmail() {
-		// Verifica se o e-mail é nulo ou vazio
-		if (!email) {
-			setError('Por favor, digite seu e-mail.');
-			Alert.alert('Atenção', 'É necessário digitar o e-mail');
+		try {
+			await validationSchema.validate({ email }, { abortEarly: false });
+		} catch (validationError) {
+			const errorMessage = validationError.errors[0];
+			setError(errorMessage);
 			return;
 		}
 
@@ -31,15 +39,15 @@ export const RecoverPassword = ({ navigation }) => {
 		} catch (error) {
 			if (error.response && error.response.status === 404) {
 				setError('E-mail não encontrado. Verifique e tente novamente.');
-				Alert.alert('Atenção', 'O e-mail digitado nao foi encontrado');
 			} else {
 				console.log(error);
-				alert('Ocorreu um erro. Por favor, tente novamente.');
+				setError('Ocorreu um erro. Por favor, tente novamente.');
 			}
 		} finally {
 			setLoading(false);
 		}
 	}
+
 	return (
 		<Container>
 			<ContentIconSetinha onPress={() => navigation.goBack()}>
@@ -56,6 +64,9 @@ export const RecoverPassword = ({ navigation }) => {
 				value={email}
 				onChangeText={(text) => setEmail(text)}
 			/>
+			{error ? (
+				<Text style={{ color: 'red', marginBottom: 20 }}>{error}</Text>
+			) : null}
 			<Button onPress={() => SendEmail()}>
 				{loading ? (
 					<ActivityIndicator size="small" color="#ffffff" />

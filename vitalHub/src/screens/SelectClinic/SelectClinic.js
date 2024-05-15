@@ -11,6 +11,7 @@ import {
 import { Alert, LogBox, TouchableOpacity } from 'react-native';
 import { ClinicCard } from '../../components/ClinicCard/ClinicCard';
 import { api } from '../../services/Service';
+import * as Yup from 'yup';
 
 export const SelectClinic = ({ navigation, route }) => {
 	const [selectedClinic, setSelectedClinic] = useState(null);

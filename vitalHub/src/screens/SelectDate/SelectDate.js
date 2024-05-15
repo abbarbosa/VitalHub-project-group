@@ -52,9 +52,7 @@ export const SelectDate = ({ navigation, route }) => {
 			/>
 
 			<Button onPress={() => handleContinue()}>
-				<ButtonTitle onPress={() => setShowModalConfirm(true)}>
-					Confirm
-				</ButtonTitle>
+				<ButtonTitle>Confirm</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
 				Cancel

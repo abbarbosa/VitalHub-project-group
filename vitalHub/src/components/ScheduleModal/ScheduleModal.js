@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ContentProfile, TextProfileInput } from '../../screens/Profile/Style';
 import {
 	Button,
+	ButtonCity,
 	ButtonSecundary,
 	ButtonSecundaryTitle,
 	ButtonTitle,
@@ -19,8 +20,10 @@ import {
 	InputModal,
 	TextProfileInputModal,
 } from './Style';
-import { Alert, Modal, TouchableOpacity } from 'react-native';
+import { Alert, Modal, Text, TouchableOpacity } from 'react-native';
 import { FormChoice } from '../Button/FormChoice';
+import { InputCitySelect } from '../Input/InputCitySelect';
+import * as Yup from 'yup';
 
 export const ScheduleModal = ({
 	visible,
@@ -28,31 +31,32 @@ export const ScheduleModal = ({
 	navigation,
 	...rest
 }) => {
-	const nivelConsulta = [{ id: 0 }, { id: 1, id: 2 }];
-
 	const [activeButton, setActiveButton] = useState(null);
 	const [agendamento, setAgendamento] = useState({
 		prioridadeId: null,
 		localizacao: '',
 	});
 
-	const [prioridadeConsulta, setPrioridadeConsulta] = useState(
-		'ADD341BE-8E85-40F1-BCA3-71C72A1585D3',
-	);
+	const [errors, setErrors] = useState({ prioridadeId: '', localizacao: '' });
 
-	const handleContinue = () => {
-		// Verifica se um botão foi selecionado e se a cidade foi digitada
-		if (
-			agendamento.prioridadeId &&
-			agendamento.localizacao &&
-			agendamento.localizacao.trim() !== ''
-		) {
-			// Se a validação for bem-sucedida, fecha o modal e navega para a próxima página
+	const validationSchema = Yup.object().shape({
+		prioridadeId: Yup.string().required('Selecione um tipo de consulta!'),
+		localizacao: Yup.string().required('Selecione a cidade'),
+	});
+
+	const handleContinue = async () => {
+		try {
+			await validationSchema.validate(agendamento, { abortEarly: false });
 			setShowModalSchedule(false);
 			navigation.replace('SelectClinic', { agendamento: agendamento });
-		} else {
-			// Caso contrário, exibe uma mensagem de erro ou toma outra ação apropriada
-			Alert.alert('Please select a type of query or enter a city.');
+		} catch (error) {
+			if (error.name === 'ValidationError') {
+				const validationErrors = {};
+				error.inner.forEach((e) => {
+					validationErrors[e.path] = e.message;
+				});
+				setErrors(validationErrors);
+			}
 		}
 	};
 
@@ -70,6 +74,12 @@ export const ScheduleModal = ({
 			...agendamento,
 			prioridadeId: prioridadeId,
 			prioridadeLabel: prioridadeLabel,
+		});
+	};
+	const handleCitySelect = (selectedCity) => {
+		setAgendamento({
+			...agendamento,
+			localizacao: selectedCity,
 		});
 	};
 	return (
@@ -125,25 +135,27 @@ export const ScheduleModal = ({
 							/>
 						</ContentButton>
 					</ContentProfile>
+					{errors.prioridadeId ? (
+						<Text style={styles.errorText}>
+							{errors.prioridadeId}
+						</Text>
+					) : null}
 					{/*  */}
-					<ContentProfile>
-						<TextProfileInputModal>
-							Enter the desired city
-						</TextProfileInputModal>
-						<InputModal
-							placeholder="Enter the city"
-							onChangeText={(txt) =>
-								setAgendamento({
-									...agendamento,
-									localizacao: txt,
-								})
-							}
-							value={agendamento ? agendamento.localizacao : null}
-						/>
-					</ContentProfile>
-					<Button onPress={() => handleContinue()}>
+
+					<InputCitySelect
+						setSelectedCity={handleCitySelect}
+						labelText="Selecione uma cidade"
+						defaultText="Selecione uma cidade"
+					/>
+					{errors.localizacao ? (
+						<Text style={styles.errorTextCity}>
+							{errors.localizacao}
+						</Text>
+					) : null}
+
+					<ButtonCity onPress={() => handleContinue()}>
 						<ButtonTitle>Continue</ButtonTitle>
-					</Button>
+					</ButtonCity>
 
 					<ButtonSecundary onPress={() => handleCancel()}>
 						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
@@ -152,4 +164,15 @@ export const ScheduleModal = ({
 			</AgendModal>
 		</Modal>
 	);
+};
+
+const styles = {
+	errorText: {
+		color: 'red',
+		marginTop: 5,
+	},
+	errorTextCity: {
+		color: 'red',
+		marginTop: 5,
+	},
 };

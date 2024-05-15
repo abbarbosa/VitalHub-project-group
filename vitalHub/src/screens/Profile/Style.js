@@ -35,7 +35,14 @@ export const ContentProfile = styled.View`
 	width: 90%;
 	height: auto;
 	flex-direction: column;
-	margin-bottom: 24px;
+	margin-bottom: 5px;
+`;
+
+export const ContentProfileCity = styled.View`
+	width: 90%;
+	height: auto;
+	flex-direction: column;
+	margin-bottom: 5px;
 `;
 
 export const RowContentProfile = styled(ContentProfile)`
@@ -76,7 +83,7 @@ export const InputRow = styled.TextInput.attrs({
 	color: #33303e;
 	background-color: #f5f3f3;
 	font-size: 16px;
-	font-family: 'MontserratAlternates_600SemiBold';
+	font-family: 'MontserratAlternates_500Medium';
 `;
 
 export const ButtonCamera = styled.TouchableOpacity.attrs({

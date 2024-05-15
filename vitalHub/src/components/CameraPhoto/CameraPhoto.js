@@ -56,16 +56,15 @@ export const CameraPhoto = ({ navigation, route }) => {
 	}
 
 	async function SendPhoto() {
+		setOpenModal(false);
 		if (route.params && route.params.isProfile) {
-			navigation.replace(
-				route.params.isProfile === true
-					? 'Profile'
-					: 'VisualizePrescription',
-				{ photoUri: photo },
-			);
+			navigation.replace('Profile', { photoUri: photo });
 		} else {
 			// Se isProfile não estiver definido ou for falso, navegue de volta para VisualizePrescription
-			navigation.replace('VisualizePrescription', { photoUri: photo });
+			navigation.replace('VisualizePrescription', {
+				photoUri: photo,
+				consultaid: route.params.consultaid,
+			});
 		}
 	}
 

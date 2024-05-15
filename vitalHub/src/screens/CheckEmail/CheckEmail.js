@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, LogBox, Text, View } from 'react-native';
 import { Logo } from '../../components/Logo/Style';
 import { Title } from '../../components/Title/Style';
 import { Container } from '../../components/Container/Style';
@@ -19,12 +19,14 @@ import { InputNumbers } from '../../components/Input/Style';
 
 import { api } from '../../services/Service';
 
+import * as Yup from 'yup';
+
 export const CheckEmail = ({ navigation, route }) => {
 	const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-	const [code, setCode] = useState('');
+	const [code, setCode] = useState(['', '', '', '']);
+	const [error, setError] = useState('');
 
 	function focusNextInput(index) {
-		//Se o index é menor do que a quantidade de campos
 		if (index < inputs.length - 1) {
 			inputs[index + 1].current.focus();
 		}
@@ -32,33 +34,35 @@ export const CheckEmail = ({ navigation, route }) => {
 
 	function FocusPrevInput(index) {
 		if (index > 0) {
+			inputs[index - 1].current.focus();
 		}
-		inputs[index - 1].current.focus();
 	}
 
 	async function ValidadeCode() {
-		console.log(
-			`/RecuperarSenha/ValidarCodigoRecuperacaoSenha?email=${route.params.emailRecuperacao}&codigo=${code}`,
-		);
+		try {
+			const schema = Yup.string().length(
+				4,
+				'Please enter the correct 4-digit code',
+			);
+			await schema.validate(code.join(''));
 
-		await api
-			.post(
-				`/RecuperarSenha/ValidarCodigoRecuperacaoSenha?email=${route.params.emailRecuperacao}&codigo=${code}`,
-			)
-			.then(() => {
-				navigation.replace('ResetPassword', {
-					emailRecuperacao: route.params.emailRecuperacao,
-				});
-			})
-			.catch((error) => {
-				console.log(error);
-				Alert.alert('Erro!', 'Código Inválido');
+			await api.post(
+				`/RecuperarSenha/ValidarCodigoRecuperacaoSenha?email=${
+					route.params.emailRecuperacao
+				}&codigo=${code.join('')}`,
+			);
+			navigation.replace('ResetPassword', {
+				emailRecuperacao: route.params.emailRecuperacao,
 			});
+		} catch (validationError) {
+			setError('Insira o codigo correto');
+		}
 	}
 
 	useEffect(() => {
 		inputs[0].current.focus();
 	}, []);
+
 	return (
 		<Container>
 			<ContentIconSetinha onPress={() => navigation.navigate('Login')}>
@@ -77,24 +81,21 @@ export const CheckEmail = ({ navigation, route }) => {
 						gap: 15,
 					}}
 				>
-					{/* <InputNumbers placeholder="0" /> */}
-
 					{[0, 1, 2, 3].map((index) => (
 						<InputNumbers
 							key={index}
-							ref={inputs[index]} //chave de acordo com o index
-							keyBoardType="numeric" //ref de acordo com o index do app
+							ref={inputs[index]}
+							keyboardType="numeric"
 							placeholder="0"
 							maxLength={1}
 							caretHidden={true}
 							onChangeText={(text) => {
-								//verifica se o campo está vazio
 								if (text == '') {
 									FocusPrevInput(index);
 								} else {
-									const newCode = [...code]; //separa os valores das casinhas
-									newCode[index] = text; //corrige o valor de acordo com a posição
-									setCode(newCode.join('')); //junta todos em uma string
+									const newCode = [...code];
+									newCode[index] = text;
+									setCode(newCode);
 
 									focusNextInput(index);
 								}
@@ -102,6 +103,18 @@ export const CheckEmail = ({ navigation, route }) => {
 						/>
 					))}
 				</View>
+				{error ? (
+					<Text
+						style={{
+							color: 'red',
+							marginLeft: 50,
+							marginTop: -10,
+							marginBottom: 15,
+						}}
+					>
+						{error}
+					</Text>
+				) : null}
 			</ContentCheck>
 			<Button onPress={() => ValidadeCode()}>
 				<ButtonTitle>Send</ButtonTitle>

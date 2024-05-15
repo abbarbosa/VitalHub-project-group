@@ -24,7 +24,8 @@ import { api } from '../../services/Service';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ButtonCamera, ContainerImage } from './Style';
 import moment from 'moment';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, LogBox } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 
 export const Profile = ({ navigation, route }) => {
 	const [profile, setProfile] = useState();
@@ -46,13 +47,26 @@ export const Profile = ({ navigation, route }) => {
 			setProfile(token.role);
 
 			const url = token.role === 'Medico' ? 'Medicos' : 'Pacientes';
-			console.log(`/${url}/BuscarPorId?id=${token.user}`);
 			await api
 				.get(`/${url}/BuscarPorId?id=${token.user}`)
 				.then((response) => {
 					setDados(response.data);
-					console.log(`Dados do usuario`);
 					console.log(response.data);
+					if (token.role === 'Medico') {
+						setLogradouro(response.data.endereco.logradouro);
+						setCep(response.data.endereco.cep);
+						setNumber(response.data.endereco.numero);
+						setCity(response.data.endereco.cidade);
+					} else {
+						setLogradouro(response.data.endereco.logradouro);
+						setCep(response.data.endereco.cep);
+						setNumber(response.data.endereco.numero.toString());
+						setCity(response.data.endereco.cidade);
+						setDateBirth(response.data.dataNascimento);
+						setCpf(response.data.cpf);
+						setRg(response.data.rg);
+						console.log(rg);
+					}
 				})
 				.catch((error) => {
 					console.log(`Deu erro aqui: ${error}`);
@@ -66,38 +80,49 @@ export const Profile = ({ navigation, route }) => {
 		try {
 			const token = await UserDecodeToken();
 
-			const formattedDate = moment(dateBirth).format('YYYY-MM-DD');
+			// Formata a data para o formato YYYY-MM-DD antes de enviar
+			const formattedDate = moment(dateBirth, 'DD/MM/YYYY').format(
+				'YYYY-MM-DD',
+			);
 
 			const url = profile === 'Medico' ? 'Medicos' : 'Pacientes';
-
-			let dataToSend = {
+			console.log({
 				rg: rg,
 				cpf: cpf,
 				dataNascimento: formattedDate,
-			};
+				cep: cep,
+				logradouro: logradouro,
+				numero: number,
+				cidade: city,
+			});
 
-			if (profile === 'Medico') {
-				dataToSend = {
+			await api
+				.put(`/${url}?idUsuario=${token.user}`, {
+					rg: rg,
+					cpf: cpf,
+					dataNascimento: formattedDate,
 					cep: cep,
 					logradouro: logradouro,
 					numero: number,
 					cidade: city,
-				};
-			}
-
-			await api
-				.put(`/${url}?idUsuario=${token.user}`, dataToSend)
+				})
 				.then((response) => {
 					setEdicaoHabilitada(false);
 					console.log(`Sucesso na edicao: ${response.data}`);
-					LogBox.ignoreAllLogs();
+					// navigation.replace('Profile');
+					// LogBox.ignoreAllLogs();
+
+					BuscarPorId();
 				})
 				.catch((error) => {
-					console.log(`Deu erro no metodo: ${error}`);
+					console.error(
+						'Error in API call:',
+						error.response ? error.response.data : error,
+					);
 					LogBox.ignoreAllLogs();
 				});
 		} catch (error) {
-			console.log(`Deu erro na chamada da api: ${error}`);
+			console.error('Error in try-catch:', error);
 		}
 	}
 
@@ -166,6 +191,7 @@ export const Profile = ({ navigation, route }) => {
 			.then((response) => {
 				setPhotoAtualizada(response.data.foto);
 				console.log(response);
+				navigation.replace('Profile');
 				LogBox.ignoreAllLogs();
 			})
 			.catch((error) => {
@@ -232,15 +258,17 @@ export const Profile = ({ navigation, route }) => {
 										Date of birth:
 									</TextProfileInput>
 									<InputProfile
-										placeholder={'04-05-1999'}
-										onChangeText={(text) =>
-											setDateBirth(text)
-										}
+										placeholder={'DD/MM/YYYY'}
+										onChangeText={(text) => {
+											// Atualiza o estado com a data no formato DD/MM/YYYY
+											setDateBirth(text);
+										}}
 										editable={edicaoHabilitada}
 									>
-										{moment(dados.dataNascimento).format(
-											`YYYY-MM-DD`,
-										)}
+										{moment(
+											dados.dataNascimento,
+											'YYYY-MM-DD',
+										).format('DD/MM/YYYY')}
 									</InputProfile>
 								</>
 							) : (
@@ -266,12 +294,11 @@ export const Profile = ({ navigation, route }) => {
 								<>
 									<TextProfileInput>CPF:</TextProfileInput>
 									<InputProfile
-										placeholder={'859*********'}
+										placeholder={'XXX.XXX.XXX-XX'}
 										onChangeText={(text) => setCpf(text)}
 										editable={edicaoHabilitada}
-									>
-										{dados.cpf}
-									</InputProfile>
+										value={cpf}
+									/>
 								</>
 							) : (
 								<>
@@ -291,12 +318,11 @@ export const Profile = ({ navigation, route }) => {
 								<>
 									<TextProfileInput>RG:</TextProfileInput>
 									<InputProfile
-										placeholder={'52*******'}
+										placeholder={'XX.XXX.XXX-X'}
 										onChangeText={(text) => setRg(text)}
 										editable={edicaoHabilitada}
-									>
-										{dados.rg}
-									</InputProfile>
+										value={rg}
+									/>
 								</>
 							) : (
 								<></>
@@ -311,9 +337,8 @@ export const Profile = ({ navigation, route }) => {
 									placeholder={'Av. Dos Estados'}
 									onChangeText={(text) => setLogradouro(text)}
 									editable={edicaoHabilitada}
-								>
-									{dados.endereco.logradouro}
-								</InputRow>
+									value={logradouro}
+								/>
 							</RowContentProfile>
 							{/*  */}
 							<RowContentProfile>
@@ -322,9 +347,9 @@ export const Profile = ({ navigation, route }) => {
 									placeholder={'10990'}
 									onChangeText={(text) => setNumber(text)}
 									editable={edicaoHabilitada}
-								>
-									{dados.endereco.numero}
-								</InputRow>
+									keyboardType={'numeric'} // Definindo o teclado como numérico
+									value={number}
+								/>
 							</RowContentProfile>
 						</ContentRow>
 						{/*  */}
@@ -335,9 +360,8 @@ export const Profile = ({ navigation, route }) => {
 									placeholder={'05545-333'}
 									onChangeText={(text) => setCep(text)}
 									editable={edicaoHabilitada}
-								>
-									{dados.endereco.cep}
-								</InputRow>
+									value={cep}
+								/>
 							</RowContentProfile>
 							{/*  */}
 							<RowContentProfile>
@@ -346,9 +370,8 @@ export const Profile = ({ navigation, route }) => {
 									placeholder={'Capao Redondo - SP'}
 									onChangeText={(text) => setCity(text)}
 									editable={edicaoHabilitada}
-								>
-									{dados.endereco.cidade}
-								</InputRow>
+									value={city}
+								/>
 							</RowContentProfile>
 						</ContentRow>
 

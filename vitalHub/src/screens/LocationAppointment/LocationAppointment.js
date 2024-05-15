@@ -75,7 +75,7 @@ export const LocationAppointment = ({ navigation, route }) => {
 						</RowContentProfile>
 						{/*  */}
 						<RowContentProfile>
-							<TextProfileInput>neighborhood</TextProfileInput>
+							<TextProfileInput>Neighborhood</TextProfileInput>
 							<InputRow placeholder={'Jerumenha-PI'}>
 								{clinica.endereco.cidade}-SP
 							</InputRow>

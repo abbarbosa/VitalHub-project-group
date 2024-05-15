@@ -58,11 +58,11 @@ export const ConfirmModal = ({
 
 	useEffect(() => {
 		profileLoad();
-	}, []);
+	}, [visible]);
 
 	return (
 		<Modal visible={visible} transparent={true} animationType="fade">
-			{agendamento ? (
+			{agendamento != null ? (
 				<PatientModal>
 					<ContentConfirmModal>
 						<Title>Schedule an appointment</Title>
@@ -107,7 +107,7 @@ export const ConfirmModal = ({
 					</ContentConfirmModal>
 				</PatientModal>
 			) : (
-				<ActivityIndicator></ActivityIndicator>
+				<ActivityIndicator />
 			)}
 		</Modal>
 	);

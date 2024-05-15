@@ -160,7 +160,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 				</Button>
 
 				<ButtonSecundaryTitle
-					onPress={() => navigation.navigate('Home')}
+					onPress={() => navigation.navigate('Main')}
 				>
 					Cancel
 				</ButtonSecundaryTitle>

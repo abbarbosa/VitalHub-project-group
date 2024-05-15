@@ -38,6 +38,8 @@ export const VisualizePrescription = ({ navigation, route }) => {
 	}, [consulta, route.params.consultaid]);
 
 	async function BuscarConsulta() {
+		console.log('Teste de hoje');
+		console.log(route.params.consultaid);
 		await api
 			.get(`/Consultas/BuscarPorId?id=${route.params.consultaid}`)
 			.then((response) => {
@@ -51,7 +53,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 
 	async function InserirExame() {
 		const formData = new FormData();
-		formData.append('ConsultaId', consulta.id);
+		formData.append('ConsultaId', route.params.consultaid);
 		formData.append('Imagem', {
 			uri: route.params.photoUri,
 			name: `image.${route.params.photoUri.split('.').pop()}`,
@@ -175,6 +177,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 								onPress={() =>
 									navigation.navigate('CameraPhoto', {
 										isProfile: false,
+										consultaid: route.params.consultaid,
 									})
 								}
 							>
@@ -197,13 +200,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 								value={descricaoExame}
 								multiline={true}
 								editable={false}
-							>
-								{consulta.exames &&
-								consulta.exames.length > 0 &&
-								consulta.exames[0].descricao
-									? consulta.exames[0].descricao
-									: ''}
-							</InputRecord>
+							/>
 						</ContentProfile>
 						<ButtonSecundaryTitle
 							onPress={() => navigation.navigate('Home')}

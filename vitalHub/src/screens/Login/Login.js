@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Container } from '../../components/Container/Style';
 import { Logo } from '../../components/Logo/Style';
 import { Title } from '../../components/Title/Style';
@@ -11,27 +12,31 @@ import {
 } from '../../components/Button/Style';
 import { AntDesign } from '@expo/vector-icons';
 import { ContentAccount, TextAccount } from './Style';
-import { useState } from 'react';
-
+import { ActivityIndicator, Alert, StyleSheet, Text } from 'react-native';
+import Notification from '../../components/Notification/Notification';
 import { api } from '../../services/Service';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-//import para a função de carregamento
-import { ActivityIndicator } from 'react-native';
+import * as Yup from 'yup';
 
 export const Login = ({ navigation }) => {
 	const [email, setEmail] = useState('');
 	const [senha, setSenha] = useState('');
-	const [loading, setLoading] = useState();
+	const [loading, setLoading] = useState(false);
+	const [notifyUser, setNotifyUser] = useState({ showMessage: false });
+	const [errors, setErrors] = useState({ email: '', senha: '' });
+
+	const validationSchema = Yup.object().shape({
+		email: Yup.string().required('Preencha todos os campos'),
+		senha: Yup.string().required('Preencha todos os campos'),
+	});
 
 	async function Login() {
 		setLoading(true);
 		try {
-			if (!email || !senha) {
-				alert('Por favor, preencha todos os campos.');
-				return;
-			}
+			await validationSchema.validate(
+				{ email, senha },
+				{ abortEarly: false },
+			);
 
 			const response = await api.post('/Login', {
 				email: email,
@@ -41,43 +46,44 @@ export const Login = ({ navigation }) => {
 			await AsyncStorage.setItem('token', JSON.stringify(response.data));
 			navigation.navigate('Main');
 		} catch (error) {
-			console.log('Erro ao fazer login:', error);
-			alert(
-				'Erro ao fazer login. Verifique suas credenciais e tente novamente.',
-			);
+			if (error.name === 'ValidationError') {
+				const validationErrors = {};
+				error.inner.forEach((e) => {
+					validationErrors[e.path] = e.message;
+				});
+				setErrors(validationErrors);
+			} else {
+				setErrors({ email: 'Email ou senha inválidos', senha: '' });
+			}
 		} finally {
-			console.log('Finalizando...');
-			setTimeout(() => {
-				setLoading(false);
-				console.log('Finalizado.');
-			}, 2000);
+			setLoading(false);
 		}
 	}
-
 	return (
 		<Container>
 			<Logo source={require('../../assets/logoVitalHub.png')} />
-
 			<Title>Log in or create an account</Title>
-
 			<Input
 				placeholder={'Username or email...'}
 				value={email}
 				onChangeText={(txt) => setEmail(txt)}
-				//onChange={event => event.nativeEvent.text}
 			/>
-
+			{errors.email ? (
+				<Text style={styles.errorText}>{errors.email}</Text>
+			) : null}
 			<Input
 				placeholder={'Password...'}
 				secureTextEntry={true}
 				value={senha}
 				onChangeText={(txt) => setSenha(txt)}
 			/>
+			{errors.senha ? (
+				<Text style={styles.errorText}>{errors.senha}</Text>
+			) : null}
 
 			<LinkMedium onPress={() => navigation.navigate('RecoverPassword')}>
-				Forgot you password?
+				Forgot your password?
 			</LinkMedium>
-
 			<Button onPress={Login}>
 				{loading ? (
 					<ActivityIndicator size="small" color="#ffffff" />
@@ -85,12 +91,10 @@ export const Login = ({ navigation }) => {
 					<ButtonTitle>Log in</ButtonTitle>
 				)}
 			</Button>
-
 			<ButtonGoogle>
 				<AntDesign name="google" size={18} color="#496BBA" />
 				<ButtonTitleGoogle>Log in with Google</ButtonTitleGoogle>
 			</ButtonGoogle>
-
 			<ContentAccount>
 				<TextAccount>
 					Don't have an account?{' '}
@@ -104,3 +108,12 @@ export const Login = ({ navigation }) => {
 		</Container>
 	);
 };
+
+const styles = StyleSheet.create({
+	errorText: {
+		color: 'red',
+		marginTop: 5,
+	},
+});
+
+export default Login;
