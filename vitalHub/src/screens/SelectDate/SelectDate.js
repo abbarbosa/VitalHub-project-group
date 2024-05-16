@@ -36,7 +36,9 @@ export const SelectDate = ({ navigation, route }) => {
 
 	return (
 		<Container>
+
 			<TitleSelection>Selecionar Data</TitleSelection>
+
 
 			<FullCalendar
 				setSelectedDate={setSelectedDate}

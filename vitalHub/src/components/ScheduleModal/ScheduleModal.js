@@ -81,12 +81,14 @@ export const ScheduleModal = ({
 		>
 			<AgendModal>
 				<ContentSModal>
+
 					<Title>Agendar consulta</Title>
 
 					<ContentProfile>
 						<TextProfileInputModal>
 							Qual o nível de consulta
 						</TextProfileInputModal>
+
 						<ContentButton>
 							<FormChoice
 								textButton={'Rotina'}
@@ -128,7 +130,9 @@ export const ScheduleModal = ({
 					{/*  */}
 					<ContentProfile>
 						<TextProfileInputModal>
+
 						Informe a localização desejada
+
 						</TextProfileInputModal>
 						<InputModal
 							placeholder="Informe a localização"

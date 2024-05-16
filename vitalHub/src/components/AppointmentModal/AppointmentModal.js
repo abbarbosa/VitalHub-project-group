@@ -51,6 +51,7 @@ export const AppointmentModal = ({
 		}
 	}
 
+
 	async function handleConfirmSchedule() {
 		try {
 			const response = await api.put(
@@ -129,7 +130,7 @@ export const AppointmentModal = ({
 									handleClose('VisualizePrescription')
 								}
 							>
-								<ButtonTitle>Ver prontuário</ButtonTitle>
+								<ButtonTitle>Inserir prontuário</ButtonTitle>
 							</ButtonModal>
 						) : (
 							<ButtonModal
@@ -140,7 +141,7 @@ export const AppointmentModal = ({
 						)
 					) : roleUsuario === 'Medico' ? (
 						<ButtonModal onPress={() => handleConfirmSchedule()}>
-							<ButtonTitle>Confirmar consulta</ButtonTitle>
+							<ButtonTitle>Confirmar agendameto</ButtonTitle>
 						</ButtonModal>
 					) : (
 						<ButtonModal

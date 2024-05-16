@@ -67,7 +67,11 @@ export const ConfirmModal = ({
 					<ContentConfirmModal>
 						<Title>Agendar consulta</Title>
 						<ModalText>
+
 						Consulte os dados selecionados para a sua consulta
+
+							Data da consulta
+
 						</ModalText>
 						<SmallGroupModal>
 							<SubTitleModal>Data da consulta</SubTitleModal>
@@ -78,7 +82,8 @@ export const ConfirmModal = ({
 							</SmallTextModal>
 						</SmallGroupModal>
 						<SmallGroupModal>
-							<SubTitleModal>Médico(a) da consulta</SubTitleModal>
+
+							<SubTitleModal>Medico(a) da consulta</SubTitleModal>
 							<SmallTextModal>
 								{agendamento.medicoLabel}
 							</SmallTextModal>
@@ -93,7 +98,9 @@ export const ConfirmModal = ({
 							</SmallTextModal>
 						</SmallGroupModal>
 						<SmallGroupModal>
-							<SubTitleModal>Tipo da consulta </SubTitleModal>
+
+							<SubTitleModal>Tipo de consulta</SubTitleModal>
+
 							<SmallTextModal>
 								{agendamento.prioridadeLabel}
 							</SmallTextModal>

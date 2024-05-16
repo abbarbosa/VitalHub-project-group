@@ -115,7 +115,10 @@ export const AppointmentCard = ({
 						roleUsuario === 'Paciente' ? (
 							<ButtonCard onPress={onPressAppointment}>
 								<ButtonText situacao={situacao.situacao}>
+
 									Ver prontuário
+
+
 								</ButtonText>
 							</ButtonCard>
 						) : (

@@ -13,7 +13,9 @@ const CalendarHome = ({ setDateSelected }) => {
 			'_',
 		),
 		weekdays:
+
 			'Domingo_Segunda_Terça_Quarta_Quinda_Sexta_Sábado'.split(
+
 				'_',
 			),
 		weekdaysShort: 'Dom_Seg_Ter_Qua_Qui_Sex_Sab'.split('_'),

@@ -109,7 +109,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 				<ContentProfile>
 					<TextProfileInput>Descrição da consulta:</TextProfileInput>
 					<InputRecord
-						placeholder={'Description'}
+						placeholder={'Descrição'}
 						multiline={true}
 						onChangeText={(text) => setDescricao(text)}
 						editable={edicaoHabilitada}
@@ -118,9 +118,11 @@ export const MedicalRecords = ({ navigation, route }) => {
 					</InputRecord>
 				</ContentProfile>
 				<ContentProfile>
+
 					<TextProfileInput>Diagnóstico do Paciente:</TextProfileInput>
+
 					<InputMedicalRecords
-						placeholder={'Diagnosis'}
+						placeholder={'Diagnóstico'}
 						onChangeText={(text) => setDiagnostico(text)}
 						editable={edicaoHabilitada}
 					>
@@ -128,9 +130,11 @@ export const MedicalRecords = ({ navigation, route }) => {
 					</InputMedicalRecords>
 				</ContentProfile>
 				<ContentProfile>
-					<TextProfileInput>Prescrição Médica:</TextProfileInput>
+
+					<TextProfileInput>Prescrição médica:</TextProfileInput>
+
 					<InputRecord
-						placeholder={'Prescription'}
+						placeholder={'Prescrição'}
 						onChangeText={(text) => setPrescricao(text)}
 						editable={edicaoHabilitada}
 					>

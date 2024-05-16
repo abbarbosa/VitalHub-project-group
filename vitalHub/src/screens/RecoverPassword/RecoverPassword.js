@@ -20,30 +20,32 @@ export const RecoverPassword = ({ navigation }) => {
 	const [error, setError] = useState('');
 
 
-	 async function SendEmail() {
-    // Verifica se o e-mail é nulo ou vazio
-    if (!email) {
-      setError('Por favor, digite seu e-mail.');
-	  Alert.alert('Atenção', 'É necessário digitar o e-mail')
-      return;
-    }
 
-    setLoading(true);
-    try {
-      await api.post(`/RecuperarSenha?email=${email}`);
-      navigation.replace('CheckEmail', { emailRecuperacao: email });
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setError('E-mail não encontrado. Verifique e tente novamente.');
-        Alert.alert('Atenção', 'O e-mail digitado nao foi encontrado')
-      } else {
-        console.log(error);
-        alert('Ocorreu um erro. Por favor, tente novamente.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
+
+	async function SendEmail() {
+		// Verifica se o e-mail é nulo ou vazio
+		if (!email) {
+			setError('Por favor, digite seu e-mail.');
+			Alert.alert('Atenção', 'É necessário digitar o e-mail');
+			return;
+		}
+
+		setLoading(true);
+		try {
+			await api.post(`/RecuperarSenha?email=${email}`);
+			navigation.replace('CheckEmail', { emailRecuperacao: email });
+		} catch (error) {
+			if (error.response && error.response.status === 404) {
+				setError('E-mail não encontrado. Verifique e tente novamente.');
+				Alert.alert('Atenção', 'O e-mail digitado nao foi encontrado');
+			} else {
+				console.log(error);
+				alert('Ocorreu um erro. Por favor, tente novamente.');
+			}
+		} finally {
+			setLoading(false);
+		}
+	}
 
 	return (
 		<Container>
@@ -51,16 +53,20 @@ export const RecoverPassword = ({ navigation }) => {
 				<AntDesign name="leftcircle" size={30} color="#49B3BA" />
 			</ContentIconSetinha>
 			<Logo source={require('../../assets/logoVitalHub.png')} />
-			<Title>Recuperar senha?</Title>
+
+			<Title>Recuperar senha</Title>
+
 			<SubText>
 			Digite abaixo seu email cadastrado que enviaremos um link para recuperação de senha
 			</SubText>
 			<RecoverInput
-				placeholder={'Usuário E-mail'}
-				value={email}
-				onChangeText={(text) => setEmail(text)}
-			/>
-			<Button onPress={() => SendEmail()}>
+
+				placeholder={'Usuaário ou e-mail'}
+
+				value={email} onChangeText={(text) => setEmail(text)} />
+			<Button onPress={() => SendEmail()} >
+
+
 				{loading ? (
 					<ActivityIndicator size="small" color="#ffffff" />
 				) : (
@@ -69,4 +75,4 @@ export const RecoverPassword = ({ navigation }) => {
 			</Button>
 		</Container >
 	);
-};
+  }

@@ -54,10 +54,10 @@ export const Login = ({ navigation }) => {
 		<Container>
 			<Logo source={require('../../assets/logoVitalHub.png')} />
 
-			<Title>Entrar ou criar conta</Title>
+			<Title>Entrar ou criar uma conta</Title>
 
 			<Input
-				placeholder={'Usuario ou e-mail...'}
+				placeholder={'Usuário email...'}
 				value={email}
 				onChangeText={(txt) => setEmail(txt)}
 			//onChange={event => event.nativeEvent.text}
@@ -84,7 +84,7 @@ export const Login = ({ navigation }) => {
 
 			<ButtonGoogle>
 				<AntDesign name="google" size={18} color="#496BBA" />
-				<ButtonTitleGoogle>Entrar com Google</ButtonTitleGoogle>
+				<ButtonTitleGoogle>Entrar com o  Google</ButtonTitleGoogle>
 			</ButtonGoogle>
 
 			<ContentAccount>
@@ -93,7 +93,7 @@ export const Login = ({ navigation }) => {
 					<LinkBold
 						onPress={() => navigation.navigate('CreateAccount')}
 					>
-						Crie uma conta agora!
+						Faça uma agora!
 					</LinkBold>
 				</TextAccount>
 			</ContentAccount>

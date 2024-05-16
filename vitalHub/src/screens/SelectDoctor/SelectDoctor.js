@@ -61,7 +61,9 @@ export const SelectDoctor = ({ navigation, route }) => {
 
 	return (
 		<Container>
+
 			<TitleSelection>Selecionar Médico</TitleSelection>
+
 
 			<ListComponent
 				data={medicoLista}

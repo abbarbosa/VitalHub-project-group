@@ -39,7 +39,9 @@ export const SelectInput = ({
 	return (
 		<SelectInputView>
 			<ContentProfile>
+
 				<TextProfileInput>Selecionar horário</TextProfileInput>
+
 				<SelectDropdown
 					data={arrayOptions}
 					defaultButtonText={defaultText}
