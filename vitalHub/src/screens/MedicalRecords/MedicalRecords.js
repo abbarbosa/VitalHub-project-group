@@ -107,7 +107,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 				</ContentName>
 
 				<ContentProfile>
-					<TextProfileInput>Query description:</TextProfileInput>
+					<TextProfileInput>Descrição da consulta:</TextProfileInput>
 					<InputRecord
 						placeholder={'Description'}
 						multiline={true}
@@ -118,7 +118,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 					</InputRecord>
 				</ContentProfile>
 				<ContentProfile>
-					<TextProfileInput>Patient diagnosis:</TextProfileInput>
+					<TextProfileInput>Diagnóstico do Paciente:</TextProfileInput>
 					<InputMedicalRecords
 						placeholder={'Diagnosis'}
 						onChangeText={(text) => setDiagnostico(text)}
@@ -128,7 +128,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 					</InputMedicalRecords>
 				</ContentProfile>
 				<ContentProfile>
-					<TextProfileInput>Medical prescription:</TextProfileInput>
+					<TextProfileInput>Prescrição Médica:</TextProfileInput>
 					<InputRecord
 						placeholder={'Prescription'}
 						onChangeText={(text) => setPrescricao(text)}
@@ -142,27 +142,27 @@ export const MedicalRecords = ({ navigation, route }) => {
 						onPress={() => EditarProntuario()}
 						disabled={!consulta}
 					>
-						<ButtonTitle>Save</ButtonTitle>
+						<ButtonTitle>Salvar</ButtonTitle>
 					</Button>
 				) : (
 					<Button
 						disabled={!consulta}
 						style={{ backgroundColor: '#CCCCCC' }}
 					>
-						<ButtonTitle>Save</ButtonTitle>
+						<ButtonTitle>Salvar</ButtonTitle>
 					</Button>
 				)}
 				<Button
 					onPress={() => setEdicaoHabilitada(true)}
 					disabled={edicaoHabilitada}
 				>
-					<ButtonTitle>Edit</ButtonTitle>
+					<ButtonTitle>Editar</ButtonTitle>
 				</Button>
 
 				<ButtonSecundaryTitle
 					onPress={() => navigation.navigate('Home')}
 				>
-					Cancel
+					Cancelar
 				</ButtonSecundaryTitle>
 			</Container>
 		</ScrollContainer>

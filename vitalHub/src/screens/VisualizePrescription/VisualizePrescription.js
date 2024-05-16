@@ -118,10 +118,10 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						</ContentName>
 						<ContentProfile>
 							<TextProfileInput>
-								Query description:
+								Decrição da consulta
 							</TextProfileInput>
 							<InputRecord
-								placeholder={'Description here'}
+								placeholder={'Descrição aqui'}
 								multiline={true}
 								editable={false}
 							>
@@ -130,10 +130,10 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						</ContentProfile>
 						<ContentProfile>
 							<TextProfileInput>
-								Patient diagnosis:
+								Diagnóstico do paciente
 							</TextProfileInput>
 							<InputMedicalRecords
-								placeholder={'Diagnosis here'}
+								placeholder={'Diagnóstico aqui'}
 								editable={false}
 							>
 								{consulta.diagnostico}
@@ -141,10 +141,10 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						</ContentProfile>
 						<ContentProfile>
 							<TextProfileInput>
-								Medical prescription:
+								Prescrição médica:
 							</TextProfileInput>
 							<InputRecord
-								placeholder={'Prescription here'}
+								placeholder={'Prescrição aqui'}
 								editable={false}
 							>
 								{consulta.receita?.medicamento}
@@ -159,7 +159,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 											size={24}
 											color="black"
 										/>
-										<Title>No photo informed</Title>
+										<Title>Nenhuma foto informada</Title>
 									</FileVisualize>
 								</>
 							) : (
@@ -183,11 +183,11 @@ export const VisualizePrescription = ({ navigation, route }) => {
 									size={24}
 									color="white"
 								/>
-								<TextSend>Send</TextSend>
+								<TextSend>Enviar</TextSend>
 							</ViewPhotoSend>
 							<TouchableOpacity>
 								<ButtonTextVisualize>
-									Cancel
+									Cancelar
 								</ButtonTextVisualize>
 							</TouchableOpacity>
 						</ContentSend>
@@ -208,7 +208,7 @@ export const VisualizePrescription = ({ navigation, route }) => {
 						<ButtonSecundaryTitle
 							onPress={() => navigation.navigate('Home')}
 						>
-							Back
+							Voltar
 						</ButtonSecundaryTitle>
 					</>
 				) : (

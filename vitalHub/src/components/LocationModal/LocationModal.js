@@ -31,7 +31,7 @@ export const LocationModal = ({
 					/>
 					<Title>Dr. Hans Chucrute</Title>
 					<BigGroupModal>
-						<SmallTextModal>Plastic Surgeon</SmallTextModal>
+						<SmallTextModal>Cirurgião Plástico</SmallTextModal>
 						<SmallTextModal>CRM-15287</SmallTextModal>
 					</BigGroupModal>
 					<Button>

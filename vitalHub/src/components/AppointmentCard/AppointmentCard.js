@@ -78,10 +78,10 @@ export const AppointmentCard = ({
 						</TextAge>
 						<TextBold>
 							{consulta.prioridade.prioridade === 0
-								? 'Checkup'
+								? 'Rotina'
 								: consulta.prioridade.prioridade === 1
-								? 'Exam'
-								: 'Urgency'}
+								? 'Exame'
+								: 'Urgência'}
 						</TextBold>
 					</ProfileData>
 				</DataProfileCard>
@@ -108,20 +108,20 @@ export const AppointmentCard = ({
 					{situacao === 'Pendentes' ? (
 						<ButtonCard onPress={onPressCancel}>
 							<ButtonText situacao={situacao.situacao}>
-								Cancel
+								Cancelar
 							</ButtonText>
 						</ButtonCard>
 					) : situacao === 'Realizados' ? (
 						roleUsuario === 'Paciente' ? (
 							<ButtonCard onPress={onPressAppointment}>
 								<ButtonText situacao={situacao.situacao}>
-									View Medical Records
+									Ver prontuário
 								</ButtonText>
 							</ButtonCard>
 						) : (
 							<ButtonCard onPress={onPressAppointment}>
 								<ButtonText situacao={situacao.situacao}>
-									Insert medical records
+									Inserir prontuário
 								</ButtonText>
 							</ButtonCard>
 						)

@@ -1,27 +1,28 @@
-import { useEffect, useState } from 'react';
-import { AbsListAppontment } from '../../components/AbsListAppointment/AbsListAppointment';
-import CalendarHome from '../../components/CalendarHome/CalendarHome';
-import { Container } from '../../components/Container/Style';
+import { useEffect, useState } from "react";
+import { Container } from "../../components/Container/Style";
 import { Header } from '../../components/Header/Header';
-import { FilterAppointment } from './Style';
-import { ListComponent } from '../../components/List/List';
+import { UserDecodeToken } from "../../services/Utils/Auth";
+import CalendarHome from '../../components/CalendarHome/CalendarHome';
+import { api } from "../../services/Service";
+import { FilterAppointment } from "./Style";
+import { AbsListAppontment } from '../../components/AbsListAppointment/AbsListAppointment';
+import { ListComponent } from "../../components/List/List";
+import { TouchableOpacity } from "react-native";
 import { AppointmentCard } from '../../components/AppointmentCard/AppointmentCard';
-import CancellationModal from '../../components/CancellationModal/CancellationModal';
-import { AppointmentModal } from '../../components/AppointmentModal/AppointmentModal';
 import { ScheduleButton } from '../../components/ScheduleButton/ScheduleButton';
 import { ScheduleModal } from '../../components/ScheduleModal/ScheduleModal';
-import { TouchableOpacity } from 'react-native';
+import CancellationModal from "../../components/CancellationModal/CancellationModal";
+import { AppointmentModal } from '../../components/AppointmentModal/AppointmentModal'
 import { LocationModal } from '../../components/LocationModal/LocationModal';
-import { api } from '../../services/Service';
-import { UserDecodeToken } from '../../services/Utils/Auth';
+
 
 export const Home = ({ navigation }) => {
 	const [statusLista, setStatusLista] = useState('Pendentes');
 	const [showModalCancel, setShowModalCancel] = useState(false);
 	const [showModalAppointment, setShowModalAppointment] = useState(false);
 	const [showModalSchedule, setShowModalSchedule] = useState(false);
-	const [showModalLocationAppointment, setShowModalLocationAppointment] =
-		useState(false);
+	const [showModalLocationAppointment, setShowModalLocationAppointment] = useState(false);
+
 
 	const [dateSelected, setDateSelected] = useState('');
 
@@ -89,29 +90,25 @@ export const Home = ({ navigation }) => {
 
 	return (
 		<Container>
-			{/* Header */}
 			<Header navigation={navigation} />
-			{/* Calendario */}
 			<CalendarHome setDateSelected={setDateSelected} />
-			{/* Buttons(Filtros) */}
 			<FilterAppointment>
 				<AbsListAppontment
-					textButton={'Scheduled'}
+					textButton={'Agendada'}
 					clickButton={statusLista === 'Pendentes'}
 					onPress={() => setStatusLista('Pendentes')}
 				/>
 				<AbsListAppontment
-					textButton={'Realized'}
+					textButton={'Realizada'}
 					clickButton={statusLista === 'Realizados'}
 					onPress={() => setStatusLista('Realizados')}
 				/>
 				<AbsListAppontment
-					textButton={'Canceled'}
+					textButton={'Cancelada'}
 					clickButton={statusLista === 'Cancelados'}
 					onPress={() => setStatusLista('Cancelados')}
 				/>
 			</FilterAppointment>
-
 			<ListComponent
 				data={listaConsulta}
 				key={(item) => item.id}
@@ -124,12 +121,12 @@ export const Home = ({ navigation }) => {
 								navigation={navigation}
 								situacao={item.situacao.situacao}
 								onPressAppointment={() =>
-									MostrarModal('prontuario', item)
-								}
+									MostrarModal('prontuario', item)}
+
 								onPressCancel={() =>
-									MostrarModal('cancelar', item)
-								}
-								consulta={item} // Passando os dados da consulta como prop
+									MostrarModal('cancelar', item)}
+
+								consulta={item}
 								roleUsuario={profile.role}
 								dataConsulta={item.dataConsulta}
 								prioridade={item.prioridade.prioridade}
@@ -138,11 +135,12 @@ export const Home = ({ navigation }) => {
 										? item.paciente
 										: item.medicoClinica.medico
 								}
+
 							/>
+
 						</TouchableOpacity>
-					)
-				}
-			/>
+
+					)} />
 			{profile.role === 'Paciente' && (
 				<>
 					<ScheduleButton
@@ -155,7 +153,6 @@ export const Home = ({ navigation }) => {
 					/>
 				</>
 			)}
-
 			<CancellationModal
 				navigation={navigation}
 				visible={showModalCancel}
@@ -163,13 +160,14 @@ export const Home = ({ navigation }) => {
 				consulta={consultaSelecionada}
 			/>
 			<AppointmentModal
-				situacao={statusLista}
-				navigation={navigation}
-				visible={showModalAppointment}
-				setShowModalAppointment={setShowModalAppointment}
-				consulta={consultaSelecionada}
-				roleUsuario={profile.role}
+			situacao={statusLista}
+			navigation={navigation}
+			visible={showModalAppointment}
+			setShowModalAppointment={setShowModalAppointment}
+			consulta={consultaSelecionada}
+			roleUsuario={profile.role}
 			/>
+
 			<LocationModal
 				visible={showModalLocationAppointment}
 				setShowModalLocationAppointment={
@@ -178,5 +176,5 @@ export const Home = ({ navigation }) => {
 				consulta={consultaSelecionada}
 			/>
 		</Container>
-	);
+	)
 };

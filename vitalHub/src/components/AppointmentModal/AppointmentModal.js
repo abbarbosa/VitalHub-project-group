@@ -51,8 +51,6 @@ export const AppointmentModal = ({
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	async function handleConfirmSchedule() {
 		try {
 			const response = await api.put(
@@ -70,7 +68,6 @@ export const AppointmentModal = ({
 			console.error('Erro ao realizar consulta:', error);
 		}
 	}
->>>>>>> 386569977ea7e7c73ce08ad3f05ae84bf3697cf4
 
 	const calcularIdade = (dataNascimento) => {
 		const hoje = moment();
@@ -132,29 +129,29 @@ export const AppointmentModal = ({
 									handleClose('VisualizePrescription')
 								}
 							>
-								<ButtonTitle>View medical record</ButtonTitle>
+								<ButtonTitle>Ver prontuário</ButtonTitle>
 							</ButtonModal>
 						) : (
 							<ButtonModal
 								onPress={() => handleClose('MedicalRecords')}
 							>
-								<ButtonTitle>Insert medical record</ButtonTitle>
+								<ButtonTitle>Inserir prontuário</ButtonTitle>
 							</ButtonModal> // Se não for 'Paciente', renderiza um fragmento vazio
 						)
 					) : roleUsuario === 'Medico' ? (
 						<ButtonModal onPress={() => handleConfirmSchedule()}>
-							<ButtonTitle>Confirm schedule</ButtonTitle>
+							<ButtonTitle>Confirmar consulta</ButtonTitle>
 						</ButtonModal>
 					) : (
 						<ButtonModal
 							onPress={() => handleClose('LocationAppointment')}
 						>
-							<ButtonTitle>View appointment location</ButtonTitle>
+							<ButtonTitle>Ver local da consulta</ButtonTitle>
 						</ButtonModal>
 					)}
 
 					<ButtonSecundary onPress={closeModal}>
-						<ButtonSecundaryTitle>Cancel</ButtonSecundaryTitle>
+						<ButtonSecundaryTitle>Cancelar</ButtonSecundaryTitle>
 					</ButtonSecundary>
 				</ModalContent>
 			</PatientModal>

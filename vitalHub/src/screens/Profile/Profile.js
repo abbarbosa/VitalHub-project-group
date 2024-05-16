@@ -229,7 +229,7 @@ export const Profile = ({ navigation, route }) => {
 							{profile === 'Paciente' ? (
 								<>
 									<TextProfileInput>
-										Date of birth:
+										Data de Nascimento:
 									</TextProfileInput>
 									<InputProfile
 										placeholder={'04-05-1999'}
@@ -246,7 +246,7 @@ export const Profile = ({ navigation, route }) => {
 							) : (
 								<>
 									<TextProfileInput>
-										Speciality:
+										ESpecialidade:
 									</TextProfileInput>
 									<InputProfile
 										placeholder={'Surgeon'}
@@ -306,7 +306,7 @@ export const Profile = ({ navigation, route }) => {
 
 						<ContentRow>
 							<RowContentProfile>
-								<TextProfileInput>Address:</TextProfileInput>
+								<TextProfileInput>Endereço:</TextProfileInput>
 								<InputRow
 									placeholder={'Av. Dos Estados'}
 									onChangeText={(text) => setLogradouro(text)}
@@ -317,7 +317,7 @@ export const Profile = ({ navigation, route }) => {
 							</RowContentProfile>
 							{/*  */}
 							<RowContentProfile>
-								<TextProfileInput>Number:</TextProfileInput>
+								<TextProfileInput>Número:</TextProfileInput>
 								<InputRow
 									placeholder={'10990'}
 									onChangeText={(text) => setNumber(text)}
@@ -341,7 +341,7 @@ export const Profile = ({ navigation, route }) => {
 							</RowContentProfile>
 							{/*  */}
 							<RowContentProfile>
-								<TextProfileInput>City:</TextProfileInput>
+								<TextProfileInput>Cidade:</TextProfileInput>
 								<InputRow
 									placeholder={'Capao Redondo - SP'}
 									onChangeText={(text) => setCity(text)}
@@ -363,11 +363,11 @@ export const Profile = ({ navigation, route }) => {
 							onPress={() => setEdicaoHabilitada(true)}
 							disabled={edicaoHabilitada}
 						>
-							<ButtonTitle>Edit</ButtonTitle>
+							<ButtonTitle>Editar</ButtonTitle>
 						</Button>
 
 						<ButtonExitApp onPress={() => Logout()}>
-							<ButtonTitle>Exit the app</ButtonTitle>
+							<ButtonTitle>Sair do app</ButtonTitle>
 						</ButtonExitApp>
 					</>
 				) : (

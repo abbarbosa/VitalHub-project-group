@@ -125,7 +125,7 @@ export const Map = ({ clinica }) => {
 				</MapView>
 			) : (
 				<>
-					<Text>Localizao nao encontrada</Text>
+					<Text>Localização não encontrada</Text>
 
 					<ActivityIndicator />
 				</>

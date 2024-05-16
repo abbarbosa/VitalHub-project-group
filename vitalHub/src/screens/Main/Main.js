@@ -40,7 +40,7 @@ export const Main = ({navigation, route}) => {
 										size={22}
 										color="#4E4B59"
 									/>
-									{focused && <TextIcon>Schedule</TextIcon>}
+									{focused && <TextIcon>Agenda</TextIcon>}
 								</ContentIcon>
 							</>
 						);
@@ -57,7 +57,7 @@ export const Main = ({navigation, route}) => {
 										size={22}
 										color="#4E4B59"
 									/>
-									{focused && <TextIcon>Profile</TextIcon>}
+									{focused && <TextIcon>Perfil</TextIcon>}
 								</ContentIcon>
 							</>
 						);

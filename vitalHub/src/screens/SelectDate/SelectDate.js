@@ -30,13 +30,13 @@ export const SelectDate = ({ navigation, route }) => {
 
 			setShowModalConfirm(true);
 		} else {
-			Alert.alert('Please select a date and time.');
+			Alert.alert('Por favor selecione uma data e hora');
 		}
 	}
 
 	return (
 		<Container>
-			<TitleSelection>Select Date</TitleSelection>
+			<TitleSelection>Selecionar Data</TitleSelection>
 
 			<FullCalendar
 				setSelectedDate={setSelectedDate}
@@ -45,19 +45,19 @@ export const SelectDate = ({ navigation, route }) => {
 			/>
 
 			<SelectInput
-				labelText="Select an available time slot"
-				defaultText="Select a time"
+				labelText="Selecione um horário disponível"
+				defaultText="Selecinar horário"
 				setSelectedTime={setSelectedTime}
 				handleSelectedFn={setSelectedTime}
 			/>
 
 			<Button onPress={() => handleContinue()}>
 				<ButtonTitle onPress={() => setShowModalConfirm(true)}>
-					Confirm
+					Confirmar
 				</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
-				Cancel
+				Cancelar
 			</ButtonSecundaryTitle>
 
 			<ConfirmModal

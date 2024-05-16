@@ -55,13 +55,13 @@ export const SelectDoctor = ({ navigation, route }) => {
 				},
 			});
 		} else {
-			Alert.alert('Please select a doctor.');
+			Alert.alert('Por favor selecione um médico');
 		}
 	}
 
 	return (
 		<Container>
-			<TitleSelection>Select Doctor</TitleSelection>
+			<TitleSelection>Selecionar Médico</TitleSelection>
 
 			<ListComponent
 				data={medicoLista}
@@ -83,10 +83,10 @@ export const SelectDoctor = ({ navigation, route }) => {
 			/>
 
 			<Button onPress={() => handleContinue()}>
-				<ButtonTitle>Continue</ButtonTitle>
+				<ButtonTitle>Continuar</ButtonTitle>
 			</Button>
 			<ButtonSecundaryTitle onPress={() => navigation.navigate('Main')}>
-				Cancel
+				Cancelar
 			</ButtonSecundaryTitle>
 		</Container>
 	);

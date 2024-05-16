@@ -65,12 +65,12 @@ export const ConfirmModal = ({
 			{agendamento ? (
 				<PatientModal>
 					<ContentConfirmModal>
-						<Title>Schedule an appointment</Title>
+						<Title>Agendar consulta</Title>
 						<ModalText>
-							Consult the data selected for your query
+						Consulte os dados selecionados para a sua consulta
 						</ModalText>
 						<SmallGroupModal>
-							<SubTitleModal>Appointment Date</SubTitleModal>
+							<SubTitleModal>Data da consulta</SubTitleModal>
 							<SmallTextModal>
 								{moment(agendamento.dataConsulta).format(
 									'DD/MM/YYYY HH:mm',
@@ -78,31 +78,31 @@ export const ConfirmModal = ({
 							</SmallTextModal>
 						</SmallGroupModal>
 						<SmallGroupModal>
-							<SubTitleModal>Doctor</SubTitleModal>
+							<SubTitleModal>Médico(a) da consulta</SubTitleModal>
 							<SmallTextModal>
 								{agendamento.medicoLabel}
 							</SmallTextModal>
 							<SmallTextModal>
 								{agendamento.clinicaLabel}
 							</SmallTextModal>
-						</SmallGroupModal>
+						</SmallGroupModal>           
 						<SmallGroupModal>
-							<SubTitleModal>Appoitment location</SubTitleModal>
+							<SubTitleModal>Local da consulta</SubTitleModal>
 							<SmallTextModal>
 								{agendamento.localizacao}
 							</SmallTextModal>
 						</SmallGroupModal>
 						<SmallGroupModal>
-							<SubTitleModal>Appointment type</SubTitleModal>
+							<SubTitleModal>Tipo da consulta </SubTitleModal>
 							<SmallTextModal>
 								{agendamento.prioridadeLabel}
 							</SmallTextModal>
 						</SmallGroupModal>
 						<Button onPress={() => ConfirmarConsulta()}>
-							<ButtonTitle>Continue</ButtonTitle>
+							<ButtonTitle>Confirmar</ButtonTitle>
 						</Button>
 						<ButtonSecundaryTitle onPress={closeModal}>
-							Cancel
+							Cancelar
 						</ButtonSecundaryTitle>
 					</ContentConfirmModal>
 				</PatientModal>
@@ -111,4 +111,4 @@ export const ConfirmModal = ({
 			)}
 		</Modal>
 	);
-};
+}; 

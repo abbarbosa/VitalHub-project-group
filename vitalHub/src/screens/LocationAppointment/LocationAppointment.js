@@ -83,7 +83,7 @@ export const LocationAppointment = ({ navigation, route }) => {
 						</RowContentProfile>
 					</ContentRow>
 					<ButtonSecundary onPress={() => navigation.replace('Main')}>
-						<ButtonSecundaryTitle>Back</ButtonSecundaryTitle>
+						<ButtonSecundaryTitle>Voltar</ButtonSecundaryTitle>
 					</ButtonSecundary>
 				</>
 			) : (
